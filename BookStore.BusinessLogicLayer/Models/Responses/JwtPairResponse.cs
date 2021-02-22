@@ -2,7 +2,7 @@
 
 namespace BookStore.BusinessLogicLayer.Models.Responses
 {
-    public class LoginResponse : BaseModel
+    public class JwtPairResponse : BaseModel
     {
         public string AccessToken { get; set; }
         

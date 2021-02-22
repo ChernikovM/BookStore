@@ -6,12 +6,14 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
 {
     public interface IAccountService
     {
-        public Task<RegistrationResponse> Register(UserRegistrationModel model);
+        public Task<MessageResponse> Register(UserRegistrationModel model);
 
-        public Task<LoginResponse> Login(UserLoginModel model); //TODO: сделать другое возвращ знач - JwtPairResponse 
+        public Task<JwtPairResponse> Login(UserLoginModel model);
 
-        public Task<EmailConfirmationResponse> ConfirmEmail(UserEmailConfirmationModel model);
+        public Task<MessageResponse> ConfirmEmail(UserEmailConfirmationModel model);
 
-        public Task<LoginResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken); //TODO: сделать другое возвращ знач - JwtPairResponse 
+        public Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken);
+
+        public Task<MessageResponse> ResetPassword(UserResetPasswordModel model);
     }
 }

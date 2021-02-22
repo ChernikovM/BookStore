@@ -37,7 +37,7 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> ConfirmEmail([FromQuery] UserEmailConfirmationModel model)
         {
             var response = await _accountService.ConfirmEmail(model);
@@ -51,6 +51,15 @@ namespace BookStore.PresentationLayer.Controllers
         {
             var accessToken = authorization.Split(" ").Last();
             var response = await _accountService.RefreshTokens(model, accessToken);
+
+            return new OkObjectResult(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordModel model)
+        {
+            var response = await _accountService.ResetPassword(model);
 
             return new OkObjectResult(response);
         }

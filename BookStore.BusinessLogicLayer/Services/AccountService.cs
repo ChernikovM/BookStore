@@ -33,7 +33,7 @@ namespace BookStore.BusinessLogicLayer.Services
             _jwtService = jwtService;
         }
 
-        public async Task<RegistrationResponse> Register(UserRegistrationModel model)
+        public async Task<MessageResponse> Register(UserRegistrationModel model)
         {
             var newUser = _mapper.Map<User>(model);
 
@@ -48,10 +48,10 @@ namespace BookStore.BusinessLogicLayer.Services
 
             await _emailSenderService.SendEmailConfirmationLinkAsync(newUser);
 
-            return new RegistrationResponse() { Response = "Please confirm your email."};
+            return new MessageResponse() { Message = "Please confirm your email."};
         }
         
-        public async Task<EmailConfirmationResponse> ConfirmEmail(UserEmailConfirmationModel model)
+        public async Task<MessageResponse> ConfirmEmail(UserEmailConfirmationModel model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
 
@@ -69,7 +69,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
             await SetClaims(user);
 
-            return new EmailConfirmationResponse() { Response = "Registration successfully completed." };
+            return new MessageResponse() { Message = "Registration successfully completed." };
         }
 
         private async Task SetClaims(User user)
@@ -84,7 +84,7 @@ namespace BookStore.BusinessLogicLayer.Services
             await _userManager.AddClaimsAsync(user, claims);
         }
 
-        public async Task<LoginResponse> Login(UserLoginModel model)
+        public async Task<JwtPairResponse> Login(UserLoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user is null)
@@ -115,7 +115,7 @@ namespace BookStore.BusinessLogicLayer.Services
             return tokenPair;
         }
 
-        public async Task<LoginResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken)
+        public async Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken)
         {
             var claims = _jwtService.GetClaims(accessToken);
             var userName = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
@@ -147,5 +147,9 @@ namespace BookStore.BusinessLogicLayer.Services
             return response;
         }
 
+        public async Task<MessageResponse> ResetPassword(UserResetPasswordModel model)
+        {
+            //TODO: passwordGenerate, sendEmail, update user password in db.
+        }
     }
 }

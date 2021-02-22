@@ -2,8 +2,8 @@
 
 namespace BookStore.BusinessLogicLayer.Models.Responses
 {
-    public class RegistrationResponse : BaseModel
+    public class MessageResponse : BaseModel
     {
-        public string Response { get; set; }
+        public string Message { get; set; }
     }
 }

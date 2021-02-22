@@ -7,12 +7,10 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
 {
     public interface IJwtService
     {
-        public LoginResponse GenerateTokenPair(IList<Claim> claims);
-        public string GenerateAccessToken(IList<Claim> claims);
-        public string GenerateRefreshToken(IList<Claim> claims);
+        public JwtPairResponse GenerateTokenPair(IList<Claim> claims);
         public bool ValidateRefreshToken(User user, string token);
         public ClaimsPrincipal ValidateAccessToken(string token);
-
+        public string GenerateToken(IList<Claim> claims, int lifeTimeMinutes);
         public IEnumerable<Claim> GetClaims(string token);
     }
 }

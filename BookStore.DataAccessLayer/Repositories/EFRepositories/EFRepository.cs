@@ -12,7 +12,7 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories
         where TEntity : BaseEntity
     {
         private readonly DataContext _context;
-        private readonly DbSet<TEntity> _dbSet;
+        protected readonly DbSet<TEntity> _dbSet;
 
         public EFRepository(DataContext context)
         {
@@ -50,6 +50,11 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories
         public void Update(TEntity item)
         {
             _context.Entry(item).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void SaveChanges()
+        {
             _context.SaveChanges();
         }
     }

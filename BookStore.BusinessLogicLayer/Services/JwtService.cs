@@ -21,11 +21,11 @@ namespace BookStore.BusinessLogicLayer.Services
             _config = config;
         }
 
-        public string GenerateAccessToken(IList<Claim> claims)
+        public string GenerateToken(IList<Claim> claims, int lifeTimeMinutes)
         {
             var secret = Encoding.ASCII.GetBytes(_config.Secret);
 
-            var expiredDate = DateTime.UtcNow.AddMinutes(_config.AccessTokenExpiration);
+            var expiredDate = DateTime.UtcNow.AddMinutes(lifeTimeMinutes);
 
             var jwtToken = new JwtSecurityToken(
                 _config.Issuer,
@@ -35,37 +35,17 @@ namespace BookStore.BusinessLogicLayer.Services
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
                 );
 
-            var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+            var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
-            return HttpUtility.UrlEncode(accessToken);
+            return token;
         }
 
-        public string GenerateRefreshToken(IList<Claim> claims)
+        public JwtPairResponse GenerateTokenPair(IList<Claim> claims)
         {
-            //TODO: change generator RTs; add lifeTime to token
-            var secret = Encoding.ASCII.GetBytes(_config.Secret);
+            var accessToken = GenerateToken(claims, _config.AccessTokenExpiration);
+            var refreshToken = GenerateToken(claims, _config.RefreshTokenExpiration);
 
-            var expiredDate = DateTime.UtcNow.AddMinutes(_config.RefreshTokenExpiration);
-
-            var jwtToken = new JwtSecurityToken(
-                _config.Issuer,
-                _config.Audience,
-                claims,
-                expires: expiredDate,
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
-                );
-
-            var refreshToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-
-            return HttpUtility.UrlEncode(refreshToken);
-        }
-
-        public LoginResponse GenerateTokenPair(IList<Claim> claims)
-        {
-            var accessToken = GenerateAccessToken(claims);
-            var refreshToken = GenerateRefreshToken(claims);
-
-            LoginResponse result = new LoginResponse() { AccessToken = accessToken, RefreshToken = refreshToken};
+            JwtPairResponse result = new JwtPairResponse() { AccessToken = accessToken, RefreshToken = refreshToken};
 
             return result;
         }
@@ -75,7 +55,7 @@ namespace BookStore.BusinessLogicLayer.Services
             return new JwtSecurityTokenHandler().ReadJwtToken(token).Claims;
         }
 
-        public ClaimsPrincipal ValidateAccessToken(string token) //TODO: вынести в отдельный метод генерацию токена и валидацию
+        public ClaimsPrincipal ValidateAccessToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             
@@ -88,6 +68,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 ValidAudience = _config.Audience,
                 ValidateAudience = true,
                 ValidateLifetime = true,
+                
 
             }, out SecurityToken validatedToken);
 
@@ -96,12 +77,21 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public bool ValidateRefreshToken(User user, string token)
         {
-            //TODO: check tokens lifeTime
             string userToken = user.RefreshToken;
 
-            var result = token.Equals(userToken);
+            if (!token.Equals(userToken))
+            {
+                return false;
+            }
 
-            return result;
+            var validTo = new JwtSecurityTokenHandler().ReadJwtToken(token).ValidTo;
+
+            if (validTo < DateTime.Now)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

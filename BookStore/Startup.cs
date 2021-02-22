@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -81,7 +82,8 @@ namespace BookStore
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.Secret)),
                         ValidAudience = jwtConfig.Audience,
                         ValidateAudience = true,
-                        ValidateLifetime = true, //TODO: неправильно чекает время жизни токена (пропускает с протухшим токеном)
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
                     };
                     x.Events = new JwtBearerEvents
                     {
@@ -95,13 +97,13 @@ namespace BookStore
                         }
                     };
                 });
-            
+
             AuthorizationPolicyBuilder policyBuilder = 
                 new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
             policyBuilder.RequireAuthenticatedUser();
             services.AddAuthorization(options => options.DefaultPolicy = policyBuilder.Build());
+            //services.AddAuthorization();
             
-            /*
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("MyAccessPolicy", policy => policy.RequireAssertion(context =>
@@ -112,7 +114,7 @@ namespace BookStore
                     return false;
                 }));
             });
-            */
+            
 
         }
 
