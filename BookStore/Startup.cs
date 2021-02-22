@@ -18,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BookStore
 {
@@ -37,7 +38,7 @@ namespace BookStore
             services.AddControllers();
 
             services.AddDbContext<DataContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("Default"))
+                options => options.UseSqlServer(Configuration.GetConnectionString("Server"))
             );
 
             services.AddIdentity<User, IdentityRole>()
@@ -80,7 +81,18 @@ namespace BookStore
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.Secret)),
                         ValidAudience = jwtConfig.Audience,
                         ValidateAudience = true,
-                        ValidateLifetime = true, //TODO: не правильно чекает время жизни токена
+                        ValidateLifetime = true, //TODO: неправильно чекает время жизни токена (пропускает с протухшим токеном)
+                    };
+                    x.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            {
+                                context.Response.Headers.Add("Token-Expired", "true");
+                            }
+                            return Task.CompletedTask;
+                        }
                     };
                 });
             
@@ -89,6 +101,19 @@ namespace BookStore
             policyBuilder.RequireAuthenticatedUser();
             services.AddAuthorization(options => options.DefaultPolicy = policyBuilder.Build());
             
+            /*
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("MyAccessPolicy", policy => policy.RequireAssertion(context =>
+                {
+                if (context.User.Identity.IsAuthenticated == true)
+                    return true;
+                else
+                    return false;
+                }));
+            });
+            */
+
         }
 
 
@@ -106,7 +131,6 @@ namespace BookStore
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseMiddleware<JwtAuthorizationMiddleware>();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

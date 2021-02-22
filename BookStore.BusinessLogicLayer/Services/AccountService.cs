@@ -74,7 +74,6 @@ namespace BookStore.BusinessLogicLayer.Services
 
         private async Task SetClaims(User user)
         {
-            var roles = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
@@ -109,9 +108,43 @@ namespace BookStore.BusinessLogicLayer.Services
 
             var tokenPair = _jwtService.GenerateTokenPair(userClaims);
 
+            user.RefreshToken = tokenPair.RefreshToken;
+            await _userManager.UpdateAsync(user);
             //_userManager.SetAuthenticationTokenAsync<>();
 
             return tokenPair;
+        }
+
+        public async Task<LoginResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken)
+        {
+            var claims = _jwtService.GetClaims(accessToken);
+            var userName = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if (user is null)
+            {
+                throw new CustomException(HttpStatusCode.Unauthorized, "User was not found.");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.RefreshToken))
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "Invalid token.");
+            }
+
+            var refreshTokenIsValid = _jwtService.ValidateRefreshToken(user, model.RefreshToken);
+
+            if (!refreshTokenIsValid)
+            {
+                throw new CustomException(HttpStatusCode.Unauthorized, "Invalid refreshToken.");
+            }
+
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            var response = _jwtService.GenerateTokenPair(userClaims);
+
+            user.RefreshToken = response.RefreshToken;
+            await _userManager.UpdateAsync(user);
+
+            return response;
         }
 
     }

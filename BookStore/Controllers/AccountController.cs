@@ -1,8 +1,8 @@
-﻿using BookStore.BusinessLogicLayer.Exceptions;
-using BookStore.BusinessLogicLayer.Models.User;
+﻿using BookStore.BusinessLogicLayer.Models.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BookStore.PresentationLayer.Controllers
@@ -41,6 +41,16 @@ namespace BookStore.PresentationLayer.Controllers
         public async Task<IActionResult> ConfirmEmail([FromQuery] UserEmailConfirmationModel model)
         {
             var response = await _accountService.ConfirmEmail(model);
+
+            return new OkObjectResult(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> RefreshTokens([FromQuery] UserRefreshTokensModel model, [FromHeader] string authorization)
+        {
+            var accessToken = authorization.Split(" ").Last();
+            var response = await _accountService.RefreshTokens(model, accessToken);
 
             return new OkObjectResult(response);
         }

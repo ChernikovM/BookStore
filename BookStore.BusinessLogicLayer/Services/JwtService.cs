@@ -42,6 +42,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public string GenerateRefreshToken(IList<Claim> claims)
         {
+            //TODO: change generator RTs; add lifeTime to token
             var secret = Encoding.ASCII.GetBytes(_config.Secret);
 
             var expiredDate = DateTime.UtcNow.AddMinutes(_config.RefreshTokenExpiration);
@@ -69,6 +70,11 @@ namespace BookStore.BusinessLogicLayer.Services
             return result;
         }
 
+        public IEnumerable<Claim> GetClaims(string token)
+        {
+            return new JwtSecurityTokenHandler().ReadJwtToken(token).Claims;
+        }
+
         public ClaimsPrincipal ValidateAccessToken(string token) //TODO: вынести в отдельный метод генерацию токена и валидацию
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -90,7 +96,12 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public bool ValidateRefreshToken(User user, string token)
         {
-            throw new System.NotImplementedException();
+            //TODO: check tokens lifeTime
+            string userToken = user.RefreshToken;
+
+            var result = token.Equals(userToken);
+
+            return result;
         }
     }
 }

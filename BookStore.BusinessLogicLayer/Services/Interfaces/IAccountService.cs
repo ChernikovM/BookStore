@@ -8,8 +8,10 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
     {
         public Task<RegistrationResponse> Register(UserRegistrationModel model);
 
-        public Task<LoginResponse> Login(UserLoginModel model);
+        public Task<LoginResponse> Login(UserLoginModel model); //TODO: сделать другое возвращ знач - JwtPairResponse 
 
         public Task<EmailConfirmationResponse> ConfirmEmail(UserEmailConfirmationModel model);
+
+        public Task<LoginResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken); //TODO: сделать другое возвращ знач - JwtPairResponse 
     }
 }

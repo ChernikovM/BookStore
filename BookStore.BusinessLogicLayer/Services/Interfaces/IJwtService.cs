@@ -12,5 +12,7 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
         public string GenerateRefreshToken(IList<Claim> claims);
         public bool ValidateRefreshToken(User user, string token);
         public ClaimsPrincipal ValidateAccessToken(string token);
+
+        public IEnumerable<Claim> GetClaims(string token);
     }
 }
