@@ -22,9 +22,9 @@ namespace BookStore.BusinessLogicLayer.Services
         private readonly IJwtService _jwtService;
 
         public AccountService(
-            UserManager<User> userManager, 
-            IMapper mapper, 
-            IEmailSenderService emailSenderService, 
+            UserManager<User> userManager,
+            IMapper mapper,
+            IEmailSenderService emailSenderService,
             IJwtService jwtService)
         {
             _userManager = userManager;
@@ -48,9 +48,9 @@ namespace BookStore.BusinessLogicLayer.Services
 
             await _emailSenderService.SendEmailConfirmationLinkAsync(newUser);
 
-            return new MessageResponse() { Message = "Please confirm your email."};
+            return new MessageResponse() { Message = "Please confirm your email." };
         }
-        
+
         public async Task<MessageResponse> ConfirmEmail(UserEmailConfirmationModel model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
@@ -110,7 +110,6 @@ namespace BookStore.BusinessLogicLayer.Services
 
             user.RefreshToken = tokenPair.RefreshToken;
             await _userManager.UpdateAsync(user);
-            //_userManager.SetAuthenticationTokenAsync<>();
 
             return tokenPair;
         }
@@ -149,7 +148,36 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public async Task<MessageResponse> ResetPassword(UserResetPasswordModel model)
         {
-            //TODO: passwordGenerate, sendEmail, update user password in db.
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user is null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
+            }
+
+            await _emailSenderService.SendPasswordResettingLinkAsync(user);
+
+            return new MessageResponse() { Message = "Email was sent." };
+            //TODO: passwordGenerate, sendEmail+++, update user password in db.
+        }
+
+        public async Task<MessageResponse> ChangePassword(UserChangePasswordModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+
+            if (user is null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, result);
+            }
+
+            return new MessageResponse() { Message = "Password successfully changed." };
         }
     }
 }

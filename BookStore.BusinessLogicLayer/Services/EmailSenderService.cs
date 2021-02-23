@@ -1,10 +1,12 @@
 ﻿using BookStore.BusinessLogicLayer.Configurations.Interfaces;
+using BookStore.BusinessLogicLayer.Exceptions;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Identity;
 using MimeKit;
 using System;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -37,6 +39,14 @@ namespace BookStore.BusinessLogicLayer.Services
             return emailMessage;
         }
 
+        private void IsEmailConfirmed(User user)
+        {
+            if (user.EmailConfirmed == false)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "Email is not confirmed.");
+            }
+        }
+
         private async Task SendEmailAsync(MimeMessage message)
         {
             using var smtpClient = new SmtpClient();
@@ -65,11 +75,42 @@ namespace BookStore.BusinessLogicLayer.Services
             var emailConfirmationUrl = new UriBuilder
             {
                 Port = _config.Port,
-                Path = _config.Path,
+                Path = _config.PathEmailConfirmation,
                 Query = $"userId={user.Id}&token={HttpUtility.UrlEncode(token)}"
             };
 
             sb.Append(emailConfirmationUrl);
+
+            var message = GetMessage(user.UserName, user.Email, messageSubject, sb.ToString());
+
+            await SendEmailAsync(message);
+        }
+
+        public async Task SendPasswordResettingLinkAsync(User user)
+        {
+            IsEmailConfirmed(user);
+
+            string messageSubject = "Reset Password";
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"Hi, {user.UserName}.");
+            sb.Append(Environment.NewLine);
+            sb.Append(Environment.NewLine);
+            sb.Append($"A request has been received to change the password for your account.");
+            sb.Append(Environment.NewLine);
+            sb.Append($"Follow the next link if you want to change password: ");
+            sb.Append(Environment.NewLine);
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var resetPasswordLink = new UriBuilder
+            {
+                Port = _config.Port,
+                Path = _config.PathPasswordChange,
+                Query = $"userId={user.Id}&token={HttpUtility.UrlEncode(token)}"
+            };
+
+            sb.Append(resetPasswordLink);
 
             var message = GetMessage(user.UserName, user.Email, messageSubject, sb.ToString());
 

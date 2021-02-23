@@ -57,9 +57,18 @@ namespace BookStore.PresentationLayer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordModel model)
+        public async Task<IActionResult> ResetPassword([FromForm] UserResetPasswordModel model)
         {
             var response = await _accountService.ResetPassword(model);
+
+            return new OkObjectResult(response);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword([FromForm]UserChangePasswordModel model)
+        {
+            var response = await _accountService.ChangePassword(model);
 
             return new OkObjectResult(response);
         }

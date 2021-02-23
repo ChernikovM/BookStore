@@ -42,7 +42,7 @@ namespace BookStore
                 options => options.UseSqlServer(Configuration.GetConnectionString("Server"))
             );
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(x => x.User.RequireUniqueEmail = true)
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
             
@@ -102,7 +102,6 @@ namespace BookStore
                 new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
             policyBuilder.RequireAuthenticatedUser();
             services.AddAuthorization(options => options.DefaultPolicy = policyBuilder.Build());
-            //services.AddAuthorization();
             
             services.AddAuthorization(options =>
             {

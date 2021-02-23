@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Web;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
