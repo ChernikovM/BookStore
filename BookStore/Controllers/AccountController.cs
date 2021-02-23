@@ -72,5 +72,15 @@ namespace BookStore.PresentationLayer.Controllers
 
             return new OkObjectResult(response);
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Logout([FromHeader] string authorization)
+        {
+            var accessToken = authorization.Split(" ").Last();
+            var response = await _accountService.Logout(accessToken);
+
+            return new OkObjectResult(response);
+        }
     }
 }

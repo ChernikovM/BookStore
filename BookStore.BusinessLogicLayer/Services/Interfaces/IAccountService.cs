@@ -17,5 +17,7 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
         public Task<MessageResponse> ResetPassword(UserResetPasswordModel model);
 
         public Task<MessageResponse> ChangePassword(UserChangePasswordModel model);
+
+        public Task<MessageResponse> Logout(string accessToken);
     }
 }

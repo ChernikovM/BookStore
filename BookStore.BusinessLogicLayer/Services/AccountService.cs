@@ -158,7 +158,6 @@ namespace BookStore.BusinessLogicLayer.Services
             await _emailSenderService.SendPasswordResettingLinkAsync(user);
 
             return new MessageResponse() { Message = "Email was sent." };
-            //TODO: passwordGenerate, sendEmail+++, update user password in db.
         }
 
         public async Task<MessageResponse> ChangePassword(UserChangePasswordModel model)
@@ -177,7 +176,24 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(HttpStatusCode.BadRequest, result);
             }
 
-            return new MessageResponse() { Message = "Password successfully changed." };
+            return new MessageResponse() { Message = "Password was successfully changed." };
+        }
+
+        public async Task<MessageResponse> Logout(string accessToken)
+        {
+            var claims = _jwtService.GetClaims(accessToken);
+            var userName = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if (user is null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
+            }
+
+            user.RefreshToken = null;
+            await _userManager.UpdateAsync(user);
+
+            return new MessageResponse() {Message = "Successfully logged out."};
         }
     }
 }
