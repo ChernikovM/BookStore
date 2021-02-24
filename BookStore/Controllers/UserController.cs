@@ -39,7 +39,8 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(response);
         }
 
-        [Authorize("AdminOnly")]
+        //[Authorize("AdminOnly")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetUserProfile([FromQuery] string email)
         {

@@ -67,8 +67,6 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(HttpStatusCode.BadRequest, "Invalid token.");
             }
 
-            await SetClaims(user);
-
             return new MessageResponse() { Message = "Registration successfully completed." };
         }
 
@@ -83,6 +81,11 @@ namespace BookStore.BusinessLogicLayer.Services
 
             await _userManager.AddClaimsAsync(user, claims);
         }
+        private async Task ClearClaims(User user)
+        {
+            await _userManager.RemoveClaimsAsync(user, await _userManager.GetClaimsAsync(user));
+        }
+
 
         public async Task<JwtPairResponse> Login(UserLoginModel model)
         {
@@ -104,6 +107,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(System.Net.HttpStatusCode.Unauthorized, "Email not confirmed.");
             }
 
+            await ClearClaims(user);
             await SetClaims(user);
 
             var userClaims = await _userManager.GetClaimsAsync(user);
@@ -193,6 +197,7 @@ namespace BookStore.BusinessLogicLayer.Services
             }
 
             user.RefreshToken = null;
+            await ClearClaims(user);
             await _userManager.UpdateAsync(user);
 
             return new MessageResponse() {Message = "Successfully logged out."};
