@@ -2,6 +2,7 @@
 using BookStore.DataAccessLayer.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace BookStore.DataAccessLayer.AppContext
 {
@@ -20,7 +21,9 @@ namespace BookStore.DataAccessLayer.AppContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.InitialRoles();
+            var roles = modelBuilder.InitialRoles();
+            var user = modelBuilder.InitialAdminUser();
+            modelBuilder.InitialUserRole(user, roles.First(x => x.Name.Equals(Enums.Enums.Roles.Admin.ToString())));
 
             base.OnModelCreating(modelBuilder);
         }

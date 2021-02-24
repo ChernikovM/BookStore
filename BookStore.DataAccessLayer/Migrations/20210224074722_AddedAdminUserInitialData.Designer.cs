@@ -4,14 +4,16 @@ using BookStore.DataAccessLayer.AppContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookStore.DataAccessLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210224074722_AddedAdminUserInitialData")]
+    partial class AddedAdminUserInitialData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,26 +255,6 @@ namespace BookStore.DataAccessLayer.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f8f4fd0c-e1a9-47c5-b707-0180c99a497f",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7f9f7aef-05fe-4c85-9fc5-8667179f809b",
-                            Email = "storeanager45@gmail.com",
-                            EmailConfirmed = true,
-                            FirstName = "BookStore",
-                            LastName = "Administrator",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "STOREANAGER45@GMAIL.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBiTToIlGXCKBBBWyRP2USRJZPykvprvJwlmTKbCWAZr6oDpW18e+lqwMHeGd0xuWA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "538d8367-676c-4eed-8ecf-851ae3ba8032",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -304,22 +286,22 @@ namespace BookStore.DataAccessLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d867ce84-44f4-4eb5-9944-9b69b67ecbeb",
-                            ConcurrencyStamp = "8e765ff6-7f8a-461e-bab0-839b4c79c695",
+                            Id = "99bf924d-ddad-423f-82ce-576a309dc7dd",
+                            ConcurrencyStamp = "08c4e778-78cc-4d55-a5be-236e9723ef3e",
                             Name = "Nan",
                             NormalizedName = "NAN"
                         },
                         new
                         {
-                            Id = "ab1e5260-0321-40a8-815b-5dce3cac68aa",
-                            ConcurrencyStamp = "034aa7a6-dd39-4bc4-8a48-7eb9540895a6",
+                            Id = "d6199e53-6da5-42e4-ba19-6c208082c6bb",
+                            ConcurrencyStamp = "cc60441d-2c50-4e80-a6f8-0b71a478c40b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "09169979-ea3b-43fd-a26e-641aebf49f06",
-                            ConcurrencyStamp = "367eb1a1-369b-4c90-a189-c1ae5041c284",
+                            Id = "325d7537-24a2-4d79-9c64-1de25f83e50f",
+                            ConcurrencyStamp = "c1426ac5-8454-4105-9f0d-08247a28ff2d",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -408,13 +390,6 @@ namespace BookStore.DataAccessLayer.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "f8f4fd0c-e1a9-47c5-b707-0180c99a497f",
-                            RoleId = "ab1e5260-0321-40a8-815b-5dce3cac68aa"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

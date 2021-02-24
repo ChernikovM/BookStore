@@ -104,6 +104,8 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(System.Net.HttpStatusCode.Unauthorized, "Email not confirmed.");
             }
 
+            await SetClaims(user);
+
             var userClaims = await _userManager.GetClaimsAsync(user);
 
             var tokenPair = _jwtService.GenerateTokenPair(userClaims);
@@ -160,16 +162,16 @@ namespace BookStore.BusinessLogicLayer.Services
             return new MessageResponse() { Message = "Email was sent." };
         }
 
-        public async Task<MessageResponse> ChangePassword(UserChangePasswordModel model)
+        public async Task<MessageResponse> ChangePassword(string userId, string token, UserChangePasswordModel model)
         {
-            var user = await _userManager.FindByIdAsync(model.UserId);
+            var user = await _userManager.FindByIdAsync(userId);
 
             if (user is null)
             {
                 throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
 
             if (!result.Succeeded)
             {

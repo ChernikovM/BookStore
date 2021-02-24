@@ -20,7 +20,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register([FromForm] UserRegistrationModel model)
+        public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
         {
             var response = await _accountService.Register(model);
 
@@ -29,7 +29,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login([FromForm] UserLoginModel model)
+        public async Task<IActionResult> Login([FromBody] UserLoginModel model)
         {
             var response = await _accountService.Login(model);
 
@@ -57,7 +57,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> ResetPassword([FromForm] UserResetPasswordModel model)
+        public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordModel model)
         {
             var response = await _accountService.ResetPassword(model);
 
@@ -66,9 +66,9 @@ namespace BookStore.PresentationLayer.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> ChangePassword([FromForm]UserChangePasswordModel model)
+        public async Task<IActionResult> ChangePassword([FromQuery] string userId, [FromQuery] string token, [FromBody]UserChangePasswordModel model)
         {
-            var response = await _accountService.ChangePassword(model);
+            var response = await _accountService.ChangePassword(userId, token, model);
 
             return new OkObjectResult(response);
         }

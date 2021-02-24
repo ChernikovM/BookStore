@@ -6,6 +6,7 @@ using BookStore.BusinessLogicLayer.Services;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.AppContext;
 using BookStore.DataAccessLayer.Entities;
+using BookStore.DataAccessLayer.Enums;
 using BookStore.PresentationLayer.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,6 +49,7 @@ namespace BookStore
                 .AddDefaultTokenProviders();
             
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserService, UserService>();
 
             var loggerConfig = 
                 Configuration.GetSection("LoggerConfiguration").Get<LoggerConfiguration>();
@@ -101,17 +104,17 @@ namespace BookStore
             AuthorizationPolicyBuilder policyBuilder = 
                 new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
             policyBuilder.RequireAuthenticatedUser();
+
+            var adminPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .RequireRole(Enums.Roles.Admin.ToString())
+                .Build();
+
             services.AddAuthorization(options => options.DefaultPolicy = policyBuilder.Build());
-            
+
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("MyAccessPolicy", policy => policy.RequireAssertion(context =>
-                {
-                if (context.User.Identity.IsAuthenticated == true)
-                    return true;
-                else
-                    return false;
-                }));
+                options.AddPolicy("AdminOnly", adminPolicy);
             });
             
 
