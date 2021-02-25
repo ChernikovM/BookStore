@@ -1,14 +1,20 @@
 ﻿using AutoMapper;
 using BookStore.BusinessLogicLayer.Exceptions;
+using BookStore.BusinessLogicLayer.Models;
 using BookStore.BusinessLogicLayer.Models.Responses;
 using BookStore.BusinessLogicLayer.Models.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Linq.Dynamic.Core;
+using System.Web;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
@@ -134,5 +140,24 @@ namespace BookStore.BusinessLogicLayer.Services
 
             return new MessageResponse() { Message = "Changes was successfully saved."};
         }
+
+        public async Task<MessageResponse> GetAllUsers()
+        {
+            return new MessageResponse() { Message = "List of users." };
+        }
+
+        public async Task<List<User>> TestSort(SortModel sortModel) //TODO: returnType change
+        {
+            var result = _userManager.Users.OrderBy($"{HttpUtility.UrlDecode(sortModel.SortBy)}");
+
+            return result.ToList();
+        }
+
+        private List<T> SortByPropertyName<T>(IQueryable<T> collection, string str)
+        {
+            var sortedItems = collection.OrderBy($"{HttpUtility.UrlDecode(str)}");
+            return sortedItems.ToList();
+        }
+
     }
 }

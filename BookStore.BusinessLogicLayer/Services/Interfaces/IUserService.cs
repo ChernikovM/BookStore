@@ -1,5 +1,8 @@
-﻿using BookStore.BusinessLogicLayer.Models.Responses;
+﻿using BookStore.BusinessLogicLayer.Models;
+using BookStore.BusinessLogicLayer.Models.Responses;
 using BookStore.BusinessLogicLayer.Models.User;
+using BookStore.DataAccessLayer.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BookStore.BusinessLogicLayer.Services.Interfaces
@@ -13,5 +16,9 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
         public Task<UserResponseModel> GetUserProfile(string email);
 
         public Task<MessageResponse> EditUserProfile(UserUpdateModel model, string accessToken);
+
+        public Task<MessageResponse> GetAllUsers();
+
+        public Task<List<User>> TestSort(SortModel model);
     }
 }

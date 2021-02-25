@@ -1,4 +1,5 @@
-﻿using BookStore.BusinessLogicLayer.Models.User;
+﻿using BookStore.BusinessLogicLayer.Models;
+using BookStore.BusinessLogicLayer.Models.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -39,8 +40,7 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(response);
         }
 
-        //[Authorize("AdminOnly")]
-        [Authorize(Roles = "Admin")]
+        [Authorize("AdminOnly")]
         [HttpGet]
         public async Task<IActionResult> GetUserProfile([FromQuery] string email)
         {
@@ -55,6 +55,24 @@ namespace BookStore.PresentationLayer.Controllers
             var accessToken = authorization.Split(" ").Last();
 
             var response = await _userService.EditUserProfile(model, accessToken);
+            return new OkObjectResult(response);
+        }
+
+        [Authorize("AdminOnly")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var response = await _userService.GetAllUsers();
+
+            return new OkObjectResult(response);
+        }
+
+        [Authorize("AdminOnly")]
+        [HttpGet]
+        public async Task<IActionResult> TestSort([FromBody]SortModel model)
+        {
+            var response = await _userService.TestSort(model);
+
             return new OkObjectResult(response);
         }
     }
