@@ -25,7 +25,6 @@ namespace BookStore.BusinessLogicLayer.Models
             }
         }
 
-
         public PageModel(int count, int currentPageNumber, int pageSize)
         {
             CurrentPageNumber = currentPageNumber;

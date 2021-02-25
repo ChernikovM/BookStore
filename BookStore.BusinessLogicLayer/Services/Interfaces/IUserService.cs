@@ -17,7 +17,7 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
 
         public Task<MessageResponse> EditUserProfile(UserUpdateModel model, string accessToken);
 
-        public Task<MessageResponse> GetAllUsers();
+        public Task<IndexResponseModel<User>> GetAllUsers(IndexRequestModel model);
 
         public Task<List<User>> TestSort(SortModel model);
     }

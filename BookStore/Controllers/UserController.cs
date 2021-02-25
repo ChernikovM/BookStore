@@ -60,9 +60,9 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers([FromBody]IndexRequestModel model)
         {
-            var response = await _userService.GetAllUsers();
+            var response = await _userService.GetAllUsers(model);
 
             return new OkObjectResult(response);
         }

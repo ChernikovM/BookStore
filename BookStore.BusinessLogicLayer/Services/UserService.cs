@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using System.Web;
+using System.Linq.Dynamic.Core.Exceptions;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
@@ -141,9 +142,28 @@ namespace BookStore.BusinessLogicLayer.Services
             return new MessageResponse() { Message = "Changes was successfully saved."};
         }
 
-        public async Task<MessageResponse> GetAllUsers()
+        public async Task<IndexResponseModel<User>> GetAllUsers(IndexRequestModel model)
         {
-            return new MessageResponse() { Message = "List of users." };
+            string[] filters = model.Filter.Split("+");
+
+            var query = _userManager.Users;
+
+            foreach (var filter in filters)
+            {
+                try
+                {
+                    string propName = filter.Split("=").First();
+                    string expr = filter.Split("=").Last();
+                    query = query.Where($"{propName}.Contains({expr})");
+                }
+                catch (Exception)
+                { 
+                    //do nothing if property not found or other
+                }
+            }
+            var result = query.ToList();
+
+            return null;
         }
 
         public async Task<List<User>> TestSort(SortModel sortModel) //TODO: returnType change
