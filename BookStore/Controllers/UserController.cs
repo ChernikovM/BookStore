@@ -66,14 +66,5 @@ namespace BookStore.PresentationLayer.Controllers
 
             return new OkObjectResult(response);
         }
-
-        [Authorize("AdminOnly")]
-        [HttpGet]
-        public async Task<IActionResult> TestSort([FromBody]SortModel model)
-        {
-            var response = await _userService.TestSort(model);
-
-            return new OkObjectResult(response);
-        }
     }
 }

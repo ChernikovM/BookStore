@@ -40,7 +40,7 @@ namespace BookStore
             services.AddControllers();
 
             services.AddDbContext<DataContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("Default"))
+                options => options.UseSqlServer(Configuration.GetConnectionString("Server"))
             );
 
             services.AddIdentity<User, IdentityRole>(x => x.User.RequireUniqueEmail = true)
@@ -69,6 +69,11 @@ namespace BookStore
                 Configuration.GetSection("JwtConfiguration").Get<JwtConfiguration>();
             services.AddSingleton<IJwtConfiguration>(jwtConfig);
             services.AddScoped<IJwtService, JwtService>();
+
+            var dataCollectionAccessConfig =
+                Configuration.GetSection("DataCollectionAccessConfiguration").Get<DataCollectionAccessServiceConfiguration>();
+            services.AddSingleton<IDataCollectionAccessServiceConfiguration>(dataCollectionAccessConfig);
+            services.AddScoped<IDataCollectionAccessService, DataCollectionAccessService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(x =>

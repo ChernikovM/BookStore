@@ -9,6 +9,8 @@ namespace BookStore.BusinessLogicLayer.Models
 
         public int TotalPages { get; set; }
 
+        public int PageSize { get; set; }
+
         public bool HasPreviousPage
         {
             get
@@ -29,6 +31,7 @@ namespace BookStore.BusinessLogicLayer.Models
         {
             CurrentPageNumber = currentPageNumber;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            PageSize = pageSize;
         }
 
         

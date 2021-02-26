@@ -6,16 +6,11 @@ using BookStore.BusinessLogicLayer.Models.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Net;
-using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Linq.Dynamic.Core;
-using System.Web;
-using System.Linq.Dynamic.Core.Exceptions;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
@@ -25,13 +20,21 @@ namespace BookStore.BusinessLogicLayer.Services
         private readonly IJwtService _jwtService;
         private readonly IMapper _mapper;
         private readonly IEmailSenderService _emailSenderService;
+        private readonly IDataCollectionAccessService _dataCollectionService;
 
-        public UserService(UserManager<User> userManager, IJwtService jwtService, IMapper mapper, IEmailSenderService emailSenderService)
+        public UserService(
+            UserManager<User> userManager, 
+            IJwtService jwtService, 
+            IMapper mapper, 
+            IEmailSenderService emailSenderService,
+            IDataCollectionAccessService dataCollectionService
+            )
         {
             _userManager = userManager;
             _jwtService = jwtService;
             _mapper = mapper;
             _emailSenderService = emailSenderService;
+            _dataCollectionService = dataCollectionService;
         }
 
         private async Task<User> GetUserByTokenAsync(string token)
@@ -142,42 +145,13 @@ namespace BookStore.BusinessLogicLayer.Services
             return new MessageResponse() { Message = "Changes was successfully saved."};
         }
 
-        public async Task<IndexResponseModel<User>> GetAllUsers(IndexRequestModel model)
+        public async Task<DataCollectionModel<UserModel>> GetAllUsers(IndexRequestModel model)
         {
-            string[] filters = model.Filter.Split("+");
+            var collection = _userManager.Users;
 
-            var query = _userManager.Users;
+            var result = _dataCollectionService.GetCollection<UserModel, User>(collection, model, out DataCollectionModel<UserModel> responseModel);
 
-            foreach (var filter in filters)
-            {
-                try
-                {
-                    string propName = filter.Split("=").First();
-                    string expr = filter.Split("=").Last();
-                    query = query.Where($"{propName}.Contains({expr})");
-                }
-                catch (Exception)
-                { 
-                    //do nothing if property not found or other
-                }
-            }
-            var result = query.ToList();
-
-            return null;
+            return responseModel;
         }
-
-        public async Task<List<User>> TestSort(SortModel sortModel) //TODO: returnType change
-        {
-            var result = _userManager.Users.OrderBy($"{HttpUtility.UrlDecode(sortModel.SortBy)}");
-
-            return result.ToList();
-        }
-
-        private List<T> SortByPropertyName<T>(IQueryable<T> collection, string str)
-        {
-            var sortedItems = collection.OrderBy($"{HttpUtility.UrlDecode(str)}");
-            return sortedItems.ToList();
-        }
-
     }
 }
