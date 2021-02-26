@@ -27,12 +27,9 @@ namespace BookStore.BusinessLogicLayer.Services
             string filter = requestModel.Filter;
             string sort = requestModel.SortBy;
             var pagination = requestModel.PageRequestModel;
-            int collectionCount;
 
             collection = Filter<U, T>(collection, ref filter);
             collection = Sort<U, T>(collection, ref sort);
-
-            collectionCount = collection.Count();
 
             collection = Pagination<U>(collection, ref pagination, out PageModel pageModel);
 

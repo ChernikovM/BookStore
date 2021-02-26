@@ -7,6 +7,8 @@ using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.AppContext;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Enums;
+using BookStore.DataAccessLayer.Repositories.EFRepositories;
+using BookStore.DataAccessLayer.Repositories.EFRepositories.Base;
 using BookStore.PresentationLayer.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -120,7 +122,8 @@ namespace BookStore
             {
                 options.AddPolicy("AdminOnly", adminPolicy);
             });
-            
+
+            services.AddScoped<EFRepository<Author>, AuthorRepository>();
 
         }
 

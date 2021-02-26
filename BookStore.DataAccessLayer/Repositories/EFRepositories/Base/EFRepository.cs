@@ -3,15 +3,14 @@ using BookStore.DataAccessLayer.Entities.Base;
 using BookStore.DataAccessLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace BookStore.DataAccessLayer.Repositories.EFRepositories
+namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Base
 {
     public class EFRepository<TEntity> : IBaseRepository<TEntity>
         where TEntity : BaseEntity
     {
-        private readonly DataContext _context;
+        protected readonly DataContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
         public EFRepository(DataContext context)
@@ -31,14 +30,14 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories
             return _dbSet.Find(id);
         }
 
-        public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate)
+        public IQueryable<TEntity> Get(Func<TEntity, bool> predicate)
         {
-            return _dbSet.Where(predicate).ToList();
+            return _dbSet.Where(predicate).AsQueryable();
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public IQueryable<TEntity> GetAll()
         {
-            return _dbSet.ToList();
+            return _dbSet;
         }
 
         public void Remove(TEntity item)
