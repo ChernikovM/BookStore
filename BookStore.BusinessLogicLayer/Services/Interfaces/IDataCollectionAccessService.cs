@@ -11,8 +11,8 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
         
         public IQueryable<T> Pagination<T>(IQueryable<T> collection, ref PageRequestModel requestModel, out PageModel responseModel);
 
-        public IQueryable<T> Filter<T>(IQueryable<T> collection, ref string filterString);
+        public IQueryable<T> Filter<T, U>(IQueryable<T> collection, ref string filterString);
 
-        public IQueryable<T> Sort<T>(IQueryable<T> collection, ref string sortString);
+        public IQueryable<T> Sort<T, U>(IQueryable<T> collection, ref string sortString);
     }
 }

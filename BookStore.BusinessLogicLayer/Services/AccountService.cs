@@ -6,6 +6,7 @@ using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Enums;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -86,7 +87,6 @@ namespace BookStore.BusinessLogicLayer.Services
             await _userManager.RemoveClaimsAsync(user, await _userManager.GetClaimsAsync(user));
         }
 
-
         public async Task<JwtPairResponse> Login(UserLoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
@@ -99,6 +99,14 @@ namespace BookStore.BusinessLogicLayer.Services
             if (!checkPassword)
             {
                 throw new CustomException(HttpStatusCode.BadRequest, "Invalid credentials.");
+            }
+
+            if (user.LockoutEnd is not null)
+            {
+                if (user.LockoutEnd > DateTime.UtcNow)
+                {
+                    throw new CustomException(HttpStatusCode.Forbidden, "This account is blocked.");
+                }
             }
 
             var checkEmailConfirmation = await _userManager.IsEmailConfirmedAsync(user);

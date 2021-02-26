@@ -11,10 +11,14 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
 
         public Task<MessageResponse> UpdateMyProfile(UserUpdateModel model, string accessToken);
 
-        public Task<UserResponseModel> GetUserProfile(string email);
+        public Task<UserModel> GetUserProfile(string email);
 
         public Task<MessageResponse> EditUserProfile(UserUpdateModel model, string accessToken);
 
         public Task<DataCollectionModel<UserModel>> GetAllUsers(IndexRequestModel model);
+
+        public Task<MessageResponse> BlockUser(UserLockoutModel model);
+
+        public Task<MessageResponse> UnblockUser(UserLockoutModel model);
     }
 }

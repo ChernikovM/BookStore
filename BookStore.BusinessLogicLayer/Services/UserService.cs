@@ -6,6 +6,7 @@ using BookStore.BusinessLogicLayer.Models.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
@@ -103,7 +104,7 @@ namespace BookStore.BusinessLogicLayer.Services
             return new MessageResponse() { Message = response };
         }
 
-        public async Task<UserResponseModel> GetUserProfile(string email)
+        public async Task<UserModel> GetUserProfile(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -112,7 +113,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
             }
 
-            var response = _mapper.Map<UserResponseModel>(user);
+            var response = _mapper.Map<UserModel>(user);
 
             return response;
         }
@@ -152,6 +153,41 @@ namespace BookStore.BusinessLogicLayer.Services
             var result = _dataCollectionService.GetCollection<UserModel, User>(collection, model, out DataCollectionModel<UserModel> responseModel);
 
             return responseModel;
+        }
+
+        public async Task<MessageResponse> BlockUser(UserLockoutModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user is null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
+            }
+
+            if (!user.LockoutEnabled)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "This user cannot be blocked.");
+            }
+
+            user.LockoutEnd = DateTime.UtcNow.AddYears(100); //TODO: hardcode
+            await _userManager.UpdateAsync(user);
+
+            return new MessageResponse() { Message = "User was successfully blocked."};
+        }
+
+        public async Task<MessageResponse> UnblockUser(UserLockoutModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user is null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
+            }
+
+            user.LockoutEnd = null;
+            await _userManager.UpdateAsync(user);
+
+            return new MessageResponse() { Message = "User was successfully unblocked." };
         }
     }
 }

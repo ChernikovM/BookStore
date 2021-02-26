@@ -1,7 +1,6 @@
 ﻿using BookStore.BusinessLogicLayer.Models;
 using BookStore.BusinessLogicLayer.Models.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
-using BookStore.DataAccessLayer.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -63,6 +62,24 @@ namespace BookStore.PresentationLayer.Controllers
         public async Task<IActionResult> GetAllUsers([FromBody]IndexRequestModel model)
         {
             var response = await _userService.GetAllUsers(model);
+
+            return new OkObjectResult(response);
+        }
+
+        [Authorize("AdminOnly")]
+        [HttpGet]
+        public async Task<IActionResult> BlockUser([FromBody] UserLockoutModel model)
+        {
+            var response = await _userService.BlockUser(model);
+
+            return new OkObjectResult(response);
+        }
+
+        [Authorize("AdminOnly")]
+        [HttpGet]
+        public async Task<IActionResult> UnblockUser([FromBody] UserLockoutModel model)
+        {
+            var response = await _userService.UnblockUser(model);
 
             return new OkObjectResult(response);
         }
