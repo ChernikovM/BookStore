@@ -8,7 +8,7 @@ using BookStore.DataAccessLayer.AppContext;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Enums;
 using BookStore.DataAccessLayer.Repositories.EFRepositories;
-using BookStore.DataAccessLayer.Repositories.EFRepositories.Base;
+using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
 using BookStore.PresentationLayer.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -42,8 +42,7 @@ namespace BookStore
             services.AddControllers();
 
             services.AddDbContext<DataContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("Server"))
-            );
+                options => options.UseSqlServer(Configuration.GetConnectionString("Server")));
 
             services.AddIdentity<User, IdentityRole>(x => x.User.RequireUniqueEmail = true)
                 .AddEntityFrameworkStores<DataContext>()
@@ -51,6 +50,12 @@ namespace BookStore
             
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthorService, AuthorService>();
+            services.AddScoped<IPrintingEditionService, PrintingEditionService>();
+
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IPrintingEditionRepository, PrintingEditionRepository>();
+            
 
             var loggerConfig = 
                 Configuration.GetSection("LoggerConfiguration").Get<LoggerConfiguration>();
@@ -123,7 +128,7 @@ namespace BookStore
                 options.AddPolicy("AdminOnly", adminPolicy);
             });
 
-            services.AddScoped<EFRepository<Author>, AuthorRepository>();
+            
 
         }
 

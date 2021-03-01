@@ -1,6 +1,5 @@
 ﻿using BookStore.DataAccessLayer.Entities.Base;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace BookStore.DataAccessLayer.Repositories.Interfaces
@@ -11,8 +10,9 @@ namespace BookStore.DataAccessLayer.Repositories.Interfaces
         void Create(TEntity item);
         TEntity FindById(long id);
         IQueryable<TEntity> GetAll();
-        IQueryable<TEntity> Get(Func<TEntity, bool> predicate);
+        TEntity Get(TEntity entity);
         void Remove(TEntity item);
         void Update(TEntity item);
+        TEntity FindBy(Func<TEntity, bool> predicate);
     }
 }

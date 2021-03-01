@@ -22,7 +22,7 @@ namespace BookStore.BusinessLogicLayer.Services
             _mapper = mapper;
         }
 
-        public List<T> GetCollection<T, U>(IQueryable<U> collection, IndexRequestModel requestModel, out DataCollectionModel<T> responseModel)
+        public List<T> GetCollection<T, U>(IQueryable<U> collection, IndexRequestModel requestModel, out DataCollectionModel<T> responseModel) //T - modelType. U - entityType
         {
             string filter = requestModel.Filter;
             string sort = requestModel.SortBy;

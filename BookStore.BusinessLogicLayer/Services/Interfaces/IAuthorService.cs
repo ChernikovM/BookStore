@@ -1,7 +1,8 @@
-﻿namespace BookStore.BusinessLogicLayer.Services.Interfaces
+﻿using BookStore.BusinessLogicLayer.Models.Author;
+
+namespace BookStore.BusinessLogicLayer.Services.Interfaces
 {
-    public interface IAuthorService
+    public interface IAuthorService : ICrudService<AuthorModel>
     {
-        //TODO: CRUD interface
     }
 }

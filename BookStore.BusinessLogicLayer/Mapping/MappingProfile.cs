@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BookStore.BusinessLogicLayer.Models.Author;
+using BookStore.BusinessLogicLayer.Models.PrintingEdition;
 using BookStore.BusinessLogicLayer.Models.Responses;
 using BookStore.BusinessLogicLayer.Models.User;
 using BookStore.DataAccessLayer.Entities;
@@ -15,6 +17,8 @@ namespace BookStore.BusinessLogicLayer.Mapping
             CreateMap<User, UserResponseModel>().ReverseMap();
             CreateMap<User, UserUpdateModel>().ReverseMap();
             CreateMap<User, UserModel>().ReverseMap();
+            CreateMap<Author, AuthorModel>().ReverseMap();
+            CreateMap<PrintingEdition, PrintingEditionModel>().ReverseMap();
         }
     }
 }
