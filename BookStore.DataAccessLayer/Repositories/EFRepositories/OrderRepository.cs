@@ -1,0 +1,14 @@
+﻿using BookStore.DataAccessLayer.AppContext;
+using BookStore.DataAccessLayer.Entities;
+using BookStore.DataAccessLayer.Repositories.EFRepositories.Base;
+using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
+
+namespace BookStore.DataAccessLayer.Repositories.EFRepositories
+{
+    public class OrderRepository : EFRepository<Order>, IOrderRepository
+    {
+        public OrderRepository(DataContext context) : base(context)
+        {
+        }
+    }
+}

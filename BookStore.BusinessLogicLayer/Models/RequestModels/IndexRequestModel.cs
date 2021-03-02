@@ -1,4 +1,4 @@
-﻿namespace BookStore.BusinessLogicLayer.Models
+﻿namespace BookStore.BusinessLogicLayer.Models.RequestModels
 {
     public class IndexRequestModel
     {

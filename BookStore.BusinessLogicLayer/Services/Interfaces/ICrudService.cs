@@ -1,20 +1,21 @@
-﻿using BookStore.BusinessLogicLayer.Models;
-using BookStore.BusinessLogicLayer.Models.Base;
-using BookStore.BusinessLogicLayer.Models.Responses;
+﻿using BookStore.BusinessLogicLayer.Models.Base;
+using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.ResponseModels;
+using System.Threading.Tasks;
 
 namespace BookStore.BusinessLogicLayer.Services.Interfaces
 {
     public interface ICrudService<TModel>
-        where TModel : BaseModel
+        where TModel : BaseErrorModel
     {
-        TModel Get(TModel model);
+        Task<TModel> GetAsync(TModel model);
 
-        DataCollectionModel<TModel> GetAll(IndexRequestModel model);
+        Task<DataCollectionModel<TModel>> GetAllAsync(IndexRequestModel model);
 
-        void Create(TModel model);
+        Task CreateAsync(TModel model);
 
-        void Remove(TModel model);
+        Task RemoveAsync(TModel model);
 
-        void Update(TModel model);
+        Task UpdateAsync(TModel model);
     }
 }

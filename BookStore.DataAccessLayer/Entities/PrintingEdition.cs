@@ -2,12 +2,13 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-
 namespace BookStore.DataAccessLayer.Entities
 {
     public class PrintingEdition : BaseEntity
     {
         public string Title { get; set; }
+
+        public string SubTitle { get; set; }
 
         public string Description { get; set; }
 
@@ -17,10 +18,14 @@ namespace BookStore.DataAccessLayer.Entities
 
         public Enums.Enums.PrintingEditionType Type { get; set; }
 
-        [JsonIgnore]
-        public List<Author> Authors { get; set; } = new List<Author>();
+        public List<Author> Authors { get; set; }
 
-        [JsonIgnore]
-        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public List<OrderItem> OrderItems { get; set; }
+
+        public PrintingEdition()
+        {
+            Authors = new List<Author>();
+            OrderItems = new List<OrderItem>();
+        }
     }
 }

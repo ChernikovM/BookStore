@@ -1,6 +1,8 @@
-﻿using BookStore.BusinessLogicLayer.Models;
-using BookStore.BusinessLogicLayer.Models.User;
+﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
+using BookStore.DataAccessLayer.Entities;
+using BookStore.PresentationLayer.Controllers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -10,7 +12,7 @@ namespace BookStore.PresentationLayer.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class UserController
+    public class UserController : Controller
     {
         private readonly IUserService _userService;
 
@@ -21,9 +23,10 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetMyProfile([FromHeader]string authorization)
+        public async Task<IActionResult> GetMyProfile()
         {
-            var accessToken = authorization.Split(" ").Last();
+            HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
+            var accessToken = value.ToString().Split(" ").Last();
             var response = await _userService.GetMyProfile(accessToken);
 
             return new OkObjectResult(response);
@@ -31,9 +34,10 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Update([FromHeader] string authorization, [FromBody] UserUpdateModel model)
-        { 
-            var accessToken = authorization.Split(" ").Last();
+        public async Task<IActionResult> Update([FromBody] UserUpdateModel model)
+        {
+            HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
+            var accessToken = value.ToString().Split(" ").Last();
             var response = await _userService.UpdateMyProfile(model, accessToken);
 
             return new OkObjectResult(response);
@@ -49,9 +53,10 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpPost]
-        public async Task<IActionResult> EditProfile([FromBody]UserUpdateModel model, [FromHeader] string authorization)
+        public async Task<IActionResult> EditProfile([FromBody]UserUpdateModel model)
         {
-            var accessToken = authorization.Split(" ").Last();
+            HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
+            var accessToken = value.ToString().Split(" ").Last();
 
             var response = await _userService.EditUserProfile(model, accessToken);
             return new OkObjectResult(response);

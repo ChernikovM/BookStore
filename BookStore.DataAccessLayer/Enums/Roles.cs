@@ -4,7 +4,7 @@
     {
         public enum Roles
         { 
-            Nan = 0,
+            None = 0,
             Admin = 1,
             User = 2,
 

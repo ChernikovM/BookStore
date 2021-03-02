@@ -1,8 +1,8 @@
 ﻿using BookStore.BusinessLogicLayer.Models.Base;
 
-namespace BookStore.BusinessLogicLayer.Models.Responses
+namespace BookStore.BusinessLogicLayer.Models.ResponseModels
 {
-    public class MessageResponse : BaseModel
+    public class MessageResponse : BaseErrorModel
     {
         public string Message { get; set; }
     }

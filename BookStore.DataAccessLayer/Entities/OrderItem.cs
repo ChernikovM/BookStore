@@ -15,10 +15,8 @@ namespace BookStore.DataAccessLayer.Entities
 
         public long PrintingEditionId { get; set; }
 
-        [JsonIgnore]
         public PrintingEdition PrintingEdition { get; set; }
 
-        [JsonIgnore]
         public Order Order { get; set; }
     }
 }

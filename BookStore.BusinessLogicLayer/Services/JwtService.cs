@@ -1,23 +1,28 @@
 ﻿using BookStore.BusinessLogicLayer.Configurations.Interfaces;
-using BookStore.BusinessLogicLayer.Models.Responses;
+using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
     public class JwtService : IJwtService
     {
         private readonly IJwtConfiguration _config;
+        private readonly UserManager<User> _userManager;
 
-        public JwtService(IJwtConfiguration config)
+        public JwtService(IJwtConfiguration config, UserManager<User> userManager)
         {
             _config = config;
+            _userManager = userManager;
         }
 
         public string GenerateToken(IList<Claim> claims, int lifeTimeMinutes)
@@ -39,17 +44,38 @@ namespace BookStore.BusinessLogicLayer.Services
             return token;
         }
 
-        public JwtPairResponse GenerateTokenPair(IList<Claim> claims)
+        private async Task<IList<Claim>> SetClaims(User user)
         {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, _userManager.GetRolesAsync(user).Result.First()),
+
+            };
+
+            await _userManager.AddClaimsAsync(user, claims);
+            return claims;
+        }
+
+        public async Task ClearClaims(User user)
+        {
+            await _userManager.RemoveClaimsAsync(user, await _userManager.GetClaimsAsync(user));
+        }
+
+        public async Task<JwtPairResponse> GenerateTokenPairAsync(User user)
+        {
+            await ClearClaims(user);
+            var claims = await SetClaims(user);
+
             var accessToken = GenerateToken(claims, _config.AccessTokenExpiration);
             var refreshToken = GenerateToken(claims, _config.RefreshTokenExpiration);
 
-            JwtPairResponse result = new JwtPairResponse() { AccessToken = accessToken, RefreshToken = refreshToken};
+            JwtPairResponse result = new JwtPairResponse() { AccessToken = accessToken, RefreshToken = refreshToken };
 
             return result;
         }
 
-        public IEnumerable<Claim> GetClaims(string token)
+        public IEnumerable<Claim> GetClaimsFromToken(string token)
         {
             return new JwtSecurityTokenHandler().ReadJwtToken(token).Claims;
         }
@@ -69,7 +95,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 ValidateLifetime = true,
                 
 
-            }, out SecurityToken validatedToken);
+            }, out _);
 
             return claimsPrincipal;
         }
@@ -85,7 +111,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
             var validTo = new JwtSecurityTokenHandler().ReadJwtToken(token).ValidTo;
 
-            if (validTo < DateTime.Now)
+            if (validTo < DateTime.UtcNow)
             {
                 return false;
             }

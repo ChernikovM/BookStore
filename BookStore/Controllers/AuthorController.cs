@@ -1,5 +1,5 @@
-﻿using BookStore.BusinessLogicLayer.Models;
-using BookStore.BusinessLogicLayer.Models.Author;
+﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.PresentationLayer.Controllers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +23,7 @@ namespace BookStore.PresentationLayer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AuthorModel model)
         {
-            _authorService.Create(model);
+            await _authorService.CreateAsync(model);
 
             return new OkObjectResult("Author was successfully added.");
         }
@@ -32,7 +32,7 @@ namespace BookStore.PresentationLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(AuthorModel model)
         {
-            var result = _authorService.Get(model);
+            var result = await _authorService.GetAsync(model);
 
             return new OkObjectResult(result);
         }
@@ -41,7 +41,7 @@ namespace BookStore.PresentationLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(IndexRequestModel model)
         {
-            var result = _authorService.GetAll(model);
+            var result = await _authorService.GetAllAsync(model);
 
             return new OkObjectResult(result);
         }
@@ -50,7 +50,7 @@ namespace BookStore.PresentationLayer.Controllers
         [HttpPost]
         public async Task<IActionResult> Remove(AuthorModel model)
         {
-            _authorService.Remove(model);
+            await _authorService.RemoveAsync(model);
 
             return new OkObjectResult("Author was successfully removed.");
         }
@@ -59,7 +59,7 @@ namespace BookStore.PresentationLayer.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(AuthorModel model)
         {
-            _authorService.Update(model);
+            await _authorService.UpdateAsync(model);
 
             return new OkObjectResult("Author was successfully updated.");
         }

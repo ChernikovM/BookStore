@@ -7,7 +7,6 @@ namespace BookStore.DataAccessLayer.Entities
     {
         public long TransactionId { get; set; }
 
-        [JsonIgnore]
         public Order Order { get; set; }
     }
 }

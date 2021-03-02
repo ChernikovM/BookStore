@@ -12,7 +12,11 @@ namespace BookStore.DataAccessLayer.Entities
 
         public string RefreshToken { get; set; }
 
-        [JsonIgnore]
-        public List<Order> Orders { get; set; } = new List<Order>();
+        public List<Order> Orders { get; set; }
+
+        public User()
+        {
+            Orders = new List<Order>();
+        }
     }
 }

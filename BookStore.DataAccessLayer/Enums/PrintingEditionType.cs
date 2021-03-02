@@ -4,7 +4,7 @@
     {
         public enum PrintingEditionType
         {
-            NAN = 0,
+            None = 0,
             Book = 1,
             Journal = 2,
             Newspaper = 3,

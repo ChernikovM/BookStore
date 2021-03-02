@@ -1,8 +1,8 @@
-﻿using BookStore.BusinessLogicLayer.Models.Author;
-using BookStore.BusinessLogicLayer.Models.Base;
+﻿using BookStore.BusinessLogicLayer.Models.Base;
+using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
 using System.Collections.Generic;
 
-namespace BookStore.BusinessLogicLayer.Models.PrintingEdition
+namespace BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition
 {
     public class PrintingEditionModel : BaseModel
     {
@@ -15,8 +15,6 @@ namespace BookStore.BusinessLogicLayer.Models.PrintingEdition
         public int Type { get; set; }
 
         public string Description { get; set; }
-
-        public long Id { get; set; }
 
         public List<AuthorModel> Authors { get; set; }
     }

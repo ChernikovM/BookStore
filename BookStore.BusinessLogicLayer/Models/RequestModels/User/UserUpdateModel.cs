@@ -1,9 +1,9 @@
 ﻿using BookStore.BusinessLogicLayer.Models.Base;
 using System.ComponentModel.DataAnnotations;
 
-namespace BookStore.BusinessLogicLayer.Models.User
+namespace BookStore.BusinessLogicLayer.Models.RequestModels.User
 {
-    public class UserUpdateModel : BaseModel
+    public class UserUpdateModel : BaseErrorModel
     {
         [Required]
         public string FirstName { get; set; }

@@ -1,4 +1,4 @@
-﻿using BookStore.BusinessLogicLayer.Models.Author;
+﻿using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
 
 namespace BookStore.BusinessLogicLayer.Services.Interfaces
 {

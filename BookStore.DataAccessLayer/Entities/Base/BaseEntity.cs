@@ -12,7 +12,7 @@ namespace BookStore.DataAccessLayer.Entities.Base
 
         public BaseEntity()
         {
-            CreationDate = DateTime.Now;
+            CreationDate = DateTime.UtcNow;
             IsRemoved = false;
         }
     }

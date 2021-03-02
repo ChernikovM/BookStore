@@ -1,5 +1,5 @@
-﻿using BookStore.BusinessLogicLayer.Models.Responses;
-using BookStore.BusinessLogicLayer.Models.User;
+﻿using BookStore.BusinessLogicLayer.Models.RequestModels.User;
+using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using System.Threading.Tasks;
 
 namespace BookStore.BusinessLogicLayer.Services.Interfaces

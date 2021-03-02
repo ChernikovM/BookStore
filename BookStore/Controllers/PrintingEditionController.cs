@@ -1,10 +1,9 @@
-﻿using BookStore.BusinessLogicLayer.Models;
-using BookStore.BusinessLogicLayer.Models.PrintingEdition;
+﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.PresentationLayer.Controllers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace BookStore.PresentationLayer.Controllers
@@ -24,29 +23,37 @@ namespace BookStore.PresentationLayer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(PrintingEditionModel model)
         {
-            _peService.Create(model);
-
+            await _peService.CreateAsync(model);
+            
             return new OkObjectResult("success");
         }
 
-        public Task<IActionResult> Get(PrintingEditionModel model)
+        public async Task<IActionResult> Get(PrintingEditionModel model)
         {
-            throw new NotImplementedException();
+            var result = await _peService.GetAsync(model);
+
+            return new OkObjectResult(result);
         }
 
-        public Task<IActionResult> GetAll(IndexRequestModel model)
+        public async Task<IActionResult> GetAll(IndexRequestModel model)
         {
-            throw new NotImplementedException();
+            var result = await _peService.GetAllAsync(model);
+
+            return new OkObjectResult(result);
         }
 
-        public Task<IActionResult> Remove(PrintingEditionModel model)
+        public async Task<IActionResult> Remove(PrintingEditionModel model)
         {
-            throw new NotImplementedException();
+            await _peService.RemoveAsync(model);
+
+            return new OkObjectResult("removed");
         }
 
-        public Task<IActionResult> Update(PrintingEditionModel model)
+        public async Task<IActionResult> Update(PrintingEditionModel model)
         {
-            throw new NotImplementedException();
+            await _peService.RemoveAsync(model);
+
+            return new OkObjectResult("updated");
         }
     }
 }

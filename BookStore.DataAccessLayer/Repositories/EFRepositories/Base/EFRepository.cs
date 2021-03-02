@@ -2,15 +2,15 @@
 using BookStore.DataAccessLayer.Entities.Base;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Base
 {
     public class EFRepository<TEntity> : IEFRepository<TEntity>
         where TEntity : BaseEntity
     {
-        protected readonly DataContext _context;
+        private readonly DataContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
         public EFRepository(DataContext context)
@@ -19,47 +19,42 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Base
             _dbSet = _context.Set<TEntity>();
         }
 
-        public void Create(TEntity item)
+        public async Task CreateAsync(TEntity item)
         {
-            _dbSet.Add(item);
-            _context.SaveChanges();
+            await _dbSet.AddAsync(item);
+            await _context.SaveChangesAsync();
         }
 
-        public TEntity FindById(long id)
+        public async Task<TEntity> FindByIdAsync(long id)
         {
-            return _dbSet.Find(id);
+            return await _dbSet.FindAsync(id);
         }
 
-        public virtual TEntity Get(TEntity entity) //TODO: virtual
+        public virtual async Task<TEntity> GetAsync(TEntity entity)
         {
-            return _dbSet.Find(entity);
+            return await _dbSet.FindAsync(entity);
         }
 
-        public virtual IQueryable<TEntity> GetAll()
+        public virtual Task<IQueryable<TEntity>> GetAllAsync()
         {
-            return _dbSet;
-        } //TODO: virtual
+            return new Task<IQueryable<TEntity>>(_dbSet.AsQueryable);
+        }
 
-        public void Remove(TEntity item)
+        public async Task RemoveAsync(TEntity item)
         {
             item.IsRemoved = true;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(TEntity item)
+        public async Task UpdateAsync(TEntity item)
         {
             _context.Entry(item).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void SaveChanges()
+        public async Task SaveChangesAsync()
         {
-            _context.SaveChanges();
-        }
-
-        public TEntity FindBy(Func<TEntity, bool> predicate)
-        {
-            return _dbSet.FirstOrDefault(predicate);
+            await _context.SaveChangesAsync();
         }
     }
 }

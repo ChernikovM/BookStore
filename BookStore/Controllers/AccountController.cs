@@ -1,6 +1,7 @@
-﻿using BookStore.BusinessLogicLayer.Models.User;
+﻿using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace BookStore.PresentationLayer.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class AccountController
+    public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
 
@@ -47,9 +48,10 @@ namespace BookStore.PresentationLayer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> RefreshTokens([FromQuery] UserRefreshTokensModel model, [FromHeader] string authorization)
+        public async Task<IActionResult> RefreshTokens([FromQuery] UserRefreshTokensModel model)
         {
-            var accessToken = authorization.Split(" ").Last();
+            HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
+            var accessToken = value.ToString().Split(" ").Last();
             var response = await _accountService.RefreshTokens(model, accessToken);
 
             return new OkObjectResult(response);
@@ -75,9 +77,10 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Logout([FromHeader] string authorization)
+        public async Task<IActionResult> Logout()
         {
-            var accessToken = authorization.Split(" ").Last();
+            HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
+            var accessToken = value.ToString().Split(" ").Last();
             var response = await _accountService.Logout(accessToken);
 
             return new OkObjectResult(response);

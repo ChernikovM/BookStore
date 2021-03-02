@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using BookStore.BusinessLogicLayer.Exceptions;
-using BookStore.BusinessLogicLayer.Models;
-using BookStore.BusinessLogicLayer.Models.Responses;
-using BookStore.BusinessLogicLayer.Models.User;
+using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.RequestModels.User;
+using BookStore.BusinessLogicLayer.Models.ResponseModels;
+using BookStore.BusinessLogicLayer.Models.ResponseModels.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -40,7 +41,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
         private async Task<User> GetUserByTokenAsync(string token)
         {
-            var userClaims = _jwtService.GetClaims(token);
+            var userClaims = _jwtService.GetClaimsFromToken(token);
 
             var user = await _userManager.FindByNameAsync(userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value);
 
@@ -104,7 +105,7 @@ namespace BookStore.BusinessLogicLayer.Services
             return new MessageResponse() { Message = response };
         }
 
-        public async Task<UserModel> GetUserProfile(string email)
+        public async Task<UserResponseModelForAdmin> GetUserProfile(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -113,7 +114,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
             }
 
-            var response = _mapper.Map<UserModel>(user);
+            var response = _mapper.Map<UserResponseModelForAdmin>(user);
 
             return response;
         }
@@ -146,11 +147,11 @@ namespace BookStore.BusinessLogicLayer.Services
             return new MessageResponse() { Message = "Changes was successfully saved."};
         }
 
-        public async Task<DataCollectionModel<UserModel>> GetAllUsers(IndexRequestModel model)
+        public async Task<DataCollectionModel<UserResponseModelForAdmin>> GetAllUsers(IndexRequestModel model)
         {
             var collection = _userManager.Users;
 
-            var result = _dataCollectionService.GetCollection<UserModel, User>(collection, model, out DataCollectionModel<UserModel> responseModel);
+            _dataCollectionService.GetCollection<UserResponseModelForAdmin, User>(collection, model, out DataCollectionModel<UserResponseModelForAdmin> responseModel);
 
             return responseModel;
         }

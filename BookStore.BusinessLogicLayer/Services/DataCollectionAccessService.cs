@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BookStore.BusinessLogicLayer.Configurations.Interfaces;
-using BookStore.BusinessLogicLayer.Models;
-using BookStore.BusinessLogicLayer.Models.Responses;
+using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 return collection;
             }
 
-            string[] filters = filterString.Split(_config.SplitCharacter); //default : char = '+'
+            string[] filters = filterString.Split(_config.SplitCharacter);
 
             filterString = string.Empty;
 
@@ -70,21 +70,7 @@ namespace BookStore.BusinessLogicLayer.Services
                         continue;
                     }
 
-                    if (propType == typeof(string))
-                    {
-                        //contains or = or exception
-                        collection = collection.Where(filter);
-                    }
-                    else if (propType == typeof(int) || propType == typeof(double) || propType == typeof(long) || propType == typeof(decimal)) //TODO: filter was not tested | maybe need to add else
-                    {
-                        // > or < or = or exception
-                        collection = collection.Where(filter);
-                    }
-                    else // bool, char e.g.
-                    {
-                        collection = collection.Where(filter);
-                    }
-                    //collection = collection.Where($"{propName}.Contains({expr})");
+                    collection = collection.Where(filter);
 
                     filterString += filter + _config.SplitCharacter; //if exception was not invoked
                 }

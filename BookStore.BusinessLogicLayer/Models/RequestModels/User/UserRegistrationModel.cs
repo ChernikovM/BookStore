@@ -1,9 +1,9 @@
 ﻿using BookStore.BusinessLogicLayer.Models.Base;
 using System.ComponentModel.DataAnnotations;
 
-namespace BookStore.BusinessLogicLayer.Models.User
+namespace BookStore.BusinessLogicLayer.Models.RequestModels.User
 {
-    public class UserRegistrationModel : BaseModel
+    public class UserRegistrationModel : BaseErrorModel
     {
         [Required( AllowEmptyStrings = false, ErrorMessage = "FirstName is required." )]
         public string FirstName { get; set; }

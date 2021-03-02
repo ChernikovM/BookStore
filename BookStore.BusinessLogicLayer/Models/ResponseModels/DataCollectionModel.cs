@@ -1,9 +1,9 @@
 ﻿using BookStore.BusinessLogicLayer.Models.Base;
 using System.Collections.Generic;
 
-namespace BookStore.BusinessLogicLayer.Models.Responses
+namespace BookStore.BusinessLogicLayer.Models.ResponseModels
 {
-    public class DataCollectionModel<T> : BaseModel
+    public class DataCollectionModel<T> : BaseErrorModel
     {
         public PageModel PageModel { get; set; }
 

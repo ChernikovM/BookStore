@@ -1,5 +1,5 @@
-﻿using BookStore.BusinessLogicLayer.Models;
-using BookStore.BusinessLogicLayer.Models.Responses;
+﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using System.Collections.Generic;
 using System.Linq;
 

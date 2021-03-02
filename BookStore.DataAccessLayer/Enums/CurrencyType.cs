@@ -4,7 +4,7 @@
     {
         public enum CurrencyType
         {
-            NAN = 0,
+            None = 0,
             USD = 1,
             UAH = 2,
             EUR = 3,

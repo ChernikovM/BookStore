@@ -1,9 +1,9 @@
 ﻿using BookStore.BusinessLogicLayer.Models.Base;
 using System;
 
-namespace BookStore.BusinessLogicLayer.Models
+namespace BookStore.BusinessLogicLayer.Models.ResponseModels
 {
-    public class PageModel : BaseModel
+    public class PageModel : BaseErrorModel
     {
         public int CurrentPageNumber { get; set; }
 

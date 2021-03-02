@@ -2,8 +2,7 @@
 
 namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces
 {
-    public interface IAuthorRepository : IEFRepository<Author>
+    public interface IOrderRepository : IEFRepository<Order>
     {
-
     }
 }

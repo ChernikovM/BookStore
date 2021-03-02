@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace BookStore.BusinessLogicLayer.Models.User
+namespace BookStore.BusinessLogicLayer.Models.RequestModels.User
 {
-    public class UserChangePasswordModel : BaseModel
+    public class UserChangePasswordModel : BaseErrorModel
     {
         [Required]
         [FromBody]

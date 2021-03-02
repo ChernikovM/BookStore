@@ -39,7 +39,7 @@ namespace BookStore.PresentationLayer.Middlewares
 
         public async Task HandleExceptionAsync(HttpStatusCode code, Exception ex, HttpContext context)
         {
-            BaseModel result = new BaseModel(ex);
+            BaseErrorModel result = new BaseErrorModel(ex);
             context.Response.Clear();
             context.Response.StatusCode = (int)code;
 

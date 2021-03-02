@@ -23,7 +23,7 @@ namespace BookStore.BusinessLogicLayer.Services
             StringBuilder sb = new StringBuilder();
 
             sb.Append(new string('_', 20)).Append(Environment.NewLine);
-            sb.Append($"- Date: {DateTime.Now}").Append(Environment.NewLine);
+            sb.Append($"- Date: {DateTime.UtcNow}").Append(Environment.NewLine);
             sb.Append($"- Exception : {ex.GetType()}").Append(Environment.NewLine);
             sb.Append($"- Error : {ex.Message}").Append(Environment.NewLine);
             sb.Append($"- Stack Trace: {Environment.NewLine}{ex.StackTrace}").Append(Environment.NewLine);

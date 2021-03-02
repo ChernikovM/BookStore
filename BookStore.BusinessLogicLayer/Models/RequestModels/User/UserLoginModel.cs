@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BookStore.BusinessLogicLayer.Models.User
+namespace BookStore.BusinessLogicLayer.Models.RequestModels.User
 {
     public class UserLoginModel
     {

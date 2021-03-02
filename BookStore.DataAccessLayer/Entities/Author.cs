@@ -8,7 +8,12 @@ namespace BookStore.DataAccessLayer.Entities
     {
         public string Name { get; set; }
 
-        [JsonIgnore]
-        public List<PrintingEdition> PrintingEditions { get; set; } = new List<PrintingEdition>();
+        public List<PrintingEdition> PrintingEditions { get; set; }
+
+        public Author()
+        {
+            PrintingEditions = new List<PrintingEdition>();
+        }
+
     }
 }

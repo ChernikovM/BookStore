@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
-using BookStore.BusinessLogicLayer.Models;
-using BookStore.BusinessLogicLayer.Models.PrintingEdition;
-using BookStore.BusinessLogicLayer.Models.Responses;
+using BookStore.BusinessLogicLayer.Exceptions;
+using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition;
+using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
-using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
@@ -25,43 +27,80 @@ namespace BookStore.BusinessLogicLayer.Services
             _authorRepository = authorRepository;
         }
 
-        public void Create(PrintingEditionModel model)
+
+        public async Task CreateAsync(PrintingEditionModel model)
         {
-            var authorsModelsList = model.Authors;
+            var authorsModelsList = model.Authors; //TODO: error when Authors is null
             var authors = new List<Author>();
 
             foreach (var authorModel in authorsModelsList)
             {
-                authors.Add(_authorRepository.FindById(authorModel.Id));
+                var author = await _authorRepository.FindByIdAsync(authorModel.Id);
+                if (author is null)
+                {
+                    continue;
+                }
+                authors.Add(author);
+            }
+
+            if (authors.Count < 1)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "Invalid Authors.");
             }
 
             var entity = _mapper.Map<PrintingEdition>(model);
 
             entity.Authors = authors;
 
-            _repository.Create(entity);
-
-            //throw new NotImplementedException();
+            await _repository.CreateAsync(entity);
         }
 
-        public PrintingEditionModel Get(PrintingEditionModel model)
+        public async Task<PrintingEditionModel> GetAsync(PrintingEditionModel model)
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetAsync(_mapper.Map<PrintingEdition>(model));
+
+            return _mapper.Map<PrintingEditionModel>(result);
         }
 
-        public DataCollectionModel<PrintingEditionModel> GetAll(IndexRequestModel model)
+        public async Task<DataCollectionModel<PrintingEditionModel>> GetAllAsync(IndexRequestModel model)
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetAllAsync();
+
+            _dataService.GetCollection(result, model, out DataCollectionModel<PrintingEditionModel> response);
+
+            return response;
         }
 
-        public void Remove(PrintingEditionModel model)
+        public async Task RemoveAsync(PrintingEditionModel model)
         {
-            throw new NotImplementedException();
+            if (model.Id == default)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "Ivalid Id.");
+            }
+
+            var entity = await _repository.FindByIdAsync(model.Id);
+            if (entity is null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "Invalid data.");
+            }
+
+            await _repository.RemoveAsync(entity);
         }
 
-        public void Update(PrintingEditionModel model)
+        public async Task UpdateAsync(PrintingEditionModel model)
         {
-            throw new NotImplementedException();
+            if (model.Id == default)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "Ivalid Id.");
+            }
+
+            var entity = await _repository.FindByIdAsync(model.Id);
+            if (entity is null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "Invalid data.");
+            }
+
+            await _repository.UpdateAsync(_mapper.Map<PrintingEdition>(entity));
         }
     }
 }

@@ -55,7 +55,9 @@ namespace BookStore
 
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IPrintingEditionRepository, PrintingEditionRepository>();
-            
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 
             var loggerConfig = 
                 Configuration.GetSection("LoggerConfiguration").Get<LoggerConfiguration>();
@@ -128,7 +130,9 @@ namespace BookStore
                 options.AddPolicy("AdminOnly", adminPolicy);
             });
 
-            
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
         }
 

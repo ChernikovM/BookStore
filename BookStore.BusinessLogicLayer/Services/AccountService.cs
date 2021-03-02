@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using BookStore.BusinessLogicLayer.Exceptions;
-using BookStore.BusinessLogicLayer.Models.Responses;
-using BookStore.BusinessLogicLayer.Models.User;
+using BookStore.BusinessLogicLayer.Models.RequestModels.User;
+using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
@@ -37,6 +36,7 @@ namespace BookStore.BusinessLogicLayer.Services
         public async Task<MessageResponse> Register(UserRegistrationModel model)
         {
             var newUser = _mapper.Map<User>(model);
+            newUser.LockoutEnabled = true;
 
             var result = await _userManager.CreateAsync(newUser, model.Password);
 
@@ -71,22 +71,6 @@ namespace BookStore.BusinessLogicLayer.Services
             return new MessageResponse() { Message = "Registration successfully completed." };
         }
 
-        private async Task SetClaims(User user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, _userManager.GetRolesAsync(user).Result.First()),
-
-            };
-
-            await _userManager.AddClaimsAsync(user, claims);
-        }
-        private async Task ClearClaims(User user)
-        {
-            await _userManager.RemoveClaimsAsync(user, await _userManager.GetClaimsAsync(user));
-        }
-
         public async Task<JwtPairResponse> Login(UserLoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
@@ -101,12 +85,9 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(HttpStatusCode.BadRequest, "Invalid credentials.");
             }
 
-            if (user.LockoutEnd is not null)
+            if (user.LockoutEnd is not null && user.LockoutEnd > DateTime.UtcNow)
             {
-                if (user.LockoutEnd > DateTime.UtcNow)
-                {
-                    throw new CustomException(HttpStatusCode.Forbidden, "This account is blocked.");
-                }
+                throw new CustomException(HttpStatusCode.Forbidden, "This account is blocked.");
             }
 
             var checkEmailConfirmation = await _userManager.IsEmailConfirmedAsync(user);
@@ -115,12 +96,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(System.Net.HttpStatusCode.Unauthorized, "Email not confirmed.");
             }
 
-            await ClearClaims(user);
-            await SetClaims(user);
-
-            var userClaims = await _userManager.GetClaimsAsync(user);
-
-            var tokenPair = _jwtService.GenerateTokenPair(userClaims);
+            var tokenPair = await _jwtService.GenerateTokenPairAsync(user);
 
             user.RefreshToken = tokenPair.RefreshToken;
             await _userManager.UpdateAsync(user);
@@ -130,7 +106,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public async Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken)
         {
-            var claims = _jwtService.GetClaims(accessToken);
+            var claims = _jwtService.GetClaimsFromToken(accessToken);
             var userName = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
             var user = await _userManager.FindByNameAsync(userName);
 
@@ -151,8 +127,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(HttpStatusCode.Unauthorized, "Invalid refreshToken.");
             }
 
-            var userClaims = await _userManager.GetClaimsAsync(user);
-            var response = _jwtService.GenerateTokenPair(userClaims);
+            var response = await _jwtService.GenerateTokenPairAsync(user);
 
             user.RefreshToken = response.RefreshToken;
             await _userManager.UpdateAsync(user);
@@ -195,7 +170,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public async Task<MessageResponse> Logout(string accessToken)
         {
-            var claims = _jwtService.GetClaims(accessToken);
+            var claims = _jwtService.GetClaimsFromToken(accessToken);
             var userName = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
             var user = await _userManager.FindByNameAsync(userName);
 
@@ -205,10 +180,10 @@ namespace BookStore.BusinessLogicLayer.Services
             }
 
             user.RefreshToken = null;
-            await ClearClaims(user);
+            await _jwtService.ClearClaims(user);
             await _userManager.UpdateAsync(user);
 
-            return new MessageResponse() {Message = "Successfully logged out."};
+            return new MessageResponse() { Message = "Successfully logged out." };
         }
     }
 }
