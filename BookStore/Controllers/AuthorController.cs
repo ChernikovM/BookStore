@@ -1,4 +1,6 @@
-﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
+﻿using BookStore.BusinessLogicLayer.Models.Base;
+using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.RequestModels.Author;
 using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.PresentationLayer.Controllers.Interfaces;
@@ -10,7 +12,7 @@ namespace BookStore.PresentationLayer.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class AuthorController : ICrudController<AuthorModel>
+    public class AuthorController : ICrudController<AuthorModel, AuthorCreateModel>
     {
         private readonly IAuthorService _authorService;
 
@@ -21,7 +23,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpPost]
-        public async Task<IActionResult> Create(AuthorModel model)
+        public async Task<IActionResult> Create(AuthorCreateModel model)
         {
             await _authorService.CreateAsync(model);
 
@@ -30,7 +32,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpGet]
-        public async Task<IActionResult> Get(AuthorModel model)
+        public async Task<IActionResult> Get(BaseModel model)
         {
             var result = await _authorService.GetAsync(model);
 
@@ -48,7 +50,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpPost]
-        public async Task<IActionResult> Remove(AuthorModel model)
+        public async Task<IActionResult> Remove(BaseModel model)
         {
             await _authorService.RemoveAsync(model);
 

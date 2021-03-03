@@ -47,7 +47,9 @@ namespace BookStore
             services.AddIdentity<User, IdentityRole>(x => x.User.RequireUniqueEmail = true)
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
-            
+
+            services.AddScoped<IValidationService, ValidationService>();
+
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();

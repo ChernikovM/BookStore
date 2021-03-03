@@ -42,8 +42,20 @@ namespace BookStore.BusinessLogicLayer.Services
         private async Task<User> GetUserByTokenAsync(string token)
         {
             var userClaims = _jwtService.GetClaimsFromToken(token);
+            var username = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+            var user = await _userManager.FindByNameAsync(username);
 
-            var user = await _userManager.FindByNameAsync(userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value);
+            if (user is null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
+            }
+
+            return user;
+        }
+
+        private async Task<User> GetUserByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
 
             if (user is null)
             {
@@ -92,14 +104,11 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(HttpStatusCode.BadRequest, result);
             }
 
-            string response;
+            string response = "Account was successfully updated.";
+
             if (emailUpdatedFlag == true)
             {
                 response = "Confirm your email.";
-            }
-            else
-            {
-                response = "Account was successfully updated.";
             }
 
             return new MessageResponse() { Message = response };
@@ -107,12 +116,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public async Task<UserResponseModelForAdmin> GetUserProfile(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user is null)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
-            }
+            var user = await GetUserByEmail(email);
 
             var response = _mapper.Map<UserResponseModelForAdmin>(user);
 
@@ -141,6 +145,7 @@ namespace BookStore.BusinessLogicLayer.Services
             {
                 user.Email = model.Email;
                 user.EmailConfirmed = false;
+                await _emailSenderService.SendEmailConfirmationLinkAsync(user); //TODO: change text in email
             }
             await _userManager.UpdateAsync(user);
 
@@ -158,12 +163,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public async Task<MessageResponse> BlockUser(UserLockoutModel model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if (user is null)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
-            }
+            var user = await GetUserByEmail(model.Email);
 
             if (!user.LockoutEnabled)
             {
@@ -178,12 +178,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public async Task<MessageResponse> UnblockUser(UserLockoutModel model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if (user is null)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
-            }
+            var user = await GetUserByEmail(model.Email);
 
             user.LockoutEnd = null;
             await _userManager.UpdateAsync(user);

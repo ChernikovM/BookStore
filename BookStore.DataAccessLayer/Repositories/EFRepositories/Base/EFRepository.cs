@@ -2,6 +2,8 @@
 using BookStore.DataAccessLayer.Entities.Base;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,9 +27,23 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Base
             await _context.SaveChangesAsync();
         }
 
-        public async Task<TEntity> FindByIdAsync(long id)
+        public async Task<TEntity> FindByIdAsync(long? id)
         {
-            return await _dbSet.FindAsync(id);
+            var result = await _dbSet.FindAsync(id);
+
+            if(result.IsRemoved)
+            {
+                return null;
+            }
+
+            return result;
+        }
+
+        public async Task<List<TEntity>> FindByIdAsync(List<long> ids)
+        {
+            var result = _dbSet.Where(x => ids.Contains(x.Id) && x.IsRemoved == false);
+
+            return await result.ToListAsync();
         }
 
         public virtual async Task<TEntity> GetAsync(TEntity entity)
@@ -42,6 +58,11 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Base
 
         public async Task RemoveAsync(TEntity item)
         {
+            if (item is null)
+            {
+                throw new NullReferenceException();
+            }
+
             item.IsRemoved = true;
             await _context.SaveChangesAsync();
         }

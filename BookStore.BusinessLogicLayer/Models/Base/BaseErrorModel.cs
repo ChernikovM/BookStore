@@ -13,7 +13,7 @@ namespace BookStore.BusinessLogicLayer.Models.Base
             Errors = new List<string>();
         }
 
-        public BaseErrorModel(Exception ex)
+        public BaseErrorModel(Exception ex) : this()
         {
             if (ex is CustomException)
             {

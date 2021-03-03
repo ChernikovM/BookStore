@@ -45,7 +45,12 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(HttpStatusCode.BadRequest, result);
             }
 
-            await _userManager.AddToRoleAsync(newUser, Enums.Roles.User.ToString());
+            result = await _userManager.AddToRoleAsync(newUser, Enums.Roles.User.ToString());
+
+            if (!result.Succeeded)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, result);
+            }
 
             await _emailSenderService.SendEmailConfirmationLinkAsync(newUser);
 
@@ -113,11 +118,6 @@ namespace BookStore.BusinessLogicLayer.Services
             if (user is null)
             {
                 throw new CustomException(HttpStatusCode.Unauthorized, "User was not found.");
-            }
-
-            if (string.IsNullOrWhiteSpace(model.RefreshToken))
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "Invalid token.");
             }
 
             var refreshTokenIsValid = _jwtService.ValidateRefreshToken(user, model.RefreshToken);

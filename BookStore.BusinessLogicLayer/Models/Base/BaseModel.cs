@@ -1,7 +1,11 @@
-﻿namespace BookStore.BusinessLogicLayer.Models.Base
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BookStore.BusinessLogicLayer.Models.Base
 {
     public class BaseModel : BaseErrorModel
     {
-        public long Id { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        [Range(1, long.MaxValue, ErrorMessage = "Invalid id.")]
+        public long? Id { get; set; }
     }
 }

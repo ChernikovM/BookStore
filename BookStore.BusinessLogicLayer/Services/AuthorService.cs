@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BookStore.BusinessLogicLayer.Exceptions;
+using BookStore.BusinessLogicLayer.Models.Base;
 using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.RequestModels.Author;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
@@ -24,28 +26,35 @@ namespace BookStore.BusinessLogicLayer.Services
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(AuthorModel model)
+        private async Task<Author> FindById(long id)
         {
-            if (string.IsNullOrWhiteSpace(model.Name))
+            var author = await _repository.FindByIdAsync(id);
+
+            if (author is null)
             {
-                throw new CustomException(HttpStatusCode.BadRequest, "Invalid author's name.");
+                throw new CustomException(HttpStatusCode.BadRequest, "Author was not found.");
             }
 
+            return author;
+        }
+
+        public async Task CreateAsync(AuthorCreateModel model)
+        {
             var entity = _mapper.Map<Author>(model);
             
             await _repository.CreateAsync(entity);
         }
 
-        public async Task<AuthorModel> GetAsync(AuthorModel model)
+        public async Task<AuthorModel> GetAsync(BaseModel model)
         {
-            if (model.Id == default)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "Invalid author's id.");
-            }
-
             var ent = _mapper.Map<Author>(model);
 
-            var entity = await _repository.GetAsync(ent); 
+            var entity = await _repository.GetAsync(ent);
+
+            if(entity is null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "Not found.");
+            }
 
             var result= _mapper.Map<AuthorModel>(entity);
 
@@ -61,26 +70,17 @@ namespace BookStore.BusinessLogicLayer.Services
             return response;
         }
 
-        public async Task RemoveAsync(AuthorModel model)
+        public async Task RemoveAsync(BaseModel model)
         {
-            if (model.Id == default)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "Invalid author's id.");
-            }
+            var author = await FindById(model.Id.Value);
 
-            var author = await _repository.FindByIdAsync(model.Id);
             await _repository.RemoveAsync(author);
         }
 
         public async Task UpdateAsync(AuthorModel model)
         {
-            if (model.Id == default)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "Invalid author's id.");
-            }
+            var author = await FindById(model.Id.Value);
 
-            var author = await _repository.FindByIdAsync(model.Id);
-            
             await _repository.UpdateAsync(author);
         }
 

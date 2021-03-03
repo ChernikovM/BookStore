@@ -1,9 +1,13 @@
-﻿namespace BookStore.BusinessLogicLayer.Models.RequestModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BookStore.BusinessLogicLayer.Models.RequestModels
 {
     public class PageRequestModel
     {
-        public int Page { get; set; }
+        public int? Page { get; set; }
 
-        public int PageSize { get; set; }
+        [Required]
+        [Range(1, 100)]
+        public int? PageSize { get; set; }
     }
 }

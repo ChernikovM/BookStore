@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 
 namespace BookStore.BusinessLogicLayer.Services.Interfaces
 {
-    public interface ICrudService<TModel>
+    public interface ICrudService<TModel, TCreateModel>
         where TModel : BaseErrorModel
     {
-        Task<TModel> GetAsync(TModel model);
+        Task<TModel> GetAsync(BaseModel model);
 
         Task<DataCollectionModel<TModel>> GetAllAsync(IndexRequestModel model);
 
-        Task CreateAsync(TModel model);
+        Task CreateAsync(TCreateModel model);
 
-        Task RemoveAsync(TModel model);
+        Task RemoveAsync(BaseModel model);
 
         Task UpdateAsync(TModel model);
     }

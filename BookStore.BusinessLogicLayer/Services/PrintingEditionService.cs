@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using BookStore.BusinessLogicLayer.Exceptions;
+using BookStore.BusinessLogicLayer.Models.Base;
 using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.RequestModels.PrintingEdition;
 using BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
-using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -27,21 +29,21 @@ namespace BookStore.BusinessLogicLayer.Services
             _authorRepository = authorRepository;
         }
 
-
-        public async Task CreateAsync(PrintingEditionModel model)
+        private async Task<PrintingEdition> FindByIdAsync(long id)
         {
-            var authorsModelsList = model.Authors; //TODO: error when Authors is null
-            var authors = new List<Author>();
-
-            foreach (var authorModel in authorsModelsList)
+            var entity = await _repository.FindByIdAsync(id);
+            if (entity is null)
             {
-                var author = await _authorRepository.FindByIdAsync(authorModel.Id);
-                if (author is null)
-                {
-                    continue;
-                }
-                authors.Add(author);
+                throw new CustomException(HttpStatusCode.BadRequest, "Not found.");
             }
+
+            return entity;
+        }
+
+        public async Task CreateAsync(PrintingEditionCreateModel model)
+        {
+            var authorsIds = model.Authors.Select(x => x.Id.Value).ToList();
+            var authors = await _authorRepository.FindByIdAsync(authorsIds);
 
             if (authors.Count < 1)
             {
@@ -55,9 +57,14 @@ namespace BookStore.BusinessLogicLayer.Services
             await _repository.CreateAsync(entity);
         }
 
-        public async Task<PrintingEditionModel> GetAsync(PrintingEditionModel model)
+        public async Task<PrintingEditionModel> GetAsync(BaseModel model)
         {
             var result = await _repository.GetAsync(_mapper.Map<PrintingEdition>(model));
+
+            if (result is null)
+            {
+                throw new CustomException(HttpStatusCode.NotFound, "Not found.");
+            }
 
             return _mapper.Map<PrintingEditionModel>(result);
         }
@@ -71,34 +78,16 @@ namespace BookStore.BusinessLogicLayer.Services
             return response;
         }
 
-        public async Task RemoveAsync(PrintingEditionModel model)
+        public async Task RemoveAsync(BaseModel model)
         {
-            if (model.Id == default)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "Ivalid Id.");
-            }
-
-            var entity = await _repository.FindByIdAsync(model.Id);
-            if (entity is null)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "Invalid data.");
-            }
+            var entity = await FindByIdAsync(model.Id.Value);
 
             await _repository.RemoveAsync(entity);
         }
 
         public async Task UpdateAsync(PrintingEditionModel model)
         {
-            if (model.Id == default)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "Ivalid Id.");
-            }
-
-            var entity = await _repository.FindByIdAsync(model.Id);
-            if (entity is null)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "Invalid data.");
-            }
+            var entity = await FindByIdAsync(model.Id.Value);
 
             await _repository.UpdateAsync(_mapper.Map<PrintingEdition>(entity));
         }

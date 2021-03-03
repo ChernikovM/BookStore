@@ -85,27 +85,22 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public IQueryable<T> Pagination<T>(IQueryable<T> collection, ref PageRequestModel requestModel, out PageModel responseModel)
         {
-            int collectionCount = 0;
+            var collectionCount = collection.Count();
 
-            try
-             {
-                if (requestModel is null)
-                {
-                    requestModel = new PageRequestModel();
-                    throw new Exception();
-                }
-
-                collectionCount = collection.Count();
-                collection = collection.Page(requestModel.Page, requestModel.PageSize);
-            }
-            catch (Exception)
+            if (requestModel.Page is null)
             {
-                collection = collection.Page(_config.DefaultPage, _config.DefaultPageSize);
                 requestModel.Page = _config.DefaultPage;
-                requestModel.PageSize = _config.DefaultPageSize;
             }
 
-            responseModel = new PageModel(collectionCount, requestModel.Page, requestModel.PageSize);
+            responseModel = new PageModel(collectionCount, requestModel.Page.Value, requestModel.PageSize.Value);
+
+            if (requestModel.Page.Value > responseModel.TotalPages)
+            {
+                requestModel.Page = responseModel.TotalPages;
+                responseModel.CurrentPageNumber = requestModel.Page.Value;
+            }
+
+            collection = collection.Page(requestModel.Page.Value, requestModel.PageSize.Value);
 
             return collection;
         }

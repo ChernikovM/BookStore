@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net;
 
 namespace BookStore.BusinessLogicLayer.Exceptions
@@ -20,6 +22,11 @@ namespace BookStore.BusinessLogicLayer.Exceptions
         public CustomException(HttpStatusCode code, IEnumerable<string> errorMessages) : this(code)
         {
             ErrorMessages.AddRange(errorMessages);
+        }
+
+        public CustomException(HttpStatusCode code, List<ValidationResult> errorMessages) : this(code)
+        {
+            ErrorMessages.AddRange(errorMessages.Select(x => x.ErrorMessage));
         }
 
         public CustomException(HttpStatusCode code, string errorMessage) : this(code)

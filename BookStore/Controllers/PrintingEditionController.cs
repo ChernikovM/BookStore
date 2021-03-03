@@ -1,4 +1,6 @@
-﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
+﻿using BookStore.BusinessLogicLayer.Models.Base;
+using BookStore.BusinessLogicLayer.Models.RequestModels;
+using BookStore.BusinessLogicLayer.Models.RequestModels.PrintingEdition;
 using BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.PresentationLayer.Controllers.Interfaces;
@@ -10,7 +12,7 @@ namespace BookStore.PresentationLayer.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class PrintingEditionController : ICrudController<PrintingEditionModel>
+    public class PrintingEditionController : ICrudController<PrintingEditionModel, PrintingEditionCreateModel>
     {
         private readonly IPrintingEditionService _peService;
 
@@ -21,20 +23,22 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpPost]
-        public async Task<IActionResult> Create(PrintingEditionModel model)
+        public async Task<IActionResult> Create(PrintingEditionCreateModel model)
         {
             await _peService.CreateAsync(model);
             
             return new OkObjectResult("success");
         }
 
-        public async Task<IActionResult> Get(PrintingEditionModel model)
+        [HttpGet]
+        public async Task<IActionResult> Get(BaseModel model)
         {
             var result = await _peService.GetAsync(model);
 
             return new OkObjectResult(result);
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetAll(IndexRequestModel model)
         {
             var result = await _peService.GetAllAsync(model);
@@ -42,13 +46,17 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(result);
         }
 
-        public async Task<IActionResult> Remove(PrintingEditionModel model)
+        [Authorize("AdminOnly")]
+        [HttpPost]
+        public async Task<IActionResult> Remove(BaseModel model)
         {
             await _peService.RemoveAsync(model);
 
             return new OkObjectResult("removed");
         }
 
+        [Authorize("AdminOnly")]
+        [HttpPost]
         public async Task<IActionResult> Update(PrintingEditionModel model)
         {
             await _peService.RemoveAsync(model);
