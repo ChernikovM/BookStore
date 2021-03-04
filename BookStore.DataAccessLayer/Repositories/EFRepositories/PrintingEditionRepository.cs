@@ -15,11 +15,11 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories
             
         }
 
-        public override async Task<PrintingEdition> GetAsync(PrintingEdition entity)
+        public override async Task<PrintingEdition> FindByIdAsync(long id)
         {
             var result = await _dbSet
                 .Include(x => x.Authors)
-                .FirstOrDefaultAsync(x => x.Id == entity.Id && x.IsRemoved == false);
+                .FirstOrDefaultAsync(x => x.Id == id && x.IsRemoved == false);
 
             return result;
         }

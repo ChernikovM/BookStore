@@ -14,7 +14,7 @@ namespace BookStore.BusinessLogicLayer.Exceptions
         public HttpStatusCode Code { get; set; }
 
         
-        private CustomException(HttpStatusCode code)
+        public CustomException(HttpStatusCode code)
         {
             Code = code;
         }

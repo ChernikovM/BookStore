@@ -9,6 +9,7 @@ using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -58,14 +59,9 @@ namespace BookStore.BusinessLogicLayer.Services
             await _repository.CreateAsync(entity);
         }
 
-        public async Task<PrintingEditionModel> GetAsync(BaseModel model)
+        public async Task<PrintingEditionModel> GetAsync(long id)
         {
-            var result = await _repository.GetAsync(_mapper.Map<PrintingEdition>(model));
-
-            if (result is null)
-            {
-                throw new CustomException(HttpStatusCode.NotFound, "Not found.");
-            }
+            var result = await FindByIdAsync(id);
 
             return _mapper.Map<PrintingEditionModel>(result);
         }
@@ -79,20 +75,30 @@ namespace BookStore.BusinessLogicLayer.Services
             return response;
         }
 
-        public async Task RemoveAsync(BaseModel model)
+        public async Task RemoveAsync(long id)
         {
-            var entity = await FindByIdAsync(model.Id.Value);
+            var entity = await FindByIdAsync(id);
 
             await _repository.RemoveAsync(entity);
         }
 
-        public async Task UpdateAsync(PrintingEditionModel model)
+        public async Task UpdateAsync(long id, PrintingEditionModel model)
         {
-            var entity = await FindByIdAsync(model.Id.Value);
+            if (id != model.Id)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest);
+            }
 
-            var obj = _mapper.Map<PrintingEdition>(model);
+            var entity = await FindByIdAsync(id);
 
-            entity = obj;
+            var authors = await _authorRepository.FindByIdAsync(model.Authors.Select(x => x.Id.Value).ToList());
+            entity.Authors = authors;
+
+            entity.Currency = model.Currency.Value;
+            entity.Description = model.Description;
+            entity.Price = model.Price.Value;
+            entity.Title = model.Title;
+            entity.Type = model.Type.Value;
 
             await _repository.UpdateAsync(entity);
         }

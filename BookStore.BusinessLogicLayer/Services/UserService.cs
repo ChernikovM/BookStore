@@ -7,6 +7,7 @@ using BookStore.BusinessLogicLayer.Models.ResponseModels.User;
 using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
+using BookStore.DataAccessLayer.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
@@ -54,10 +55,9 @@ namespace BookStore.BusinessLogicLayer.Services
             return user;
         }
 
-        private async Task<User> GetUserByEmail(string email)
+        private async Task<User> GetUserByIdAsync(string id)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-
+            var user = await _userManager.FindByIdAsync(id);
             if (user is null)
             {
                 throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
@@ -75,69 +75,86 @@ namespace BookStore.BusinessLogicLayer.Services
             return response;
         }
 
-        public async Task<MessageResponse> UpdateMyProfile(UserUpdateModel model, string accessToken)
+        public async Task<UserResponseModel> GetUserProfile(string id, string accessToken)
         {
-            bool emailUpdatedFlag = false;
+           
+            var claims = _jwtService.GetClaimsFromToken(accessToken);
 
-            var user = await GetUserByTokenAsync(accessToken);
+            var requesterId = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.UserData)).Value;
+            var requesterRole = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Role)).Value;
 
-            var passwordValidationResult = await _userManager.CheckPasswordAsync(user, model.Password);
+            if (!(requesterRole.Equals(Enums.Roles.Admin) || requesterId.Equals(id)))
+            {
+                throw new CustomException(HttpStatusCode.Forbidden);
+            }
 
+            User userProfile = await GetUserByIdAsync(id);
+
+            return _mapper.Map<UserResponseModel>(userProfile);
+        }
+
+        public async Task<DataCollectionModel<UserResponseModel>> GetAllUsers(IndexRequestModel model)
+        {
+            var collection = _userManager.Users;
+
+            _dataCollectionService.GetCollection<UserResponseModel, User>(collection, model, out DataCollectionModel<UserResponseModel> responseModel);
+
+            return responseModel;
+        }
+
+        public async Task<MessageResponse> BlockUser(string id, int? days)
+        {
+            var user = await GetUserByIdAsync(id);
+
+            if (!user.LockoutEnabled)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "This user cannot be blocked.");
+            }
+
+            if (days is null)
+            {
+                days = (DateTime.MaxValue - DateTime.Now).Days;
+            }
+            user.LockoutEnd = DateTime.UtcNow.AddDays(days.Value);
+
+            await _userManager.UpdateAsync(user);
+
+            return new MessageResponse() { Message = "User was successfully blocked."};
+        }
+
+        public async Task<MessageResponse> UnblockUser(string id)
+        {
+            var user = await GetUserByIdAsync(id);
+
+            user.LockoutEnd = null;
+            await _userManager.UpdateAsync(user);
+
+            return new MessageResponse() { Message = "User was successfully unblocked." };
+        }
+
+        public async Task<MessageResponse> Update(string? id, UserUpdateModel model, string accessToken)
+        {            
+            var claims = _jwtService.GetClaimsFromToken(accessToken);
+            var requesterId = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.UserData)).Value;
+            var requesterRole = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Role)).Value;
+            var requester = await GetUserByIdAsync(requesterId);
+
+            if (id is null)
+            {
+                id = requesterId;
+            }
+
+            var user = await GetUserByIdAsync(id);
+
+            if (!(requesterRole.Equals(Enums.Roles.Admin.ToString()) || requesterId.Equals(id)))
+            {
+                throw new CustomException(HttpStatusCode.Forbidden);
+            }
+
+            var passwordValidationResult = await _userManager.CheckPasswordAsync(requester, model.Password);
             if (!passwordValidationResult)
             {
                 throw new CustomException(HttpStatusCode.BadRequest, "Invalid password.");
-            }
-
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            if(!user.Email.Equals(model.Email))
-            {
-                user.Email = model.Email;
-                user.EmailConfirmed = false;
-                await _emailSenderService.SendEmailConfirmationLinkAsync(user); //TODO: change email text (from registration to update)
-                emailUpdatedFlag = true;
-            }
-
-            var result = await _userManager.UpdateAsync(user);
-            
-            if (!result.Succeeded)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, result);
-            }
-
-            string response = "Account was successfully updated.";
-
-            if (emailUpdatedFlag == true)
-            {
-                response = "Confirm your email.";
-            }
-
-            return new MessageResponse() { Message = response };
-        }
-
-        public async Task<UserResponseModelForAdmin> GetUserProfile(string email)
-        {
-            var user = await GetUserByEmail(email);
-
-            var response = _mapper.Map<UserResponseModelForAdmin>(user);
-
-            return response;
-        }
-
-        public async Task<MessageResponse> EditUserProfile(UserUpdateModel model, string accessToken)
-        {
-            var admin = await GetUserByTokenAsync(accessToken);
-
-            var passwordValidationResult = await _userManager.CheckPasswordAsync(admin, model.Password);
-            if(!passwordValidationResult)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "Invalid password.");
-            }
-
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user is null)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
             }
 
             user.FirstName = model.FirstName;
@@ -148,43 +165,15 @@ namespace BookStore.BusinessLogicLayer.Services
                 user.EmailConfirmed = false;
                 await _emailSenderService.SendEmailConfirmationLinkAsync(user); //TODO: change text in email
             }
-            await _userManager.UpdateAsync(user);
 
-            return new MessageResponse() { Message = "Changes was successfully saved."};
-        }
+            var result = await _userManager.UpdateAsync(user);
 
-        public async Task<DataCollectionModel<UserResponseModelForAdmin>> GetAllUsers(IndexRequestModel model)
-        {
-            var collection = _userManager.Users;
-
-            _dataCollectionService.GetCollection<UserResponseModelForAdmin, User>(collection, model, out DataCollectionModel<UserResponseModelForAdmin> responseModel);
-
-            return responseModel;
-        }
-
-        public async Task<MessageResponse> BlockUser(UserLockoutModel model)
-        {
-            var user = await GetUserByEmail(model.Email);
-
-            if (!user.LockoutEnabled)
+            if (!result.Succeeded)
             {
-                throw new CustomException(HttpStatusCode.BadRequest, "This user cannot be blocked.");
+                throw new CustomException(HttpStatusCode.BadRequest, result);
             }
 
-            user.LockoutEnd = DateTime.UtcNow.AddYears(100); //TODO: hardcode
-            await _userManager.UpdateAsync(user);
-
-            return new MessageResponse() { Message = "User was successfully blocked."};
-        }
-
-        public async Task<MessageResponse> UnblockUser(UserLockoutModel model)
-        {
-            var user = await GetUserByEmail(model.Email);
-
-            user.LockoutEnd = null;
-            await _userManager.UpdateAsync(user);
-
-            return new MessageResponse() { Message = "User was successfully unblocked." };
+            return new MessageResponse() { Message = "Changes was successfully saved." };
         }
     }
 }

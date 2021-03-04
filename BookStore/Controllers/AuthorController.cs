@@ -1,5 +1,4 @@
-﻿using BookStore.BusinessLogicLayer.Models.Base;
-using BookStore.BusinessLogicLayer.Models.RequestModels;
+﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.Author;
 using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 namespace BookStore.PresentationLayer.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class AuthorController : ICrudController<AuthorModel, AuthorCreateModel>
     {
         private readonly IAuthorService _authorService;
@@ -31,10 +30,10 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [Authorize("AdminOnly")]
-        [HttpGet]
-        public async Task<IActionResult> Get(BaseModel model)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(long id)
         {
-            var result = await _authorService.GetAsync(model);
+            var result = await _authorService.GetAsync(id);
 
             return new OkObjectResult(result);
         }
@@ -49,19 +48,19 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [Authorize("AdminOnly")]
-        [HttpPost]
-        public async Task<IActionResult> Remove(BaseModel model)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(long id) //TODO: dont work
         {
-            await _authorService.RemoveAsync(model);
+            await _authorService.RemoveAsync(id);
 
             return new OkObjectResult("Author was successfully removed.");
         }
 
         [Authorize("AdminOnly")]
-        [HttpPost]
-        public async Task<IActionResult> Update(AuthorModel model)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(long id, AuthorModel model)
         {
-            await _authorService.UpdateAsync(model);
+            await _authorService.UpdateAsync(id, model);
 
             return new OkObjectResult("Author was successfully updated.");
         }

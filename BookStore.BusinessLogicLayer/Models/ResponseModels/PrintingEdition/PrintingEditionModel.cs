@@ -13,19 +13,20 @@ namespace BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition
 
         [Required]
         [Range(0, double.MaxValue, ErrorMessage = "Invalid price.")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
         
         [Required]
         [EnumDataType(typeof(Enums.CurrencyType))]
-        public int Currency { get; set; }
+        public Enums.CurrencyType? Currency { get; set; }
 
         [Required]
         [EnumDataType(typeof(Enums.PrintingEditionType))]
-        public int Type { get; set; }
+        public Enums.PrintingEditionType? Type { get; set; }
 
         [Required]
         public string Description { get; set; }
-
+        
+        [Required]
         public List<AuthorModel> Authors { get; set; }
     }
 }

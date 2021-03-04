@@ -18,7 +18,7 @@ namespace BookStore.BusinessLogicLayer.Mapping
             CreateMap<User, UserRegistrationModel>().ReverseMap();
             CreateMap<User, UserResponseModel>().ReverseMap();
             CreateMap<User, UserUpdateModel>().ReverseMap();
-            CreateMap<User, UserResponseModelForAdmin>().ReverseMap();
+            CreateMap<User, UserResponseModel>().ReverseMap();
 
             CreateMap<Author, AuthorModel>().ReverseMap();
             CreateMap<Author, AuthorCreateModel>().ReverseMap();

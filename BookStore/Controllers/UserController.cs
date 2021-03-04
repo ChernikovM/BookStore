@@ -1,8 +1,6 @@
 ﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
-using BookStore.DataAccessLayer.Entities;
-using BookStore.PresentationLayer.Controllers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -11,7 +9,7 @@ using System.Threading.Tasks;
 namespace BookStore.PresentationLayer.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -21,70 +19,67 @@ namespace BookStore.PresentationLayer.Controllers
             _userService = userService;
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> GetMyProfile()
+        private string GetAccessToken()
         {
             HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
             var accessToken = value.ToString().Split(" ").Last();
+
+            return accessToken;
+        }
+
+        [Authorize]
+        [HttpGet("Me")]
+        public async Task<IActionResult> GetMyProfile()
+        {
+            var accessToken = GetAccessToken();
             var response = await _userService.GetMyProfile(accessToken);
 
             return new OkObjectResult(response);
         }
 
         [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> Update([FromBody] UserUpdateModel model)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserProfile(string id)
         {
-            HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
-            var accessToken = value.ToString().Split(" ").Last();
-            var response = await _userService.UpdateMyProfile(model, accessToken);
+            var accessToken = GetAccessToken();
 
+            var response = await _userService.GetUserProfile(id, accessToken);
             return new OkObjectResult(response);
         }
 
         [Authorize("AdminOnly")]
         [HttpGet]
-        public async Task<IActionResult> GetUserProfile([FromQuery] string email)
-        {
-            var response = await _userService.GetUserProfile(email);
-            return new OkObjectResult(response);
-        }
-
-        [Authorize("AdminOnly")]
-        [HttpPost]
-        public async Task<IActionResult> EditProfile([FromBody]UserUpdateModel model)
-        {
-            HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
-            var accessToken = value.ToString().Split(" ").Last();
-
-            var response = await _userService.EditUserProfile(model, accessToken);
-            return new OkObjectResult(response);
-        }
-
-        [Authorize("AdminOnly")]
-        [HttpGet]
-        public async Task<IActionResult> GetAllUsers([FromBody]IndexRequestModel model)
+        public async Task<IActionResult> GetAllUsers([FromBody] IndexRequestModel model)
         {
             var response = await _userService.GetAllUsers(model);
 
             return new OkObjectResult(response);
         }
 
-        [Authorize("AdminOnly")]
-        [HttpGet]
-        public async Task<IActionResult> BlockUser([FromBody] UserLockoutModel model)
+        [Authorize]
+        [HttpPut("{id?}")]
+        public async Task<IActionResult> Update(string? id, [FromBody] UserUpdateModel model)
         {
-            var response = await _userService.BlockUser(model);
+            var accessToken = GetAccessToken();
+            var response = await _userService.Update(id, model, accessToken);
 
             return new OkObjectResult(response);
         }
 
         [Authorize("AdminOnly")]
-        [HttpGet]
-        public async Task<IActionResult> UnblockUser([FromBody] UserLockoutModel model)
+        [HttpPost("{id}/ban/{days?}")]
+        public async Task<IActionResult> BlockUser(string id, int? days)
         {
-            var response = await _userService.UnblockUser(model);
+            var response = await _userService.BlockUser(id, days);
+
+            return new OkObjectResult(response);
+        }
+
+        [Authorize("AdminOnly")]
+        [HttpPost("{id}/unban")]
+        public async Task<IActionResult> UnblockUser(string id)
+        {
+            var response = await _userService.UnblockUser(id);
 
             return new OkObjectResult(response);
         }

@@ -50,6 +50,7 @@ namespace BookStore.BusinessLogicLayer.Services
             {
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Role, _userManager.GetRolesAsync(user).Result.First()),
+                new Claim(ClaimTypes.UserData, user.Id),
 
             };
 

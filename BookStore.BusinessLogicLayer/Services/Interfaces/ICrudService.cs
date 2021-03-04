@@ -8,14 +8,14 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
     public interface ICrudService<TModel, TCreateModel>
         where TModel : BaseErrorModel
     {
-        Task<TModel> GetAsync(BaseModel model);
+        Task<TModel> GetAsync(long id);
 
         Task<DataCollectionModel<TModel>> GetAllAsync(IndexRequestModel model);
 
         Task CreateAsync(TCreateModel model);
 
-        Task RemoveAsync(BaseModel model);
+        Task RemoveAsync(long id);
 
-        Task UpdateAsync(TModel model);
+        Task UpdateAsync(long id, TModel model);
     }
 }

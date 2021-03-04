@@ -9,13 +9,13 @@ namespace BookStore.PresentationLayer.Controllers.Interfaces
     {
         Task<IActionResult> Create(TCreateModel model);
 
-        Task<IActionResult> Get(BaseModel model);
+        Task<IActionResult> Get(long id);
 
         Task<IActionResult> GetAll(IndexRequestModel model);
 
-        Task<IActionResult> Update(TModel model);
+        Task<IActionResult> Update(long id, TModel model);
 
-        Task<IActionResult> Remove(BaseModel model);
+        Task<IActionResult> Delete(long id);
 
     }
 }

@@ -27,7 +27,7 @@ namespace BookStore.BusinessLogicLayer.Services
             _mapper = mapper;
         }
 
-        private async Task<Author> FindById(long id)
+        private async Task<Author> FindByIdAsync(long id)
         {
             var author = await _repository.FindByIdAsync(id);
 
@@ -46,16 +46,9 @@ namespace BookStore.BusinessLogicLayer.Services
             await _repository.CreateAsync(entity);
         }
 
-        public async Task<AuthorModel> GetAsync(BaseModel model)
+        public async Task<AuthorModel> GetAsync(long id)
         {
-            var ent = _mapper.Map<Author>(model);
-
-            var entity = await _repository.GetAsync(ent);
-
-            if(entity is null)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "Not found.");
-            }
+            var entity = await FindByIdAsync(id);
 
             var result= _mapper.Map<AuthorModel>(entity);
 
@@ -71,18 +64,25 @@ namespace BookStore.BusinessLogicLayer.Services
             return response;
         }
 
-        public async Task RemoveAsync(BaseModel model)
+        public async Task RemoveAsync(long id)
         {
-            var author = await FindById(model.Id.Value);
+            var author = await FindByIdAsync(id);
 
             await _repository.RemoveAsync(author);
         }
 
-        public async Task UpdateAsync(AuthorModel model)
+        public async Task UpdateAsync(long id, AuthorModel model)
         {
-            var author = await FindById(model.Id.Value);
+            if (id != model.Id)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest);
+            }
 
-            await _repository.UpdateAsync(author);
+            var entity = await FindByIdAsync(id);
+
+            entity.Name = model.Name;
+
+            await _repository.UpdateAsync(entity);
         }
 
     }

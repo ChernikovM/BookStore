@@ -27,7 +27,7 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Base
             await _context.SaveChangesAsync();
         }
 
-        public async Task<TEntity> FindByIdAsync(long? id)
+        public virtual async Task<TEntity> FindByIdAsync(long id)
         {
             var result = await _dbSet.FindAsync(id);
 
@@ -39,16 +39,11 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Base
             return result;
         }
 
-        public async Task<List<TEntity>> FindByIdAsync(List<long> ids)
+        public virtual async Task<List<TEntity>> FindByIdAsync(List<long> ids)
         {
             var result = _dbSet.Where(x => ids.Contains(x.Id) && x.IsRemoved == false);
 
             return await result.ToListAsync();
-        }
-
-        public virtual async Task<TEntity> GetAsync(TEntity entity)
-        {
-            return await _dbSet.FindAsync(entity);
         }
 
         public virtual Task<IQueryable<TEntity>> GetAllAsync()

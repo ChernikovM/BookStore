@@ -1,5 +1,4 @@
-﻿using BookStore.BusinessLogicLayer.Models.Base;
-using BookStore.BusinessLogicLayer.Models.RequestModels;
+﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.PrintingEdition;
 using BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
@@ -23,17 +22,17 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpPost]
-        public async Task<IActionResult> Create(PrintingEditionCreateModel model)
+        public async Task<IActionResult> Create([FromBody]PrintingEditionCreateModel model)
         {
             await _peService.CreateAsync(model);
-            
+
             return new OkObjectResult("success");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get(BaseModel model)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(long id)
         {
-            var result = await _peService.GetAsync(model);
+            var result = await _peService.GetAsync(id);
 
             return new OkObjectResult(result);
         }
@@ -47,20 +46,19 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [Authorize("AdminOnly")]
-        [HttpPost]
-        public async Task<IActionResult> Remove(BaseModel model)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(long id) //TODO: dont work
         {
-            await _peService.RemoveAsync(model);
+            await _peService.RemoveAsync(id);
 
-            return new OkObjectResult("removed");
+            return new OkObjectResult("deleted");
         }
 
         [Authorize("AdminOnly")]
-        [HttpPost]
-        //[Route("{id}/update")]
-        public async Task<IActionResult> Update(PrintingEditionModel model)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(long id, PrintingEditionModel model)
         {
-            await _peService.UpdateAsync( model);
+            await _peService.UpdateAsync(id, model);
 
             return new OkObjectResult("updated");
         }
