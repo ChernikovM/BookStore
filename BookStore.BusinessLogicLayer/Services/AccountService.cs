@@ -2,6 +2,7 @@
 using BookStore.BusinessLogicLayer.Exceptions;
 using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
+using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Enums;
@@ -18,14 +19,14 @@ namespace BookStore.BusinessLogicLayer.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        private readonly IEmailSenderService _emailSenderService;
-        private readonly IJwtService _jwtService;
+        private readonly IEmailSenderProvider _emailSenderService;
+        private readonly IJwtProvider _jwtService;
 
         public AccountService(
             UserManager<User> userManager,
             IMapper mapper,
-            IEmailSenderService emailSenderService,
-            IJwtService jwtService)
+            IEmailSenderProvider emailSenderService,
+            IJwtProvider jwtService)
         {
             _userManager = userManager;
             _mapper = mapper;

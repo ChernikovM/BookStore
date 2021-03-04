@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BookStore.PresentationLayer.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class PrintingEditionController : ICrudController<PrintingEditionModel, PrintingEditionCreateModel>
     {
         private readonly IPrintingEditionService _peService;
@@ -57,9 +57,10 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpPost]
+        //[Route("{id}/update")]
         public async Task<IActionResult> Update(PrintingEditionModel model)
         {
-            await _peService.RemoveAsync(model);
+            await _peService.UpdateAsync( model);
 
             return new OkObjectResult("updated");
         }

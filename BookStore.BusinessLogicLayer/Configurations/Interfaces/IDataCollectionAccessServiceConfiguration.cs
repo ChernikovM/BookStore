@@ -1,6 +1,6 @@
 ﻿namespace BookStore.BusinessLogicLayer.Configurations.Interfaces
 {
-    public interface IDataCollectionAccessServiceConfiguration
+    public interface IDataCollectionAccessProviderConfiguration
     {
         public int DefaultPageSize { get; set; }
 

@@ -5,6 +5,7 @@ using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.PrintingEdition;
 using BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
+using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
@@ -17,11 +18,11 @@ namespace BookStore.BusinessLogicLayer.Services
     public class PrintingEditionService : IPrintingEditionService
     {
         private readonly IPrintingEditionRepository _repository;
-        private readonly IDataCollectionAccessService _dataService;
+        private readonly IDataCollectionAccessProvider _dataService;
         private readonly IMapper _mapper;
         private readonly IAuthorRepository _authorRepository;
 
-        public PrintingEditionService(IPrintingEditionRepository repository, IDataCollectionAccessService dataService, IMapper mapper, IAuthorRepository authorRepository)
+        public PrintingEditionService(IPrintingEditionRepository repository, IDataCollectionAccessProvider dataService, IMapper mapper, IAuthorRepository authorRepository)
         {
             _repository = repository;
             _dataService = dataService;
@@ -89,7 +90,11 @@ namespace BookStore.BusinessLogicLayer.Services
         {
             var entity = await FindByIdAsync(model.Id.Value);
 
-            await _repository.UpdateAsync(_mapper.Map<PrintingEdition>(entity));
+            var obj = _mapper.Map<PrintingEdition>(model);
+
+            entity = obj;
+
+            await _repository.UpdateAsync(entity);
         }
     }
 }

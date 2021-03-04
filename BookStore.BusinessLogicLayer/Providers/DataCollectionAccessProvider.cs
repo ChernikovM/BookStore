@@ -2,7 +2,7 @@
 using BookStore.BusinessLogicLayer.Configurations.Interfaces;
 using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
-using BookStore.BusinessLogicLayer.Services.Interfaces;
+using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +11,12 @@ using System.Web;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
-    public class DataCollectionAccessService : IDataCollectionAccessService
+    public class DataCollectionAccessProvider : IDataCollectionAccessProvider
     {
-        private readonly IDataCollectionAccessServiceConfiguration _config;
+        private readonly IDataCollectionAccessProviderConfiguration _config;
         private readonly IMapper _mapper;
 
-        public DataCollectionAccessService(IDataCollectionAccessServiceConfiguration config, IMapper mapper)
+        public DataCollectionAccessProvider(IDataCollectionAccessProviderConfiguration config, IMapper mapper)
         {
             _config = config;
             _mapper = mapper;

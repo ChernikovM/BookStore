@@ -1,17 +1,17 @@
 ﻿using BookStore.BusinessLogicLayer.Configurations.Interfaces;
-using BookStore.BusinessLogicLayer.Services.Interfaces;
+using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookStore.BusinessLogicLayer.Services
+namespace BookStore.BusinessLogicLayer.Providers
 {
-    public class LoggerService : ILoggerService
+    public class LoggerProvider : ILoggerProvider
     {
         private readonly ILoggerConfiguration _loggerConfiguration;
 
-        public LoggerService(ILoggerConfiguration loggerConfiguration)
+        public LoggerProvider(ILoggerConfiguration loggerConfiguration)
         {
             _loggerConfiguration = loggerConfiguration;
         }

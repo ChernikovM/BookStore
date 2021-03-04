@@ -1,6 +1,6 @@
 ﻿using BookStore.BusinessLogicLayer.Configurations.Interfaces;
 using BookStore.BusinessLogicLayer.Exceptions;
-using BookStore.BusinessLogicLayer.Services.Interfaces;
+using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Identity;
@@ -13,12 +13,12 @@ using System.Web;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
-    public class EmailSenderService : IEmailSenderService
+    public class EmailSenderProvider : IEmailSenderProvider
     {
         private readonly IEmailSenderConfiguration _config;
         private readonly UserManager<User> _userManager;
 
-        public EmailSenderService(IEmailSenderConfiguration config, UserManager<User> userManager)
+        public EmailSenderProvider(IEmailSenderConfiguration config, UserManager<User> userManager)
         {
             _config = config;
             _userManager = userManager;

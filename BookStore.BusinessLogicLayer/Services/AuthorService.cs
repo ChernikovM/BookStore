@@ -5,6 +5,7 @@ using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.Author;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
+using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
@@ -15,11 +16,11 @@ namespace BookStore.BusinessLogicLayer.Services
 {
     public class AuthorService : IAuthorService
     {
-        private readonly IDataCollectionAccessService _dataService;
+        private readonly IDataCollectionAccessProvider _dataService;
         private readonly IAuthorRepository _repository;
         private readonly IMapper _mapper;
 
-        public AuthorService(IDataCollectionAccessService dataService, IAuthorRepository repository, IMapper mapper)
+        public AuthorService(IDataCollectionAccessProvider dataService, IAuthorRepository repository, IMapper mapper)
         {
             _dataService = dataService;
             _repository = repository;

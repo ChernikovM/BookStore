@@ -2,7 +2,7 @@
 
 namespace BookStore.BusinessLogicLayer.Configurations
 {
-    public class DataCollectionAccessServiceConfiguration : IDataCollectionAccessServiceConfiguration
+    public class DataCollectionAccessServiceConfiguration : IDataCollectionAccessProviderConfiguration
     {
         public int DefaultPageSize { get; set; }
 

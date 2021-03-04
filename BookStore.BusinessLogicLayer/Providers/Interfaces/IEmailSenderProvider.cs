@@ -1,9 +1,9 @@
 ﻿using BookStore.DataAccessLayer.Entities;
 using System.Threading.Tasks;
 
-namespace BookStore.BusinessLogicLayer.Services.Interfaces
+namespace BookStore.BusinessLogicLayer.Providers.Interfaces
 {
-    public interface IEmailSenderService
+    public interface IEmailSenderProvider
     {
         public Task SendEmailConfirmationLinkAsync(User user);
 

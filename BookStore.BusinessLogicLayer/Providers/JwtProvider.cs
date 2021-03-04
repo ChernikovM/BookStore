@@ -1,6 +1,6 @@
 ﻿using BookStore.BusinessLogicLayer.Configurations.Interfaces;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
-using BookStore.BusinessLogicLayer.Services.Interfaces;
+using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -14,20 +14,20 @@ using System.Threading.Tasks;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
-    public class JwtService : IJwtService
+    public class JwtProvider : IJwtProvider
     {
         private readonly IJwtConfiguration _config;
         private readonly UserManager<User> _userManager;
 
-        public JwtService(IJwtConfiguration config, UserManager<User> userManager)
+        public JwtProvider(IJwtConfiguration config, UserManager<User> userManager)
         {
             _config = config;
             _userManager = userManager;
         }
 
-        public string GenerateToken(IList<Claim> claims, int lifeTimeMinutes)
+        public string GenerateToken(IList<Claim> claims, int lifeTimeMinutes, string secret)
         {
-            var secret = Encoding.ASCII.GetBytes(_config.Secret);
+            var secretBytes = Encoding.ASCII.GetBytes(secret);
 
             var expiredDate = DateTime.UtcNow.AddMinutes(lifeTimeMinutes);
 
@@ -36,7 +36,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 _config.Audience,
                 claims,
                 expires: expiredDate,
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(secretBytes), SecurityAlgorithms.HmacSha256Signature)
                 );
 
             var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
@@ -67,8 +67,8 @@ namespace BookStore.BusinessLogicLayer.Services
             await ClearClaims(user);
             var claims = await SetClaims(user);
 
-            var accessToken = GenerateToken(claims, _config.AccessTokenExpiration);
-            var refreshToken = GenerateToken(claims, _config.RefreshTokenExpiration);
+            var accessToken = GenerateToken(claims, _config.AccessTokenExpiration, _config.SecretAccessToken);
+            var refreshToken = GenerateToken(claims, _config.RefreshTokenExpiration, _config.SecretRefreshToken);
 
             JwtPairResponse result = new JwtPairResponse() { AccessToken = accessToken, RefreshToken = refreshToken };
 
@@ -89,12 +89,10 @@ namespace BookStore.BusinessLogicLayer.Services
                 ValidateIssuer = true,
                 ValidIssuer = _config.Issuer,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config.Secret)),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config.SecretAccessToken)),
                 ValidAudience = _config.Audience,
                 ValidateAudience = true,
                 ValidateLifetime = true,
-                
-
             }, out _);
 
             return claimsPrincipal;

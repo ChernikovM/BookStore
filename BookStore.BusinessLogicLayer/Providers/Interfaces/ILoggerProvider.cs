@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace BookStore.BusinessLogicLayer.Services.Interfaces
+namespace BookStore.BusinessLogicLayer.Providers.Interfaces
 {
-    public interface ILoggerService
+    public interface ILoggerProvider
     {
         public Task LogAsync(Exception ex);
     }

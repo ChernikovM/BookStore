@@ -1,4 +1,5 @@
 ﻿using BookStore.BusinessLogicLayer.Models.Base;
+using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
 using BookStore.DataAccessLayer.Enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,6 +26,6 @@ namespace BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition
         [Required]
         public string Description { get; set; }
 
-        public List<BaseModel> Authors { get; set; }
+        public List<AuthorModel> Authors { get; set; }
     }
 }

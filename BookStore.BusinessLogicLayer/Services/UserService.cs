@@ -4,6 +4,7 @@ using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Models.ResponseModels.User;
+using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -19,17 +20,17 @@ namespace BookStore.BusinessLogicLayer.Services
     public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
-        private readonly IJwtService _jwtService;
+        private readonly IJwtProvider _jwtService;
         private readonly IMapper _mapper;
-        private readonly IEmailSenderService _emailSenderService;
-        private readonly IDataCollectionAccessService _dataCollectionService;
+        private readonly IEmailSenderProvider _emailSenderService;
+        private readonly IDataCollectionAccessProvider _dataCollectionService;
 
         public UserService(
             UserManager<User> userManager, 
-            IJwtService jwtService, 
+            IJwtProvider jwtService, 
             IMapper mapper, 
-            IEmailSenderService emailSenderService,
-            IDataCollectionAccessService dataCollectionService
+            IEmailSenderProvider emailSenderService,
+            IDataCollectionAccessProvider dataCollectionService
             )
         {
             _userManager = userManager;

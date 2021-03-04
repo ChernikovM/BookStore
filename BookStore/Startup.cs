@@ -2,6 +2,8 @@ using AutoMapper;
 using BookStore.BusinessLogicLayer.Configurations;
 using BookStore.BusinessLogicLayer.Configurations.Interfaces;
 using BookStore.BusinessLogicLayer.Mapping;
+using BookStore.BusinessLogicLayer.Providers;
+using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.AppContext;
@@ -48,8 +50,6 @@ namespace BookStore
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IValidationService, ValidationService>();
-
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();
@@ -64,7 +64,7 @@ namespace BookStore
             var loggerConfig = 
                 Configuration.GetSection("LoggerConfiguration").Get<LoggerConfiguration>();
             services.AddSingleton<ILoggerConfiguration>(loggerConfig);
-            services.AddSingleton<ILoggerService, LoggerService>();
+            services.AddSingleton<ILoggerProvider, LoggerProvider>();
 
             var mapperConfig = new MapperConfiguration(
                 mc => mc.AddProfile<MappingProfile>());
@@ -74,17 +74,17 @@ namespace BookStore
             var emailSenderConfig = 
                 Configuration.GetSection("EmailSenderConfiguration").Get<EmailSenderConfiguration>();
             services.AddSingleton<IEmailSenderConfiguration>(emailSenderConfig);
-            services.AddScoped<IEmailSenderService, EmailSenderService>();
+            services.AddScoped<IEmailSenderProvider, EmailSenderProvider>();
 
             var jwtConfig =
                 Configuration.GetSection("JwtConfiguration").Get<JwtConfiguration>();
             services.AddSingleton<IJwtConfiguration>(jwtConfig);
-            services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IJwtProvider, JwtProvider>();
 
             var dataCollectionAccessConfig =
                 Configuration.GetSection("DataCollectionAccessConfiguration").Get<DataCollectionAccessServiceConfiguration>();
-            services.AddSingleton<IDataCollectionAccessServiceConfiguration>(dataCollectionAccessConfig);
-            services.AddScoped<IDataCollectionAccessService, DataCollectionAccessService>();
+            services.AddSingleton<IDataCollectionAccessProviderConfiguration>(dataCollectionAccessConfig);
+            services.AddScoped<IDataCollectionAccessProvider, DataCollectionAccessProvider>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(x =>
@@ -97,7 +97,7 @@ namespace BookStore
                         ValidateIssuer = true,
                         ValidIssuer = jwtConfig.Issuer,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.Secret)),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.SecretAccessToken)),
                         ValidAudience = jwtConfig.Audience,
                         ValidateAudience = true,
                         ValidateLifetime = true,

@@ -3,9 +3,9 @@ using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BookStore.BusinessLogicLayer.Services.Interfaces
+namespace BookStore.BusinessLogicLayer.Providers.Interfaces
 {
-    public interface IDataCollectionAccessService
+    public interface IDataCollectionAccessProvider
     {
         public List<T> GetCollection<T, U>(IQueryable<U> collection, IndexRequestModel requestModel, out DataCollectionModel<T> responseModel);
         

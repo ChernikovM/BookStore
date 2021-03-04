@@ -68,8 +68,8 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Base
         }
 
         public async Task UpdateAsync(TEntity item)
-        {
-            _context.Entry(item).State = EntityState.Modified;
+        { 
+            _context.Update(item);
             await _context.SaveChangesAsync();
         }
 

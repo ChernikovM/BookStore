@@ -1,6 +1,6 @@
 ﻿using BookStore.BusinessLogicLayer.Exceptions;
 using BookStore.BusinessLogicLayer.Models.Base;
-using BookStore.BusinessLogicLayer.Services.Interfaces;
+using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;
@@ -11,9 +11,9 @@ namespace BookStore.PresentationLayer.Middlewares
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILoggerService _logger;
+        private readonly ILoggerProvider _logger;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next, ILoggerService logger)
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILoggerProvider logger)
         {
             _next = next;
             _logger = logger;
