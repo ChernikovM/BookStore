@@ -67,7 +67,7 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPatch]
         public async Task<IActionResult> ChangePassword([FromQuery] string userId, [FromQuery] string token, [FromBody]UserChangePasswordModel model)
         {
             var response = await _accountService.ChangePassword(userId, token, model);

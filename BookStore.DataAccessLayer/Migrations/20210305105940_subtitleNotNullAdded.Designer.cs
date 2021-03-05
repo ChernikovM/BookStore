@@ -4,14 +4,16 @@ using BookStore.DataAccessLayer.AppContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookStore.DataAccessLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210305105940_subtitleNotNullAdded")]
+    partial class subtitleNotNullAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,6 +172,13 @@ namespace BookStore.DataAccessLayer.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("SubTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubTitle2")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -257,9 +266,9 @@ namespace BookStore.DataAccessLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "31003137-ef22-461a-96ef-d76a6bd539f8",
+                            Id = "96642fb6-380b-47cd-ab17-0bd2beeced35",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a2490e59-0693-420e-b88e-bdab3fa90d3f",
+                            ConcurrencyStamp = "54c7c256-247e-4403-b04f-c18a07ecb81c",
                             Email = "storeanager45@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "BookStore",
@@ -267,9 +276,9 @@ namespace BookStore.DataAccessLayer.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "STOREANAGER45@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOI42Cw+ZdMwsH/C+omgBWS/54xY2cFOzqCKdyWTIuyvgkx1mRtVftS/HYI2e/6uiw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDAd+wB7CoFm96noJG3yB16aKmYi0DMPacBjTennnCIU9syeUqTDsO7/XQGXbF8K1g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3217ac39-8efd-487b-b1ff-46b77e4166be",
+                            SecurityStamp = "b0d66b99-6839-48b4-a84d-4da8d07b2aae",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -304,22 +313,22 @@ namespace BookStore.DataAccessLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5b15bdf3-e1fa-4d2b-bf72-a1df1cbe3172",
-                            ConcurrencyStamp = "5e3f0e9f-3391-435d-9f86-8053059e93ac",
+                            Id = "96574b55-c048-428e-9e9f-648be49433f7",
+                            ConcurrencyStamp = "2aa202fb-bc0b-4956-97a2-e412298d711b",
                             Name = "None",
                             NormalizedName = "NONE"
                         },
                         new
                         {
-                            Id = "05943e17-0426-441e-b1d4-9e1114f4fbf1",
-                            ConcurrencyStamp = "0b8952f9-07ae-428b-8cf6-0f202e8e5757",
+                            Id = "605d9a3d-d2a8-4aef-a306-c1dcbf7a9e09",
+                            ConcurrencyStamp = "283a1a39-283d-44f4-baf1-9a8e7081f4ac",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "6fc2ed6d-ab38-4849-895f-2c8d786fc734",
-                            ConcurrencyStamp = "24f7563f-fd1a-4a76-b45c-23f2fbe1d9f0",
+                            Id = "b1861689-4d5f-4cfe-ba54-5390b86e9c28",
+                            ConcurrencyStamp = "032cffc9-c5f3-48c6-973a-1c1a7dd47545",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -412,8 +421,8 @@ namespace BookStore.DataAccessLayer.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "31003137-ef22-461a-96ef-d76a6bd539f8",
-                            RoleId = "05943e17-0426-441e-b1d4-9e1114f4fbf1"
+                            UserId = "96642fb6-380b-47cd-ab17-0bd2beeced35",
+                            RoleId = "605d9a3d-d2a8-4aef-a306-c1dcbf7a9e09"
                         });
                 });
 

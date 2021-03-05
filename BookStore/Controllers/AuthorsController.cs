@@ -22,7 +22,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpPost]
-        public async Task<IActionResult> Create(AuthorCreateModel model)
+        public async Task<IActionResult> Create([FromBody]AuthorCreateModel model)
         {
             await _authorService.CreateAsync(model);
 
@@ -40,7 +40,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpGet]
-        public async Task<IActionResult> GetAll(IndexRequestModel model)
+        public async Task<IActionResult> GetAll([FromQuery]IndexRequestModel model)
         {
             var result = await _authorService.GetAllAsync(model);
 
@@ -58,7 +58,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(long id, AuthorModel model)
+        public async Task<IActionResult> Update(long id, [FromBody]AuthorModel model)
         {
             await _authorService.UpdateAsync(id, model);
 

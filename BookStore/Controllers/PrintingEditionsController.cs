@@ -38,7 +38,7 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromBody]IndexRequestModel model)
+        public async Task<IActionResult> GetAll([FromQuery]IndexRequestModel model)
         {
             var result = await _peService.GetAllAsync(model);
 

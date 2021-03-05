@@ -49,7 +49,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers([FromBody] IndexRequestModel model)
+        public async Task<IActionResult> GetAllUsers([FromQuery] IndexRequestModel model)
         {
             var response = await _userService.GetAllUsers(model);
 

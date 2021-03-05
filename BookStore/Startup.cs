@@ -136,6 +136,15 @@ namespace BookStore
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
+            services.AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
+                    { 
+                        Version = "v1",
+                        Title = "BookStore API"
+                    });
+                });
+
         }
 
 
@@ -147,6 +156,12 @@ namespace BookStore
             }
 
             app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookStore API V1");
+            });
 
             app.UseHttpsRedirection();
 

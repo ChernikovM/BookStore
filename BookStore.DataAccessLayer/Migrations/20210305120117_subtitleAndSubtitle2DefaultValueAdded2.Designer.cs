@@ -4,14 +4,16 @@ using BookStore.DataAccessLayer.AppContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookStore.DataAccessLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210305120117_subtitleAndSubtitle2DefaultValueAdded2")]
+    partial class subtitleAndSubtitle2DefaultValueAdded2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -257,9 +259,9 @@ namespace BookStore.DataAccessLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "31003137-ef22-461a-96ef-d76a6bd539f8",
+                            Id = "0f199dd4-2978-4e98-8a0f-9020ff816eb4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a2490e59-0693-420e-b88e-bdab3fa90d3f",
+                            ConcurrencyStamp = "8863f2e8-62e4-41b0-9527-0ca7d88a0c14",
                             Email = "storeanager45@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "BookStore",
@@ -267,9 +269,9 @@ namespace BookStore.DataAccessLayer.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "STOREANAGER45@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOI42Cw+ZdMwsH/C+omgBWS/54xY2cFOzqCKdyWTIuyvgkx1mRtVftS/HYI2e/6uiw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKXC5FzL0JPJdqIQV+Gvz4zXJXJxBvWlqdWud0NnqaPVFnvDdWh4V1UiQktStXQCPw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3217ac39-8efd-487b-b1ff-46b77e4166be",
+                            SecurityStamp = "7a707234-3cb9-4ef1-a4f6-790280dc46fa",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -304,22 +306,22 @@ namespace BookStore.DataAccessLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5b15bdf3-e1fa-4d2b-bf72-a1df1cbe3172",
-                            ConcurrencyStamp = "5e3f0e9f-3391-435d-9f86-8053059e93ac",
+                            Id = "b9009f97-da7a-4faa-b06d-f6e95006ba17",
+                            ConcurrencyStamp = "6e3653ce-9e55-46e6-bd29-9afc406ef9a8",
                             Name = "None",
                             NormalizedName = "NONE"
                         },
                         new
                         {
-                            Id = "05943e17-0426-441e-b1d4-9e1114f4fbf1",
-                            ConcurrencyStamp = "0b8952f9-07ae-428b-8cf6-0f202e8e5757",
+                            Id = "02d83994-565b-45ef-a582-b8eeafa05f27",
+                            ConcurrencyStamp = "e258fd81-dc3a-4c05-b041-e91e6a219765",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "6fc2ed6d-ab38-4849-895f-2c8d786fc734",
-                            ConcurrencyStamp = "24f7563f-fd1a-4a76-b45c-23f2fbe1d9f0",
+                            Id = "d9707646-0c64-4e15-9130-14677dc5774c",
+                            ConcurrencyStamp = "33b2f216-2da2-4646-8a10-31f785c8077d",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -412,8 +414,8 @@ namespace BookStore.DataAccessLayer.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "31003137-ef22-461a-96ef-d76a6bd539f8",
-                            RoleId = "05943e17-0426-441e-b1d4-9e1114f4fbf1"
+                            UserId = "0f199dd4-2978-4e98-8a0f-9020ff816eb4",
+                            RoleId = "02d83994-565b-45ef-a582-b8eeafa05f27"
                         });
                 });
 
