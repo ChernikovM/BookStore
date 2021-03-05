@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BookStore.BusinessLogicLayer.Exceptions;
-using BookStore.BusinessLogicLayer.Models.Base;
+using BookStore.BusinessLogicLayer.Extensions;
 using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.PrintingEdition;
 using BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition;
@@ -9,10 +9,10 @@ using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using static BookStore.BusinessLogicLayer.Constants.Constants;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
@@ -36,7 +36,7 @@ namespace BookStore.BusinessLogicLayer.Services
             var entity = await _repository.FindByIdAsync(id);
             if (entity is null)
             {
-                throw new CustomException(HttpStatusCode.BadRequest, "Not found.");
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.PrintingEditionNotFound.GetDescription());
             }
 
             return entity;
@@ -49,7 +49,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
             if (authors.Count < 1)
             {
-                throw new CustomException(HttpStatusCode.BadRequest, "Invalid Authors.");
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.InvalidData.GetDescription("Authors"));
             }
 
             var entity = _mapper.Map<PrintingEdition>(model);
@@ -78,6 +78,9 @@ namespace BookStore.BusinessLogicLayer.Services
         public async Task RemoveAsync(long id)
         {
             var entity = await FindByIdAsync(id);
+
+            entity.Authors = null;
+            entity.OrderItems = null;
 
             await _repository.RemoveAsync(entity);
         }

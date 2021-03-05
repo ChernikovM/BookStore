@@ -11,11 +11,11 @@ namespace BookStore.PresentationLayer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PrintingEditionController : ICrudController<PrintingEditionModel, PrintingEditionCreateModel>
+    public class PrintingEditionsController : ICrudController<PrintingEditionModel, PrintingEditionCreateModel>
     {
         private readonly IPrintingEditionService _peService;
 
-        public PrintingEditionController(IPrintingEditionService peService)
+        public PrintingEditionsController(IPrintingEditionService peService)
         {
             _peService = peService;
         }
@@ -38,7 +38,7 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(IndexRequestModel model)
+        public async Task<IActionResult> GetAll([FromBody]IndexRequestModel model)
         {
             var result = await _peService.GetAllAsync(model);
 
@@ -47,7 +47,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(long id) //TODO: dont work
+        public async Task<IActionResult> Delete(long id)
         {
             await _peService.RemoveAsync(id);
 

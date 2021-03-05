@@ -10,7 +10,7 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
     {
         public Task<UserResponseModel> GetMyProfile(string accessToken);
 
-        public Task<MessageResponse> Update(string? id, UserUpdateModel model, string accessToken);
+        public Task<MessageResponse> Update(string id, UserUpdateModel model, string accessToken);
 
         public Task<UserResponseModel> GetUserProfile(string id, string accessToken);
 

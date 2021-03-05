@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookStore.BusinessLogicLayer.Exceptions;
+using BookStore.BusinessLogicLayer.Extensions;
 using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
@@ -15,6 +16,7 @@ using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static BookStore.BusinessLogicLayer.Constants.Constants;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
@@ -25,13 +27,15 @@ namespace BookStore.BusinessLogicLayer.Services
         private readonly IMapper _mapper;
         private readonly IEmailSenderProvider _emailSenderService;
         private readonly IDataCollectionAccessProvider _dataCollectionService;
+        private readonly IAccountService _accountService;
 
         public UserService(
             UserManager<User> userManager, 
             IJwtProvider jwtService, 
             IMapper mapper, 
             IEmailSenderProvider emailSenderService,
-            IDataCollectionAccessProvider dataCollectionService
+            IDataCollectionAccessProvider dataCollectionService,
+            IAccountService accountService
             )
         {
             _userManager = userManager;
@@ -39,36 +43,12 @@ namespace BookStore.BusinessLogicLayer.Services
             _mapper = mapper;
             _emailSenderService = emailSenderService;
             _dataCollectionService = dataCollectionService;
-        }
-
-        private async Task<User> GetUserByTokenAsync(string token)
-        {
-            var userClaims = _jwtService.GetClaimsFromToken(token);
-            var username = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
-            var user = await _userManager.FindByNameAsync(username);
-
-            if (user is null)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
-            }
-
-            return user;
-        }
-
-        private async Task<User> GetUserByIdAsync(string id)
-        {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user is null)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, "User was not found.");
-            }
-
-            return user;
+            _accountService = accountService;
         }
 
         public async Task<UserResponseModel> GetMyProfile(string accessToken)
         {
-            var user = await GetUserByTokenAsync(accessToken);
+            var user = await _accountService.FindByTokenAsync(accessToken);
 
             var response = _mapper.Map<UserResponseModel>(user);
 
@@ -77,7 +57,6 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public async Task<UserResponseModel> GetUserProfile(string id, string accessToken)
         {
-           
             var claims = _jwtService.GetClaimsFromToken(accessToken);
 
             var requesterId = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.UserData)).Value;
@@ -88,7 +67,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(HttpStatusCode.Forbidden);
             }
 
-            User userProfile = await GetUserByIdAsync(id);
+            User userProfile = await _accountService.FindByIdAsync(id);
 
             return _mapper.Map<UserResponseModel>(userProfile);
         }
@@ -97,18 +76,18 @@ namespace BookStore.BusinessLogicLayer.Services
         {
             var collection = _userManager.Users;
 
-            _dataCollectionService.GetCollection<UserResponseModel, User>(collection, model, out DataCollectionModel<UserResponseModel> responseModel);
+            _dataCollectionService.GetCollection(collection, model, out DataCollectionModel<UserResponseModel> responseModel);
 
             return responseModel;
         }
 
         public async Task<MessageResponse> BlockUser(string id, int? days)
         {
-            var user = await GetUserByIdAsync(id);
+            var user = await _accountService.FindByIdAsync(id);
 
             if (!user.LockoutEnabled)
             {
-                throw new CustomException(HttpStatusCode.BadRequest, "This user cannot be blocked.");
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.UserCannotBeBlocked.GetDescription());
             }
 
             if (days is null)
@@ -124,7 +103,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public async Task<MessageResponse> UnblockUser(string id)
         {
-            var user = await GetUserByIdAsync(id);
+            var user = await _accountService.FindByIdAsync(id);
 
             user.LockoutEnd = null;
             await _userManager.UpdateAsync(user);
@@ -132,19 +111,19 @@ namespace BookStore.BusinessLogicLayer.Services
             return new MessageResponse() { Message = "User was successfully unblocked." };
         }
 
-        public async Task<MessageResponse> Update(string? id, UserUpdateModel model, string accessToken)
+        public async Task<MessageResponse> Update(string id, UserUpdateModel model, string accessToken)
         {            
             var claims = _jwtService.GetClaimsFromToken(accessToken);
             var requesterId = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.UserData)).Value;
             var requesterRole = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Role)).Value;
-            var requester = await GetUserByIdAsync(requesterId);
+            var requester = await _accountService.FindByIdAsync(requesterId);
 
             if (id is null)
             {
                 id = requesterId;
             }
 
-            var user = await GetUserByIdAsync(id);
+            var user = await _accountService.FindByIdAsync(id);
 
             if (!(requesterRole.Equals(Enums.Roles.Admin.ToString()) || requesterId.Equals(id)))
             {
@@ -154,7 +133,7 @@ namespace BookStore.BusinessLogicLayer.Services
             var passwordValidationResult = await _userManager.CheckPasswordAsync(requester, model.Password);
             if (!passwordValidationResult)
             {
-                throw new CustomException(HttpStatusCode.BadRequest, "Invalid password.");
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.InvalidCredentials.GetDescription());
             }
 
             user.FirstName = model.FirstName;

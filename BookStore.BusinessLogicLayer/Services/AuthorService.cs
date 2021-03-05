@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BookStore.BusinessLogicLayer.Exceptions;
-using BookStore.BusinessLogicLayer.Models.Base;
+using BookStore.BusinessLogicLayer.Extensions;
 using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.Author;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
@@ -11,6 +11,7 @@ using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
 using System.Net;
 using System.Threading.Tasks;
+using static BookStore.BusinessLogicLayer.Constants.Constants;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
@@ -33,7 +34,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
             if (author is null)
             {
-                throw new CustomException(HttpStatusCode.BadRequest, "Author was not found.");
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.AuthorNotFound.GetDescription());
             }
 
             return author;
@@ -59,7 +60,7 @@ namespace BookStore.BusinessLogicLayer.Services
         {
             var query = await _repository.GetAllAsync();
 
-            _dataService.GetCollection<AuthorModel, Author>(query, model, out DataCollectionModel<AuthorModel> response);
+            _dataService.GetCollection(query, model, out DataCollectionModel<AuthorModel> response);
 
             return response;
         }
@@ -67,6 +68,8 @@ namespace BookStore.BusinessLogicLayer.Services
         public async Task RemoveAsync(long id)
         {
             var author = await FindByIdAsync(id);
+
+            author.PrintingEditions = null;
 
             await _repository.RemoveAsync(author);
         }

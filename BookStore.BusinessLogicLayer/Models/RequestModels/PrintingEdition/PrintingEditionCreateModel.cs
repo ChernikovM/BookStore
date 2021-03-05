@@ -1,5 +1,4 @@
 ﻿using BookStore.BusinessLogicLayer.Models.Base;
-using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
 using BookStore.DataAccessLayer.Enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

@@ -4519,3 +4519,29 @@ ____________________
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
 
+____________________
+- Date: 05.03.2021 08:09:38
+- Exception : System.ArgumentOutOfRangeException
+- Error : Specified argument was out of the range of valid values. (Parameter 'page')
+- Stack Trace: 
+   at System.Linq.Dynamic.Core.Validation.Check.Condition[T](T value, Predicate`1 condition, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.Page[TSource](IQueryable`1 source, Int32 page, Int32 pageSize)
+   at BookStore.BusinessLogicLayer.Services.DataCollectionAccessProvider.Pagination[T](IQueryable`1 collection, PageRequestModel& requestModel, PageModel& responseModel) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\DataCollectionAccessProvider.cs:line 103
+   at BookStore.BusinessLogicLayer.Services.DataCollectionAccessProvider.GetCollection[T,U](IQueryable`1 collection, IndexRequestModel requestModel, DataCollectionModel`1& responseModel) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\DataCollectionAccessProvider.cs:line 34
+   at BookStore.BusinessLogicLayer.Services.AuthorService.GetAllAsync(IndexRequestModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Services\AuthorService.cs:line 62
+   at BookStore.PresentationLayer.Controllers.AuthorsController.GetAll(IndexRequestModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Controllers\AuthorsController.cs:line 45
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
+

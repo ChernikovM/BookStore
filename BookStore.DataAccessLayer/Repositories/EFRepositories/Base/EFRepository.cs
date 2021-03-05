@@ -53,12 +53,8 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Base
 
         public async Task RemoveAsync(TEntity item)
         {
-            if (item is null)
-            {
-                throw new NullReferenceException();
-            }
-
             item.IsRemoved = true;
+            _dbSet.Update(item);
             await _context.SaveChangesAsync();
         }
 

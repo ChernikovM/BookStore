@@ -22,20 +22,20 @@ namespace BookStore.BusinessLogicLayer.Services
             _mapper = mapper;
         }
 
-        public List<T> GetCollection<T, U>(IQueryable<U> collection, IndexRequestModel requestModel, out DataCollectionModel<T> responseModel) //T - modelType. U - entityType
+        public List<TDest> GetCollection<TSource, TDest>(IQueryable<TSource> collection, IndexRequestModel requestModel, out DataCollectionModel<TDest> responseModel)
         {
             string filter = requestModel.Filter;
             string sort = requestModel.SortBy;
             var pagination = requestModel.PageRequestModel;
 
-            collection = Filter<U, T>(collection, ref filter);
-            collection = Sort<U, T>(collection, ref sort);
+            collection = Filter<TSource, TDest>(collection, ref filter);
+            collection = Sort<TSource, TDest>(collection, ref sort);
 
-            collection = Pagination<U>(collection, ref pagination, out PageModel pageModel);
+            collection = Pagination<TSource>(collection, ref pagination, out PageModel pageModel);
 
-            var result = _mapper.Map<List<U>, List<T>>(collection.ToList());
+            var result = _mapper.Map<List<TSource>, List<TDest>>(collection.ToList());
 
-            responseModel = new DataCollectionModel<T>()
+            responseModel = new DataCollectionModel<TDest>()
             {
                 Sort = sort,
                 Filter = filter,

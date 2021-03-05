@@ -1,5 +1,6 @@
 ﻿using BookStore.BusinessLogicLayer.Configurations.Interfaces;
 using BookStore.BusinessLogicLayer.Exceptions;
+using BookStore.BusinessLogicLayer.Extensions;
 using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using MailKit.Net.Smtp;
@@ -10,6 +11,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using static BookStore.BusinessLogicLayer.Constants.Constants;
 
 namespace BookStore.BusinessLogicLayer.Services
 {
@@ -43,7 +45,7 @@ namespace BookStore.BusinessLogicLayer.Services
         {
             if (user.EmailConfirmed == false)
             {
-                throw new CustomException(HttpStatusCode.BadRequest, "Email is not confirmed.");
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.EmailNotConfirmed.GetDescription());
             }
         }
 

@@ -1,23 +1,32 @@
 ﻿using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
+using BookStore.DataAccessLayer.Entities;
 using System.Threading.Tasks;
 
 namespace BookStore.BusinessLogicLayer.Services.Interfaces
 {
     public interface IAccountService
     {
-        public Task<MessageResponse> Register(UserRegistrationModel model);
+        Task<MessageResponse> Register(UserRegistrationModel model);
 
-        public Task<JwtPairResponse> Login(UserLoginModel model);
+        Task<JwtPairResponse> Login(UserLoginModel model);
 
-        public Task<MessageResponse> ConfirmEmail(UserEmailConfirmationModel model);
+        Task<MessageResponse> ConfirmEmail(UserEmailConfirmationModel model);
 
-        public Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken);
+        Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken);
 
-        public Task<MessageResponse> ResetPassword(UserResetPasswordModel model);
+        Task<MessageResponse> ResetPassword(UserResetPasswordModel model);
 
-        public Task<MessageResponse> ChangePassword(string userId, string token, UserChangePasswordModel model);
+        Task<MessageResponse> ChangePassword(string userId, string token, UserChangePasswordModel model);
 
-        public Task<MessageResponse> Logout(string accessToken);
+        Task<MessageResponse> Logout(string accessToken);
+
+        Task<User> FindByIdAsync(string id);
+
+        Task<User> FindByNameAsync(string name);
+
+        Task<User> FindByEmailAsync(string email);
+
+        Task<User> FindByTokenAsync(string token);
     }
 }

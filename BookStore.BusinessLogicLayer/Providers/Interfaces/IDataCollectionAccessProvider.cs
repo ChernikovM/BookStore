@@ -7,7 +7,7 @@ namespace BookStore.BusinessLogicLayer.Providers.Interfaces
 {
     public interface IDataCollectionAccessProvider
     {
-        public List<T> GetCollection<T, U>(IQueryable<U> collection, IndexRequestModel requestModel, out DataCollectionModel<T> responseModel);
+        public List<U> GetCollection<T, U>(IQueryable<T> collection, IndexRequestModel requestModel, out DataCollectionModel<U> responseModel);
         
         public IQueryable<T> Pagination<T>(IQueryable<T> collection, ref PageRequestModel requestModel, out PageModel responseModel);
 

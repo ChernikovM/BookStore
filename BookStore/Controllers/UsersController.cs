@@ -10,11 +10,11 @@ namespace BookStore.PresentationLayer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : Controller
+    public class UsersController : Controller
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }
@@ -58,7 +58,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize]
         [HttpPut("{id?}")]
-        public async Task<IActionResult> Update(string? id, [FromBody] UserUpdateModel model)
+        public async Task<IActionResult> Update(string id, [FromBody] UserUpdateModel model)
         {
             var accessToken = GetAccessToken();
             var response = await _userService.Update(id, model, accessToken);

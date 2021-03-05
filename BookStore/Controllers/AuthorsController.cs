@@ -11,11 +11,11 @@ namespace BookStore.PresentationLayer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthorController : ICrudController<AuthorModel, AuthorCreateModel>
+    public class AuthorsController : ICrudController<AuthorModel, AuthorCreateModel>
     {
         private readonly IAuthorService _authorService;
 
-        public AuthorController(IAuthorService authorService)
+        public AuthorsController(IAuthorService authorService)
         {
             _authorService = authorService;
         }
@@ -48,8 +48,8 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [Authorize("AdminOnly")]
-        [HttpDelete]
-        public async Task<IActionResult> Delete(long id) //TODO: dont work
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(long id)
         {
             await _authorService.RemoveAsync(id);
 
