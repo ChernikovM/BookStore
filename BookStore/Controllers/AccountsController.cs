@@ -48,11 +48,13 @@ namespace BookStore.PresentationLayer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> RefreshTokens([FromQuery] UserRefreshTokensModel model)
+        public async Task<IActionResult> RefreshTokens([FromBody] UserRefreshTokensModel model)
         {
+            /*
             HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
             var accessToken = value.ToString().Split(" ").Last();
-            var response = await _accountService.RefreshTokens(model, accessToken);
+            */
+            var response = await _accountService.RefreshTokens(model);
 
             return new OkObjectResult(response);
         }
@@ -83,7 +85,8 @@ namespace BookStore.PresentationLayer.Controllers
             var accessToken = value.ToString().Split(" ").Last();
             var response = await _accountService.Logout(accessToken);
 
-            return new OkObjectResult(response);
+            //return new OkObjectResult(response);
+            return Ok(response);
         }
     }
 }

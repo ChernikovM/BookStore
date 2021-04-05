@@ -16,10 +16,8 @@ namespace BookStore.BusinessLogicLayer.Mapping
         {
             CreateMap<User, UserLoginModel>().ReverseMap();
             CreateMap<User, UserRegistrationModel>().ReverseMap();
-            CreateMap<User, UserResponseModel>().ReverseMap();
+            CreateMap<User, UserResponseModel>().ReverseMap().ForMember(dest => dest.LockoutEnd, opt => opt.UseDestinationValue());
             CreateMap<User, UserUpdateModel>().ReverseMap();
-            CreateMap<User, UserResponseModel>().ReverseMap();
-
             CreateMap<Author, AuthorModel>().ReverseMap();
             CreateMap<Author, AuthorCreateModel>().ReverseMap();
             CreateMap<Author, BaseModel>().ReverseMap();

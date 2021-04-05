@@ -9,7 +9,7 @@ namespace BookStore.BusinessLogicLayer.Providers.Interfaces
     {
         public List<U> GetCollection<T, U>(IQueryable<T> collection, IndexRequestModel requestModel, out DataCollectionModel<U> responseModel);
         
-        public IQueryable<T> Pagination<T>(IQueryable<T> collection, ref PageRequestModel requestModel, out PageModel responseModel);
+        public IQueryable<T> Pagination<T>(IQueryable<T> collection, ref PageRequestModel requestModel, out PageModel responseModel, out int collectionCount);
 
         public IQueryable<T> Filter<T, U>(IQueryable<T> collection, ref string filterString);
 

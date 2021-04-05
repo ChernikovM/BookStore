@@ -15,6 +15,6 @@ namespace BookStore.BusinessLogicLayer.Models.ResponseModels.User
 
         public bool LockoutEnabled { get; set; }
 
-        public DateTime? LockoutEnd { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
     }
 }

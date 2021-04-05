@@ -1,4 +1,5 @@
 ﻿using BookStore.BusinessLogicLayer.Configurations.Interfaces;
+using BookStore.BusinessLogicLayer.Extensions;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.DataAccessLayer.Entities;
@@ -78,7 +79,17 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public IEnumerable<Claim> GetClaimsFromToken(string token)
         {
-            return new JwtSecurityTokenHandler().ReadJwtToken(token).Claims;
+            IEnumerable<Claim> result;
+            try
+            {
+                result = new JwtSecurityTokenHandler().ReadJwtToken(token).Claims;
+            }
+            catch(Exception )
+            {
+                throw new Exceptions.CustomException(System.Net.HttpStatusCode.BadRequest, Constants.Constants.ErrorMessage.InvalidToken.GetDescription());
+            }
+
+            return result;
         }
 
         public ClaimsPrincipal ValidateAccessToken(string token)

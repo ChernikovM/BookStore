@@ -46,7 +46,8 @@ namespace BookStore
             services.AddDbContext<DataContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("Server")));
 
-            services.AddIdentity<User, IdentityRole>(x => x.User.RequireUniqueEmail = true)
+            //TODO: requireUniqueEmail set true
+            services.AddIdentity<User, IdentityRole>(x => x.User.RequireUniqueEmail = false)
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
 
@@ -137,13 +138,23 @@ namespace BookStore
             );
 
             services.AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
-                    { 
-                        Version = "v1",
-                        Title = "BookStore API"
-                    });
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
+                { 
+                    Version = "v1",
+                    Title = "BookStore API"
                 });
+            });
+
+            services.AddCors(opt =>
+            {
+                opt.AddDefaultPolicy( builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader();
+                    });
+            });
 
         }
 
@@ -166,6 +177,8 @@ namespace BookStore
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();

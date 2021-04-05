@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace BookStore.DataAccessLayer.Entities

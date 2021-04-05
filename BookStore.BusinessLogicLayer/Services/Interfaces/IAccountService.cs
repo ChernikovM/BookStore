@@ -1,5 +1,6 @@
 ﻿using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
+using BookStore.BusinessLogicLayer.Models.ResponseModels.User;
 using BookStore.DataAccessLayer.Entities;
 using System.Threading.Tasks;
 
@@ -7,13 +8,13 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<MessageResponse> Register(UserRegistrationModel model);
+        Task<UserResponseModel> Register(UserRegistrationModel model);
 
         Task<JwtPairResponse> Login(UserLoginModel model);
 
         Task<MessageResponse> ConfirmEmail(UserEmailConfirmationModel model);
 
-        Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken);
+        Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model);
 
         Task<MessageResponse> ResetPassword(UserResetPasswordModel model);
 

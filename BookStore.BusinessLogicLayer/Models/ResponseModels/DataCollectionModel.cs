@@ -12,5 +12,7 @@ namespace BookStore.BusinessLogicLayer.Models.ResponseModels
         public string Filter { get; set; }
 
         public List<T> DataCollection { get; set; } = new List<T>();
+
+        public int CollectionCount { get; set; }
     }
 }

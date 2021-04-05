@@ -3,6 +3,7 @@ using BookStore.BusinessLogicLayer.Exceptions;
 using BookStore.BusinessLogicLayer.Extensions;
 using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
+using BookStore.BusinessLogicLayer.Models.ResponseModels.User;
 using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
@@ -81,7 +82,7 @@ namespace BookStore.BusinessLogicLayer.Services
             }
         }
 
-        public async Task<MessageResponse> Register(UserRegistrationModel model)
+        public async Task<UserResponseModel> Register(UserRegistrationModel model)
         {
             var newUser = _mapper.Map<User>(model);
             newUser.LockoutEnabled = true;
@@ -102,7 +103,10 @@ namespace BookStore.BusinessLogicLayer.Services
 
             await _emailSenderService.SendEmailConfirmationLinkAsync(newUser);
 
-            return new MessageResponse() { Message = "Please confirm your email." };
+            var userResponse = _mapper.Map<UserResponseModel>(newUser);
+
+            return userResponse;
+            //return new MessageResponse() { Message = "Please confirm your email." };
         }
 
         public async Task<MessageResponse> ConfirmEmail(UserEmailConfirmationModel model)
@@ -148,9 +152,9 @@ namespace BookStore.BusinessLogicLayer.Services
             return tokenPair;
         }
 
-        public async Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model, string accessToken)
+        public async Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model)
         {
-            var user = await FindByTokenAsync(accessToken);
+            var user = await FindByTokenAsync(model.RefreshToken);
 
             var refreshTokenIsValid = _jwtService.ValidateRefreshToken(user, model.RefreshToken);
             if (!refreshTokenIsValid)

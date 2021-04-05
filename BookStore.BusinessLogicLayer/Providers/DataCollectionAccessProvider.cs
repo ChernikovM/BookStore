@@ -30,8 +30,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
             collection = Filter<TSource, TDest>(collection, ref filter);
             collection = Sort<TSource, TDest>(collection, ref sort);
-
-            collection = Pagination<TSource>(collection, ref pagination, out PageModel pageModel);
+            collection = Pagination<TSource>(collection, ref pagination, out PageModel pageModel, out int collectionCount);
 
             var result = _mapper.Map<List<TSource>, List<TDest>>(collection.ToList());
 
@@ -40,7 +39,8 @@ namespace BookStore.BusinessLogicLayer.Services
                 Sort = sort,
                 Filter = filter,
                 PageModel = pageModel,
-                DataCollection = result
+                DataCollection = result,
+                CollectionCount = collectionCount
             };
 
             return result;
@@ -64,12 +64,10 @@ namespace BookStore.BusinessLogicLayer.Services
                     string propName = filter.Split(new char[] {'.', '=', '>', '<'}).First();
                     string expr = filter;
                     var propType = GetPropertyType(typeof(U), propName);
-
                     if (propType is null)
                     {
                         continue;
                     }
-
                     collection = collection.Where(filter);
 
                     filterString += filter + _config.SplitCharacter; //if exception was not invoked
@@ -83,11 +81,11 @@ namespace BookStore.BusinessLogicLayer.Services
             return collection;
         }
 
-        public IQueryable<T> Pagination<T>(IQueryable<T> collection, ref PageRequestModel requestModel, out PageModel responseModel)
+        public IQueryable<T> Pagination<T>(IQueryable<T> collection, ref PageRequestModel requestModel, out PageModel responseModel, out int collectionCount)
         {
-            var collectionCount = collection.Count();
+            collectionCount = collection.Count();
 
-            if (requestModel.Page is null)
+            if (requestModel.Page is null || requestModel.Page < 1)
             {
                 requestModel.Page = _config.DefaultPage;
             }
@@ -98,6 +96,11 @@ namespace BookStore.BusinessLogicLayer.Services
             {
                 requestModel.Page = responseModel.TotalPages;
                 responseModel.CurrentPageNumber = requestModel.Page.Value;
+            }
+
+            if (collectionCount == 0)
+            {
+                return collection;
             }
 
             collection = collection.Page(requestModel.Page.Value, requestModel.PageSize.Value);

@@ -1,8 +1,10 @@
-﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
+﻿using BookStore.BusinessLogicLayer.Exceptions;
+using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,11 +50,10 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [Authorize("AdminOnly")]
-        [HttpGet]
-        public async Task<IActionResult> GetAllUsers([FromQuery] IndexRequestModel model)
+        [HttpPost]
+        public async Task<IActionResult> GetAllUsers([FromBody] IndexRequestModel model)
         {
             var response = await _userService.GetAllUsers(model);
-
             return new OkObjectResult(response);
         }
 
