@@ -3,6 +3,7 @@ using BookStore.BusinessLogicLayer.Configurations.Interfaces;
 using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Providers.Interfaces;
+using BookStore.DataAccessLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,11 +69,20 @@ namespace BookStore.BusinessLogicLayer.Services
                     {
                         continue;
                     }
-                    collection = collection.Where(filter);
+                    
+                    if (propType.Name.Contains("List`1"))
+                    {
+                        var str = new string(filter.ToCharArray().Skip(propName.Length + 1).ToArray());
+                        collection = collection.Where(str);
+                    }
+                    else
+                    {
+                        collection = collection.Where(filter);
+                    }
 
                     filterString += filter + _config.SplitCharacter; //if exception was not invoked
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     //do nothing if property was not found or other
                 }

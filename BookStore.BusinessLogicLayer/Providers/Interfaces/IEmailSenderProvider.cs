@@ -7,6 +7,6 @@ namespace BookStore.BusinessLogicLayer.Providers.Interfaces
     {
         public Task SendEmailConfirmationLinkAsync(User user);
 
-        public Task SendPasswordResettingLinkAsync(User user);
+        public Task SendPasswordResettingLinkAsync(User user, string newPassword);
     }
 }

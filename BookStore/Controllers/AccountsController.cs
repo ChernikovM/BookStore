@@ -61,7 +61,16 @@ namespace BookStore.PresentationLayer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordModel model)
+        public async Task<IActionResult> CheckEmail([FromBody] UserResetPasswordModel model)
+        {
+            var response = await _accountService.CheckEmail(model);
+            return new OkObjectResult(response);
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword([FromBody] UserChangePasswordModel model)
         {
             var response = await _accountService.ResetPassword(model);
 
@@ -70,9 +79,9 @@ namespace BookStore.PresentationLayer.Controllers
 
         [AllowAnonymous]
         [HttpPatch]
-        public async Task<IActionResult> ChangePassword([FromQuery] string userId, [FromQuery] string token, [FromBody]UserChangePasswordModel model)
+        public async Task<IActionResult> ChangePassword([FromQuery] string userId, [FromQuery] string token, [FromQuery]string password)
         {
-            var response = await _accountService.ChangePassword(userId, token, model);
+            var response = await _accountService.ChangePassword(userId, token, password);
 
             return new OkObjectResult(response);
         }

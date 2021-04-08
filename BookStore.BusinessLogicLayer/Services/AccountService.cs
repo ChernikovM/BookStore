@@ -170,20 +170,27 @@ namespace BookStore.BusinessLogicLayer.Services
             return response;
         }
 
-        public async Task<MessageResponse> ResetPassword(UserResetPasswordModel model)
+        public async Task<MessageResponse> ResetPassword(UserChangePasswordModel model)
         {
             var user = await FindByEmailAsync(model.Email);
 
-            await _emailSenderService.SendPasswordResettingLinkAsync(user);
+            await _emailSenderService.SendPasswordResettingLinkAsync(user, model.NewPassword);
 
             return new MessageResponse() { Message = "Email was sent." };
         }
 
-        public async Task<MessageResponse> ChangePassword(string userId, string token, UserChangePasswordModel model)
+        public async Task<MessageResponse> CheckEmail(UserResetPasswordModel model)
+        {
+            var user = await FindByEmailAsync(model.Email);
+
+            return new MessageResponse() { Message = "Success" };
+        }
+
+        public async Task<MessageResponse> ChangePassword(string userId, string token, string password)
         {
             var user = await FindByIdAsync(userId);
 
-            var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+            var result = await _userManager.ResetPasswordAsync(user, token, password);
             if (!result.Succeeded)
             {
                 throw new CustomException(HttpStatusCode.BadRequest, result);

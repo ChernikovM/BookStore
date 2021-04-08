@@ -5,7 +5,7 @@ namespace BookStore.BusinessLogicLayer.Models.RequestModels.User
 {
     public class UserRefreshTokensModel : BaseErrorModel
     {
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Refresh Token field is required.")]
         public string RefreshToken { get; set; }
     }
 }

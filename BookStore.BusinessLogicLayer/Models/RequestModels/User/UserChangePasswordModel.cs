@@ -9,8 +9,11 @@ namespace BookStore.BusinessLogicLayer.Models.RequestModels.User
         [DataType(DataType.Password)]
         public string NewPassword { get; set; }
 
+        [Required]
         [DataType(DataType.Password)]
         [Compare("NewPassword", ErrorMessage = "The password and confirmation password dont match.")]
         public string ConfirmNewPassword { get; set; }
+
+        public string Email { get; set; }
     }
 }

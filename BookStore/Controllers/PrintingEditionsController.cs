@@ -21,7 +21,7 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [Authorize("AdminOnly")]
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> Create([FromBody]PrintingEditionCreateModel model)
         {
             await _peService.CreateAsync(model);
@@ -37,8 +37,8 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(result);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery]IndexRequestModel model)
+        [HttpPost]
+        public async Task<IActionResult> GetAll([FromBody]IndexRequestModel model)
         {
             var result = await _peService.GetAllAsync(model);
 
@@ -55,7 +55,7 @@ namespace BookStore.PresentationLayer.Controllers
         }
 
         [Authorize("AdminOnly")]
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> Update(long id, PrintingEditionModel model)
         {
             await _peService.UpdateAsync(id, model);

@@ -88,7 +88,7 @@ namespace BookStore.BusinessLogicLayer.Services
             await SendEmailAsync(message);
         }
 
-        public async Task SendPasswordResettingLinkAsync(User user)
+        public async Task SendPasswordResettingLinkAsync(User user, string newPassword)
         {
             IsEmailConfirmed(user);
 
@@ -109,7 +109,7 @@ namespace BookStore.BusinessLogicLayer.Services
             {
                 Port = _config.Port,
                 Path = _config.PathPasswordChange,
-                Query = $"userId={user.Id}&token={HttpUtility.UrlEncode(token)}"
+                Query = $"userId={user.Id}&token={HttpUtility.UrlEncode(token)}&password={newPassword}"
             };
 
             sb.Append(resetPasswordLink);
