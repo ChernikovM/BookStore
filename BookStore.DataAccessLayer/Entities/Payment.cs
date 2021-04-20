@@ -5,7 +5,7 @@ namespace BookStore.DataAccessLayer.Entities
 {
     public class Payment : BaseEntity
     {
-        public long TransactionId { get; set; }
+        public string SessionId { get; set; }
 
         public Order Order { get; set; }
     }

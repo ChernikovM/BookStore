@@ -40,7 +40,7 @@ namespace BookStore.PresentationLayer.Controllers
 
         [Authorize("AdminOnly")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery]IndexRequestModel model)
+        public async Task<IActionResult> GetAll([FromBody]IndexRequestModel model)
         {
             var result = await _authorService.GetAllAsync(model);
 

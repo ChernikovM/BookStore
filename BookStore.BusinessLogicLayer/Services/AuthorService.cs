@@ -40,11 +40,11 @@ namespace BookStore.BusinessLogicLayer.Services
             return author;
         }
 
-        public async Task CreateAsync(AuthorCreateModel model)
+        public async Task<long> CreateAsync(AuthorCreateModel model)
         {
             var entity = _mapper.Map<Author>(model);
             
-            await _repository.CreateAsync(entity);
+            return await _repository.CreateAsync(entity);
         }
 
         public async Task<AuthorModel> GetAsync(long id)

@@ -38,6 +38,15 @@ namespace BookStore.BusinessLogicLayer.Constants
 
             [Description("User cannot be blocked.")]
             UserCannotBeBlocked,
+
+            [Description("Order was not found.")]
+            OrderNotFound,
+
+            [Description("OrderItem was not found.")]
+            OrderItemNotFound,
+
+            [Description("Payment was not found.")]
+            PaymentNotFound,
         }
     }
 }

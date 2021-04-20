@@ -12,7 +12,7 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
 
         Task<DataCollectionModel<TModel>> GetAllAsync(IndexRequestModel model);
 
-        Task CreateAsync(TCreateModel model);
+        Task<long> CreateAsync(TCreateModel model);
 
         Task RemoveAsync(long id);
 

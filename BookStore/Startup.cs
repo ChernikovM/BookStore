@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,13 +46,6 @@ namespace BookStore
             services.AddDbContext<DataContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("Server")));
 
-            /*
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
-            */
-
             //TODO: requireUniqueEmail set true
             services.AddIdentity<User, IdentityRole>(x => x.User.RequireUniqueEmail = false)
                 .AddEntityFrameworkStores<DataContext>()
@@ -63,6 +55,8 @@ namespace BookStore
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IPrintingEditionService, PrintingEditionService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderItemService, OrderItemService>();
 
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IPrintingEditionRepository, PrintingEditionRepository>();
@@ -74,6 +68,11 @@ namespace BookStore
                 Configuration.GetSection("LoggerConfiguration").Get<LoggerConfiguration>();
             services.AddSingleton<ILoggerConfiguration>(loggerConfig);
             services.AddSingleton<ILoggerProvider, LoggerProvider>();
+
+            var stripeConfig =
+                Configuration.GetSection("StripeConfiguration").Get<StripeConfiguration>();
+            services.AddSingleton<IStripeConfiguration>(stripeConfig);
+            services.AddScoped<IPaymentStripeService, PaymentStripeService>();
 
             var mapperConfig = new MapperConfiguration(
                 mc => mc.AddProfile<MappingProfile>());
@@ -163,7 +162,6 @@ namespace BookStore
                         .AllowAnyHeader();
                     });
             });
-
         }
 
 

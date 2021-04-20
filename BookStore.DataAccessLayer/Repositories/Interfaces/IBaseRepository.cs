@@ -8,7 +8,7 @@ namespace BookStore.DataAccessLayer.Repositories.Interfaces
     public interface IBaseRepository<TEntity>
         where TEntity : BaseEntity
     {
-        Task CreateAsync(TEntity item);
+        Task<long> CreateAsync(TEntity item);
         Task<TEntity> FindByIdAsync(long id);
         Task<List<TEntity>> FindByIdAsync(List<long> ids);
         Task<IQueryable<TEntity>> GetAllAsync();

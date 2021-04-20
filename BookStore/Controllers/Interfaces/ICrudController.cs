@@ -1,5 +1,4 @@
-﻿using BookStore.BusinessLogicLayer.Models.Base;
-using BookStore.BusinessLogicLayer.Models.RequestModels;
+﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

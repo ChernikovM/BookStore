@@ -8,6 +8,7 @@ using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
+using BookStore.DataAccessLayer.Enums;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
 using System.Linq;
 using System.Net;
@@ -42,7 +43,7 @@ namespace BookStore.BusinessLogicLayer.Services
             return entity;
         }
 
-        public async Task CreateAsync(PrintingEditionCreateModel model)
+        public async Task<long> CreateAsync(PrintingEditionCreateModel model)
         {
             var authorsIds = model.Authors.Select(x => x.Id.Value).ToList();
             var authors = await _authorRepository.FindByIdAsync(authorsIds);
@@ -56,7 +57,7 @@ namespace BookStore.BusinessLogicLayer.Services
 
             entity.Authors = authors;
 
-            await _repository.CreateAsync(entity);
+            return await _repository.CreateAsync(entity);
         }
 
         public async Task<PrintingEditionModel> GetAsync(long id)
