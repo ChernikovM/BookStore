@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.PresentationLayer", "BookStore\BookStore.PresentationLayer.csproj", "{534ECE19-5CE2-44D7-A4CD-C2846093CAFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.PresentationLayer", "BookStore\BookStore.PresentationLayer.csproj", "{534ECE19-5CE2-44D7-A4CD-C2846093CAFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.DataAccessLayer", "BookStore.DataAccessLayer\BookStore.DataAccessLayer.csproj", "{7A39E5A0-349B-4685-BF20-3623FFA87828}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.DataAccessLayer", "BookStore.DataAccessLayer\BookStore.DataAccessLayer.csproj", "{7A39E5A0-349B-4685-BF20-3623FFA87828}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.BusinessLogicLayer", "BookStore.BusinessLogicLayer\BookStore.BusinessLogicLayer.csproj", "{0A223508-345F-474F-81F3-2F5875A669EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.BusinessLogicLayer", "BookStore.BusinessLogicLayer\BookStore.BusinessLogicLayer.csproj", "{0A223508-345F-474F-81F3-2F5875A669EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.AdminPanel", "BookStore.AdminPanel\BookStore.AdminPanel.csproj", "{586F4A9E-B92B-466F-A615-C47DEAC6EDD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{0A223508-345F-474F-81F3-2F5875A669EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A223508-345F-474F-81F3-2F5875A669EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A223508-345F-474F-81F3-2F5875A669EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{586F4A9E-B92B-466F-A615-C47DEAC6EDD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{586F4A9E-B92B-466F-A615-C47DEAC6EDD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{586F4A9E-B92B-466F-A615-C47DEAC6EDD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{586F4A9E-B92B-466F-A615-C47DEAC6EDD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

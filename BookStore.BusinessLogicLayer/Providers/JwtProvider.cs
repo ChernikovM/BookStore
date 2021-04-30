@@ -45,6 +45,7 @@ namespace BookStore.BusinessLogicLayer.Services
             return token;
         }
 
+        //TODO: bug when user.role == null
         private async Task<IList<Claim>> SetClaims(User user)
         {
             var claims = new List<Claim>
@@ -90,24 +91,6 @@ namespace BookStore.BusinessLogicLayer.Services
             }
 
             return result;
-        }
-
-        public ClaimsPrincipal ValidateAccessToken(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            
-            var claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = _config.Issuer,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config.SecretAccessToken)),
-                ValidAudience = _config.Audience,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-            }, out _);
-
-            return claimsPrincipal;
         }
 
         public bool ValidateRefreshToken(User user, string token)

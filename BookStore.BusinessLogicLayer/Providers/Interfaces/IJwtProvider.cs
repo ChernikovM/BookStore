@@ -10,7 +10,6 @@ namespace BookStore.BusinessLogicLayer.Providers.Interfaces
     {
         public Task<JwtPairResponse> GenerateTokenPairAsync(User user);
         public bool ValidateRefreshToken(User user, string token);
-        public ClaimsPrincipal ValidateAccessToken(string token);
         public string GenerateToken(IList<Claim> claims, int lifeTimeMinutes, string secret);
         public IEnumerable<Claim> GetClaimsFromToken(string token);
         public Task ClearClaims(User user);

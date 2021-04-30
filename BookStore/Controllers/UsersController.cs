@@ -1,11 +1,8 @@
-﻿using BookStore.BusinessLogicLayer.Exceptions;
-using BookStore.BusinessLogicLayer.Models.RequestModels;
+﻿using BookStore.BusinessLogicLayer.Models.RequestModels;
 using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BookStore.PresentationLayer.Controllers
@@ -21,53 +18,57 @@ namespace BookStore.PresentationLayer.Controllers
             _userService = userService;
         }
 
-        private string GetAccessToken()
-        {
-            HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
-            var accessToken = value.ToString().Split(" ").Last();
-
-            return accessToken;
-        }
-
         [Authorize]
-        [HttpGet("Me")]
+        [HttpGet]
         public async Task<IActionResult> GetMyProfile()
         {
-            var accessToken = GetAccessToken();
-            var response = await _userService.GetMyProfile(accessToken);
+            var username = User.Identity.Name;
+            var response = await _userService.GetMyProfile(username);
 
             return new OkObjectResult(response);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserProfile(string id)
         {
-            var accessToken = GetAccessToken();
+            var response = await _userService.GetUserProfile(id);
 
-            var response = await _userService.GetUserProfile(id, accessToken);
             return new OkObjectResult(response);
         }
 
-        [Authorize("AdminOnly")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> GetAllUsers([FromBody] IndexRequestModel model)
         {
             var response = await _userService.GetAllUsers(model);
+
             return new OkObjectResult(response);
         }
 
         [Authorize]
-        [HttpPut("{id?}")]
-        public async Task<IActionResult> Update(string id, [FromBody] UserUpdateModel model)
+        [HttpPatch]
+        public async Task<IActionResult> UpdateMyProfile([FromBody] UserUpdateModel model)
         {
-            var accessToken = GetAccessToken();
-            var response = await _userService.Update(id, model, accessToken);
+            var username = User.Identity.Name;
+            
+            var response = await _userService.UpdateMyProfile(model, username);
 
             return new OkObjectResult(response);
         }
 
-        [Authorize("AdminOnly")]
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateUserProfile(string id, [FromBody] UserUpdateModel model)
+        {
+            var userIdentity = User.Identity;
+
+            var response = await _userService.UpdateUserProfile(id, model, userIdentity);
+
+            return new OkObjectResult(response);
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpPost("{id}/ban/{days?}")]
         public async Task<IActionResult> BlockUser(string id, int? days)
         {
@@ -76,7 +77,7 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(response);
         }
 
-        [Authorize("AdminOnly")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("{id}/unban")]
         public async Task<IActionResult> UnblockUser(string id)
         {

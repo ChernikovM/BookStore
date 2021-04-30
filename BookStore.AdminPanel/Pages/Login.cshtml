@@ -1,0 +1,17 @@
+﻿@page
+@model BookStore.AdminPanel.Pages.LoginModel
+@{
+}
+
+<form method="post">
+    <input type="text" name="username" placeholder="Username" />
+    <input type="text" name="password" placeholder="Password" />
+
+    <input type="submit" value="Login" />
+</form>
+
+@if (Model.jwtModel is not null && (Model.jwtModel.AccessToken is not null) && (Model.jwtModel.RefreshToken is not null))
+{
+    <p>accessToken:@Model.jwtModel.AccessToken</p>
+    <p>refreshToken:@Model.jwtModel.RefreshToken</p>
+}

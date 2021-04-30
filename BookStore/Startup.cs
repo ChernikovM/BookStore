@@ -8,7 +8,6 @@ using BookStore.BusinessLogicLayer.Services;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.AppContext;
 using BookStore.DataAccessLayer.Entities;
-using BookStore.DataAccessLayer.Enums;
 using BookStore.DataAccessLayer.Repositories.EFRepositories;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
 using BookStore.PresentationLayer.Middlewares;
@@ -99,7 +98,7 @@ namespace BookStore
                 {
                     x.RequireHttpsMetadata = true;
                     x.SaveToken = true;
-                    
+
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -111,38 +110,28 @@ namespace BookStore
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero,
                     };
-                    x.Events = new JwtBearerEvents
-                    {
-                        OnAuthenticationFailed = context =>
-                        {
-                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                            {
-                                context.Response.Headers.Add("Token-Expired", "true");
-                            }
-                            return Task.CompletedTask;
-                        }
-                    };
                 });
 
-            AuthorizationPolicyBuilder policyBuilder = 
-                new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
-            policyBuilder.RequireAuthenticatedUser();
 
-            var adminPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-                .RequireAuthenticatedUser()
-                .RequireRole(Enums.Roles.Admin.ToString())
-                .Build();
-
-            services.AddAuthorization(options => options.DefaultPolicy = policyBuilder.Build());
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            });
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AdminOnly", adminPolicy);
+                var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
+                    JwtBearerDefaults.AuthenticationScheme);
+
+                defaultAuthorizationPolicyBuilder =
+                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+
+                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
             });
 
             services.AddControllers().AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-            );
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddSwaggerGen(c =>
             {

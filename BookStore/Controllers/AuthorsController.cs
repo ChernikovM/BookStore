@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookStore.PresentationLayer.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
     public class AuthorsController : ICrudController<AuthorModel, AuthorCreateModel>
@@ -20,7 +21,6 @@ namespace BookStore.PresentationLayer.Controllers
             _authorService = authorService;
         }
 
-        [Authorize("AdminOnly")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]AuthorCreateModel model)
         {
@@ -29,7 +29,6 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult("Author was successfully added.");
         }
 
-        [Authorize("AdminOnly")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
@@ -38,7 +37,6 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(result);
         }
 
-        [Authorize("AdminOnly")]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromBody]IndexRequestModel model)
         {
@@ -47,7 +45,6 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(result);
         }
 
-        [Authorize("AdminOnly")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
@@ -56,7 +53,6 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult("Author was successfully removed.");
         }
 
-        [Authorize("AdminOnly")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(long id, [FromBody]AuthorModel model)
         {

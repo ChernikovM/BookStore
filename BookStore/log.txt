@@ -8009,3 +8009,326 @@ ____________________
    at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
    at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
 
+____________________
+- Date: 21.04.2021 11:46:12
+- Exception : System.InvalidOperationException
+- Error : Sequence contains no elements
+- Stack Trace: 
+   at System.Linq.ThrowHelper.ThrowNoElementsException()
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.SetClaims(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 50
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.GenerateTokenPairAsync(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 70
+   at BookStore.BusinessLogicLayer.Services.AccountService.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Services\AccountService.cs:line 147
+   at BookStore.PresentationLayer.Controllers.AccountsController.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Controllers\AccountsController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
+
+____________________
+- Date: 27.04.2021 08:01:16
+- Exception : System.InvalidOperationException
+- Error : Sequence contains no elements
+- Stack Trace: 
+   at System.Linq.ThrowHelper.ThrowNoElementsException()
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.SetClaims(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 50
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.GenerateTokenPairAsync(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 70
+   at BookStore.BusinessLogicLayer.Services.AccountService.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Services\AccountService.cs:line 147
+   at BookStore.PresentationLayer.Controllers.AccountsController.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Controllers\AccountsController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 29
+
+____________________
+- Date: 27.04.2021 08:02:35
+- Exception : System.InvalidOperationException
+- Error : Sequence contains no elements
+- Stack Trace: 
+   at System.Linq.ThrowHelper.ThrowNoElementsException()
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.SetClaims(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 50
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.GenerateTokenPairAsync(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 70
+   at BookStore.BusinessLogicLayer.Services.AccountService.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Services\AccountService.cs:line 147
+   at BookStore.PresentationLayer.Controllers.AccountsController.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Controllers\AccountsController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 29
+
+____________________
+- Date: 27.04.2021 08:02:54
+- Exception : System.InvalidOperationException
+- Error : Sequence contains no elements
+- Stack Trace: 
+   at System.Linq.ThrowHelper.ThrowNoElementsException()
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.SetClaims(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 50
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.GenerateTokenPairAsync(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 70
+   at BookStore.BusinessLogicLayer.Services.AccountService.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Services\AccountService.cs:line 147
+   at BookStore.PresentationLayer.Controllers.AccountsController.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Controllers\AccountsController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 29
+
+____________________
+- Date: 27.04.2021 08:03:28
+- Exception : System.InvalidOperationException
+- Error : Sequence contains no elements
+- Stack Trace: 
+   at System.Linq.ThrowHelper.ThrowNoElementsException()
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.SetClaims(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 50
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.GenerateTokenPairAsync(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 70
+   at BookStore.BusinessLogicLayer.Services.AccountService.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Services\AccountService.cs:line 147
+   at BookStore.PresentationLayer.Controllers.AccountsController.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Controllers\AccountsController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 29
+
+____________________
+- Date: 27.04.2021 08:08:50
+- Exception : System.InvalidOperationException
+- Error : Sequence contains no elements
+- Stack Trace: 
+   at System.Linq.ThrowHelper.ThrowNoElementsException()
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.SetClaims(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 50
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.GenerateTokenPairAsync(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 70
+   at BookStore.BusinessLogicLayer.Services.AccountService.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Services\AccountService.cs:line 147
+   at BookStore.PresentationLayer.Controllers.AccountsController.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Controllers\AccountsController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 29
+
+____________________
+- Date: 28.04.2021 10:47:31
+- Exception : System.InvalidOperationException
+- Error : Both ErrorMessageResourceType and ErrorMessageResourceName need to be set on this attribute.
+- Stack Trace: 
+   at System.ComponentModel.DataAnnotations.ValidationAttribute.SetupResourceAccessor()
+   at System.ComponentModel.DataAnnotations.ValidationAttribute.FormatErrorMessage(String name)
+   at System.ComponentModel.DataAnnotations.ValidationAttribute.IsValid(Object value, ValidationContext validationContext)
+   at System.ComponentModel.DataAnnotations.ValidationAttribute.GetValidationResult(Object value, ValidationContext validationContext)
+   at Microsoft.AspNetCore.Mvc.DataAnnotations.DataAnnotationsModelValidator.Validate(ModelValidationContext validationContext)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.ValidateNode()
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.VisitSimpleType()
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.VisitImplementation(ModelMetadata& metadata, String& key, Object model)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.Visit(ModelMetadata metadata, String key, Object model)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.VisitChildren(IValidationStrategy strategy)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.VisitComplexType(IValidationStrategy defaultStrategy)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.VisitImplementation(ModelMetadata& metadata, String& key, Object model)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.Visit(ModelMetadata metadata, String key, Object model)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.Validate(ModelMetadata metadata, String key, Object model, Boolean alwaysValidateAtTopLevel, Object container)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ObjectModelValidator.Validate(ActionContext actionContext, ValidationStateDictionary validationState, String prefix, Object model, ModelMetadata metadata, Object container)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.EnforceBindRequiredAndValidate(ObjectModelValidator baseObjectValidator, ActionContext actionContext, ParameterDescriptor parameter, ModelMetadata metadata, ModelBindingContext modelBindingContext, ModelBindingResult modelBindingResult, Object container)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.BindModelAsync(ActionContext actionContext, IModelBinder modelBinder, IValueProvider valueProvider, ParameterDescriptor parameter, ModelMetadata metadata, Object value, Object container)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerBinderDelegateProvider.<>c__DisplayClass0_0.<<CreateBinderDelegate>g__Bind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 29
+
+____________________
+- Date: 28.04.2021 12:51:14
+- Exception : System.NotSupportedException
+- Error : Specified method is not supported.
+- Stack Trace: 
+   at Microsoft.AspNetCore.Server.IIS.Core.WriteOnlyStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+   at Microsoft.AspNetCore.Server.IIS.Core.WrappingStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+   at System.IO.Stream.Read(Span`1 buffer)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 28
+
+____________________
+- Date: 28.04.2021 12:51:21
+- Exception : System.NotSupportedException
+- Error : Specified method is not supported.
+- Stack Trace: 
+   at Microsoft.AspNetCore.Server.IIS.Core.WriteOnlyStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+   at Microsoft.AspNetCore.Server.IIS.Core.WrappingStream.Read(Byte[] buffer, Int32 offset, Int32 count)
+   at System.IO.Stream.Read(Span`1 buffer)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 28
+
+____________________
+- Date: 28.04.2021 14:30:28
+- Exception : System.InvalidOperationException
+- Error : Unable to resolve service for type 'BookStore.AdminPanel.Services.Interfaces.IAccountService' while attempting to activate 'BookStore.AdminPanel.Pages.LoginModel'.
+- Stack Trace: 
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method7(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.DefaultPageModelActivatorProvider.<>c__DisplayClass1_0.<CreateActivator>b__0(PageContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.DefaultPageModelFactoryProvider.<>c__DisplayClass3_0.<CreateModelFactory>b__0(PageContext pageContext)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.CreateInstance()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
+
+____________________
+- Date: 29.04.2021 08:15:50
+- Exception : System.InvalidOperationException
+- Error : The AuthorizationPolicy named: 'AdminOnly' was not found.
+- Stack Trace: 
+   at Microsoft.AspNetCore.Authorization.AuthorizationPolicy.CombineAsync(IAuthorizationPolicyProvider policyProvider, IEnumerable`1 authorizeData)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.AuthorizationMiddleware.Invoke(HttpContext httpContext) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\AuthorizationMiddleware.cs:line 31
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
+
+____________________
+- Date: 29.04.2021 08:27:33
+- Exception : System.InvalidOperationException
+- Error : Sequence contains no elements
+- Stack Trace: 
+   at System.Linq.ThrowHelper.ThrowNoElementsException()
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.SetClaims(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 50
+   at BookStore.BusinessLogicLayer.Services.JwtProvider.GenerateTokenPairAsync(User user) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\JwtProvider.cs:line 70
+   at BookStore.BusinessLogicLayer.Services.AccountService.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Services\AccountService.cs:line 147
+   at BookStore.PresentationLayer.Controllers.AccountsController.Login(UserLoginModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Controllers\AccountsController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.AuthorizationMiddleware.Invoke(HttpContext httpContext) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\AuthorizationMiddleware.cs:line 31
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
+
+____________________
+- Date: 29.04.2021 10:16:32
+- Exception : System.Exception
+- Error : Exception of type 'System.Exception' was thrown.
+- Stack Trace: 
+   at BookStore.Startup.<>c.<ConfigureServices>b__4_9(TokenValidatedContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Startup.cs:line 156
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents.TokenValidated(TokenValidatedContext context)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.AuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
+
+____________________
+- Date: 29.04.2021 13:05:42
+- Exception : System.Exception
+- Error : Exception of type 'System.Exception' was thrown.
+- Stack Trace: 
+   at BookStore.Startup.<>c.<ConfigureServices>b__4_9(ForbiddenContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Startup.cs:line 150
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents.Forbidden(ForbiddenContext context)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleForbiddenAsync(AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.ForbidAsync(AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.ForbidAsync(HttpContext context, String scheme, AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
+
+____________________
+- Date: 29.04.2021 13:45:22
+- Exception : System.Exception
+- Error : Exception of type 'System.Exception' was thrown.
+- Stack Trace: 
+   at BookStore.Startup.<>c.<ConfigureServices>b__4_10(AuthenticationFailedContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Startup.cs:line 160
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents.AuthenticationFailed(AuthenticationFailedContext context)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.AuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
+

@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace BookStore.PresentationLayer.Controllers
 {
+    [AllowAnonymous]
     [ApiController]
     [Route("[controller]/[action]")]
-    public class AccountsController : Controller
+    public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
 
-        public AccountsController(IAccountService accountService)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
         {
@@ -28,7 +28,6 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(response);
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserLoginModel model)
         {
@@ -37,7 +36,6 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(response);
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail([FromQuery] UserEmailConfirmationModel model)
         {
@@ -46,20 +44,14 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(response);
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> RefreshTokens([FromBody] UserRefreshTokensModel model)
         {
-            /*
-            HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
-            var accessToken = value.ToString().Split(" ").Last();
-            */
             var response = await _accountService.RefreshTokens(model);
 
             return new OkObjectResult(response);
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CheckEmail([FromBody] UserResetPasswordModel model)
         {
@@ -67,34 +59,29 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(response);
         }
 
-
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> ResetPassword([FromBody] UserChangePasswordModel model)
         {
             var response = await _accountService.ResetPassword(model);
 
-            return new OkObjectResult(response);
+            return Ok(response);
         }
 
-        [AllowAnonymous]
         [HttpPatch]
         public async Task<IActionResult> ChangePassword([FromQuery] string userId, [FromQuery] string token, [FromQuery]string password)
         {
             var response = await _accountService.ChangePassword(userId, token, password);
 
-            return new OkObjectResult(response);
+            return Ok(response);
         }
 
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            HttpContext.Request.Headers.TryGetValue("Authorization", out var value);
-            var accessToken = value.ToString().Split(" ").Last();
-            var response = await _accountService.Logout(accessToken);
+            var name = User.Identity.Name;
+            var response = await _accountService.Logout(name);
 
-            //return new OkObjectResult(response);
             return Ok(response);
         }
     }

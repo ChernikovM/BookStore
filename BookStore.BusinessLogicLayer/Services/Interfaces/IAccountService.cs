@@ -22,7 +22,7 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
 
         Task<MessageResponse> ChangePassword(string userId, string token, string password);
 
-        Task<MessageResponse> Logout(string accessToken);
+        Task<MessageResponse> Logout(string username);
 
         Task<User> FindByIdAsync(string id);
 

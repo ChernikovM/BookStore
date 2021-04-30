@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace BookStore.PresentationLayer.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
-    public class PrintingEditionsController : ICrudController<PrintingEditionModel, PrintingEditionCreateModel>
+    public class PrintingEditionsController : Controller, ICrudController<PrintingEditionModel, PrintingEditionCreateModel>
     {
         private readonly IPrintingEditionService _peService;
 
@@ -20,7 +21,6 @@ namespace BookStore.PresentationLayer.Controllers
             _peService = peService;
         }
 
-        [Authorize("AdminOnly")]
         [HttpPut]
         public async Task<IActionResult> Create([FromBody]PrintingEditionCreateModel model)
         {
@@ -29,14 +29,17 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult("success");
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
+            var context = HttpContext;
             var result = await _peService.GetAsync(id);
 
             return new OkObjectResult(result);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> GetAll([FromBody]IndexRequestModel model)
         {
@@ -45,7 +48,6 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(result);
         }
 
-        [Authorize("AdminOnly")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
@@ -54,7 +56,6 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult("deleted");
         }
 
-        [Authorize("AdminOnly")]
         [HttpPatch("{id}")]
         public async Task<IActionResult> Update(long id, PrintingEditionModel model)
         {

@@ -5,11 +5,11 @@ using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.PresentationLayer.Controllers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace BookStore.PresentationLayer.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
     public class PaymentsController : Controller, ICrudController<PaymentModel, PaymentCreationModel>
@@ -21,7 +21,6 @@ namespace BookStore.PresentationLayer.Controllers
             _paymentService = paymentService;
         }
 
-        [Authorize("AdminOnly")]
         [HttpPut]
         public async Task<IActionResult> Create([FromBody]PaymentCreationModel model)
         {
@@ -30,7 +29,6 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult("success");
         }
 
-        [Authorize("AdminOnly")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
@@ -55,7 +53,6 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(result);
         }
 
-        [Authorize("AdminOnly")]
         [HttpPatch("{id}")]
         public async Task<IActionResult> Update([FromQuery]long id, [FromBody]PaymentModel model)
         {

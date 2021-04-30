@@ -1,0 +1,15 @@
+﻿@page "{code:int?}"
+@model BookStore.AdminPanel.Pages.ErrorPageModel
+@{ ViewData["Title"] = "Status Code @Model.ErrorStatusCode"; }
+
+<h1>Error page</h1>
+<h2 class="text-danger">Code: @Model.ErrorStatusCode</h2>
+<h2 class="text-danger"> @Model.ErrorMessage</h2>
+
+@if (Model.ShowRequestId)
+{
+    <h3>Request ID</h3>
+    <p>
+        <code>@Model.RequestId</code>
+    </p>
+}

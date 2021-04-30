@@ -15,6 +15,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using static BookStore.BusinessLogicLayer.Constants.Constants;
 
@@ -46,30 +47,34 @@ namespace BookStore.BusinessLogicLayer.Services
             _accountService = accountService;
         }
 
-        public async Task<UserResponseModel> GetMyProfile(string accessToken)
+        private void CheckUserExist(User user)
         {
-            var user = await _accountService.FindByTokenAsync(accessToken);
+            if (user is null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.UserNotFound.GetDescription());
+            }
+        }
+
+        public async Task<UserResponseModel> GetMyProfile(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            CheckUserExist(user);
 
             var response = _mapper.Map<UserResponseModel>(user);
 
             return response;
         }
 
-        public async Task<UserResponseModel> GetUserProfile(string id, string accessToken)
+        public async Task<UserResponseModel> GetUserProfile(string id)
         {
-            var claims = _jwtService.GetClaimsFromToken(accessToken);
+            var user = await _userManager.FindByIdAsync(id);
 
-            var requesterId = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.UserData)).Value;
-            var requesterRole = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Role)).Value;
+            CheckUserExist(user);
 
-            if (!(requesterRole.Equals(Enums.Roles.Admin) || requesterId.Equals(id)))
-            {
-                throw new CustomException(HttpStatusCode.Forbidden);
-            }
+            var response = _mapper.Map<UserResponseModel>(user);
 
-            User userProfile = await _accountService.FindByIdAsync(id);
-
-            return _mapper.Map<UserResponseModel>(userProfile);
+            return response;
         }
 
         public async Task<DataCollectionModel<UserResponseModel>> GetAllUsers(IndexRequestModel model)
@@ -111,24 +116,46 @@ namespace BookStore.BusinessLogicLayer.Services
             return new MessageResponse() { Message = "User was successfully unblocked." };
         }
 
-        public async Task<MessageResponse> Update(string id, UserUpdateModel model, string accessToken)
-        {            
-            var claims = _jwtService.GetClaimsFromToken(accessToken);
-            var requesterId = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.UserData)).Value;
-            var requesterRole = claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Role)).Value;
-            var requester = await _accountService.FindByIdAsync(requesterId);
+        public async Task<MessageResponse> UpdateMyProfile(UserUpdateModel model, string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
 
-            if (id is null)
+            CheckUserExist(user);
+
+            var passwordValidationResult = await _userManager.CheckPasswordAsync(user, model.Password);
+            if (!passwordValidationResult)
             {
-                id = requesterId;
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.InvalidCredentials.GetDescription());
             }
 
-            var user = await _accountService.FindByIdAsync(id);
-
-            if (!(requesterRole.Equals(Enums.Roles.Admin.ToString()) || requesterId.Equals(id)))
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            if (user.Email.Equals(model.Email) == false)
             {
-                throw new CustomException(HttpStatusCode.Forbidden);
+                user.Email = model.Email;
+                user.EmailConfirmed = false;
+                await _emailSenderService.SendEmailConfirmationLinkAsync(user); //TODO: change text in email
             }
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, result);
+            }
+
+            return new MessageResponse() { Message = "Changes was successfully saved." };
+        }
+
+        public async Task<MessageResponse> UpdateUserProfile(string id, UserUpdateModel model, IIdentity userIdentity)
+        {
+            var requesterName = userIdentity.Name;
+
+            var requester = await _userManager.FindByNameAsync(requesterName);
+            CheckUserExist(requester);
+
+            var user = await _userManager.FindByIdAsync(id);
+            CheckUserExist(user);
 
             var passwordValidationResult = await _userManager.CheckPasswordAsync(requester, model.Password);
             if (!passwordValidationResult)
@@ -146,7 +173,6 @@ namespace BookStore.BusinessLogicLayer.Services
             }
 
             var result = await _userManager.UpdateAsync(user);
-
             if (!result.Succeeded)
             {
                 throw new CustomException(HttpStatusCode.BadRequest, result);

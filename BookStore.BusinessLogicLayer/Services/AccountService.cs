@@ -41,7 +41,7 @@ namespace BookStore.BusinessLogicLayer.Services
         {
             var user = await _userManager.FindByIdAsync(id);
 
-            CheckUserForNull(user);
+            CheckUserExist(user);
 
             return user;
         }
@@ -50,7 +50,7 @@ namespace BookStore.BusinessLogicLayer.Services
         {
             var user = await _userManager.FindByNameAsync(name);
 
-            CheckUserForNull(user);
+            CheckUserExist(user);
 
             return user;
         }
@@ -59,7 +59,7 @@ namespace BookStore.BusinessLogicLayer.Services
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            CheckUserForNull(user);
+            CheckUserExist(user);
 
             return user;
         }
@@ -74,7 +74,7 @@ namespace BookStore.BusinessLogicLayer.Services
             return user;
         }
 
-        private void CheckUserForNull(User user)
+        private void CheckUserExist(User user)
         {
             if (user is null)
             {
@@ -199,9 +199,9 @@ namespace BookStore.BusinessLogicLayer.Services
             return new MessageResponse() { Message = "Password was successfully changed." };
         }
 
-        public async Task<MessageResponse> Logout(string accessToken)
+        public async Task<MessageResponse> Logout(string username)
         {
-            var user = await FindByTokenAsync(accessToken);
+            var user = await FindByNameAsync(username);
 
             user.RefreshToken = null;
             await _jwtService.ClearClaims(user);
