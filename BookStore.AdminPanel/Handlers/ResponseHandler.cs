@@ -107,7 +107,7 @@ namespace BookStore.AdminPanel.Handlers
                 return response;
             }
 
-            await _authService.SignInAsync(newTokenPair);
+            //await _authService.SignInAsync(newTokenPair);
 
             return await RepeatRequestWithNewToken(request, newTokenPair.AccessToken);
         }

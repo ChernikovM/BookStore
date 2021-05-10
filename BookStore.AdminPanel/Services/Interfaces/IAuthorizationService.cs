@@ -1,4 +1,5 @@
 ﻿using BookStore.AdminPanel.Models;
+using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using System.Threading.Tasks;
 
 namespace BookStore.AdminPanel.Services.Interfaces
@@ -10,7 +11,7 @@ namespace BookStore.AdminPanel.Services.Interfaces
         public string RefreshToken { get; }
 
 
-        Task SignInAsync(JwtPairModel jwtPair);
+        Task SignInAsync(JwtPairResponse jwtPair);
 
         Task SignOutAsync();
 

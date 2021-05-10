@@ -23,55 +23,55 @@ namespace BookStore.AdminPanel.Pages
             };
         }
 
-        public void OnGet()
-        {
+        //public void OnGet()
+        //{
 
-        }
+        //}
 
-        public async Task OnPost()
-        {
-            var model = new SignInModel()
-            {
-                UserName = Request.Form["username"],
-                Password = Request.Form["password"]
-            };
+        //public async Task OnPost()
+        //{
+        //    var model = new SignInModel()
+        //    {
+        //        UserName = Request.Form["username"],
+        //        Password = Request.Form["password"]
+        //    };
 
-            var response = await _accountService.LoginAsync(model);
+        //    var response = await _accountService.LoginAsync(model);
 
-            if(response.Errors.Count > 0)
-            {
-                return;
-            }
+        //    if(response.Errors.Count > 0)
+        //    {
+        //        return;
+        //    }
 
-            await _authorizationService.SignInAsync(response);
+        //    await _authorizationService.SignInAsync(response);
 
             
 
-            jwtModel = response;
-            //Navigate
-            RedirectToPage("/UsersManagement");
-        }
+        //    jwtModel = response;
+        //    //Navigate
+        //    RedirectToPage("/UsersManagement");
+        //}
 
-        public async Task OnGetSignOut()
-        {
-            await _authorizationService.SignOutAsync();
-            RedirectToPage("/Login");
-        }
+        //public async Task OnGetSignOut()
+        //{
+        //    await _authorizationService.SignOutAsync();
+        //    RedirectToPage("/Login");
+        //}
 
-        public async Task OnGetSetInvalidToken()
-        {
-            var invalidPair = jwtModel;
-            invalidPair.AccessToken = "invalid";
-            jwtModel = invalidPair;
-            await _authorizationService.SignInAsync(invalidPair);
-        }
+        //public async Task OnGetSetInvalidToken()
+        //{
+        //    var invalidPair = jwtModel;
+        //    invalidPair.AccessToken = "invalid";
+        //    jwtModel = invalidPair;
+        //    await _authorizationService.SignInAsync(invalidPair);
+        //}
 
-        public async Task OnGetSetInvalidRefreshToken()
-        {
-            var invalidPair = jwtModel;
-            invalidPair.RefreshToken = "invalid";
-            jwtModel = invalidPair;
-            await _authorizationService.SignInAsync(invalidPair);
-        }
+        //public async Task OnGetSetInvalidRefreshToken()
+        //{
+        //    var invalidPair = jwtModel;
+        //    invalidPair.RefreshToken = "invalid";
+        //    jwtModel = invalidPair;
+        //    await _authorizationService.SignInAsync(invalidPair);
+        //}
     }
 }

@@ -8,13 +8,18 @@ using BookStore.BusinessLogicLayer.Services;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.AppContext;
 using BookStore.DataAccessLayer.Entities;
+using BookStore.DataAccessLayer.Enums;
 using BookStore.DataAccessLayer.Repositories.EFRepositories;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
+using BookStore.PresentationLayer.Areas.Admin;
 using BookStore.PresentationLayer.Middlewares;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -128,8 +133,36 @@ namespace BookStore
                     defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
 
                 options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+
+                var adminCookiePolicyBuilder = new AuthorizationPolicyBuilder(
+                        CookieAuthenticationDefaults.AuthenticationScheme);
+                adminCookiePolicyBuilder = adminCookiePolicyBuilder
+                                                .RequireAuthenticatedUser()
+                                                .RequireRole(Enums.Roles.Admin.ToString());
+                options.AddPolicy("AdminCookiePolicy", adminCookiePolicyBuilder.Build());
             });
 
+            ////////////////Admin Cookie Policy
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = SameSiteMode.Strict;
+                options.HttpOnly = HttpOnlyPolicy.None;
+            });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.SameSite = SameSiteMode.Lax;
+                    options.LoginPath = "/Login";
+                    options.LogoutPath = "/Login/Logout";
+                    options.AccessDeniedPath = "/Admin/index";
+                });
+
+            //services.AddScoped<BookStore.AdminPanel.Services.Interfaces.IAuthorizationService, BookStore.AdminPanel.Services.AuthorizationService>();
+            ///////////////'
+            
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
@@ -151,6 +184,8 @@ namespace BookStore
                         .AllowAnyHeader();
                     });
             });
+
+            services.AddRazorPages();
         }
 
 
@@ -171,17 +206,38 @@ namespace BookStore
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseCookiePolicy();
 
+            app.UseRouting();
+            app.UseStaticFiles();
             app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseMiddleware<MyMiddleware2>();
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
+        }
+    }
+
+    public class MyMiddleware2
+    {
+        private readonly RequestDelegate _next;
+
+        public MyMiddleware2(RequestDelegate next)
+        {
+            _next = next;
+        }
+
+        public async Task Invoke(HttpContext httpContext)
+        {
+
+            await _next(httpContext);
         }
     }
 }

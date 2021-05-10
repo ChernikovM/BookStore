@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BookStore.AdminPanel\BookStore.AdminPanel.csproj" />
     <ProjectReference Include="..\BookStore.BusinessLogicLayer\BookStore.BusinessLogicLayer.csproj" />
   </ItemGroup>
 

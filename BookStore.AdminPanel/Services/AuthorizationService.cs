@@ -1,5 +1,6 @@
 ﻿using BookStore.AdminPanel.Models;
 using BookStore.AdminPanel.Services.Interfaces;
+using BookStore.BusinessLogicLayer.Models.ResponseModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +23,7 @@ namespace BookStore.AdminPanel.Services
         }
 
 
-        public async Task SignInAsync(JwtPairModel jwtPair)
+        public async Task SignInAsync(JwtPairResponse jwtPair)
         {
             var claims = new List<Claim>
             {
