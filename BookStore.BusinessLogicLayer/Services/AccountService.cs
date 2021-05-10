@@ -152,7 +152,7 @@ namespace BookStore.BusinessLogicLayer.Services
             return tokenPair;
         }
 
-        public async Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model)
+        public async Task<JwtPairResponse> RefreshTokensAsync(UserRefreshTokensModel model)
         {
             var user = await FindByTokenAsync(model.RefreshToken);
 

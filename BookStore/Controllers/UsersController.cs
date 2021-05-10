@@ -77,7 +77,7 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(response);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(AuthenticationSchemes = "AdminCookiePolicy", Roles = "Admin")]
         [HttpPost("{id}/unban")]
         public async Task<IActionResult> UnblockUser(string id)
         {

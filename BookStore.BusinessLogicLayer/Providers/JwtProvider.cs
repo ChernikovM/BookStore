@@ -93,6 +93,25 @@ namespace BookStore.BusinessLogicLayer.Services
             return result;
         }
 
+        public bool ValidateToken(string token)
+        {
+            try
+            {
+                var validTo = new JwtSecurityTokenHandler().ReadJwtToken(token).ValidTo;
+
+                if (validTo < DateTime.UtcNow)
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public bool ValidateRefreshToken(User user, string token)
         {
             string userToken = user.RefreshToken;

@@ -47,7 +47,7 @@ namespace BookStore.PresentationLayer.Controllers
         [HttpPost]
         public async Task<IActionResult> RefreshTokens([FromBody] UserRefreshTokensModel model)
         {
-            var response = await _accountService.RefreshTokens(model);
+            var response = await _accountService.RefreshTokensAsync(model);
 
             return new OkObjectResult(response);
         }

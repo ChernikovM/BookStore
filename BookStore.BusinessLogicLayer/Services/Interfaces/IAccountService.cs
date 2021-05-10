@@ -14,7 +14,7 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
 
         Task<MessageResponse> ConfirmEmail(UserEmailConfirmationModel model);
 
-        Task<JwtPairResponse> RefreshTokens(UserRefreshTokensModel model);
+        Task<JwtPairResponse> RefreshTokensAsync(UserRefreshTokensModel model);
 
         Task<MessageResponse> ResetPassword(UserChangePasswordModel model);
 

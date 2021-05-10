@@ -2,6 +2,7 @@ using AutoMapper;
 using BookStore.BusinessLogicLayer.Configurations;
 using BookStore.BusinessLogicLayer.Configurations.Interfaces;
 using BookStore.BusinessLogicLayer.Mapping;
+using BookStore.BusinessLogicLayer.Policies.Authentication;
 using BookStore.BusinessLogicLayer.Providers;
 using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services;
@@ -11,7 +12,6 @@ using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Enums;
 using BookStore.DataAccessLayer.Repositories.EFRepositories;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
-using BookStore.PresentationLayer.Areas.Admin;
 using BookStore.PresentationLayer.Middlewares;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,7 +28,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BookStore
 {
@@ -155,12 +154,15 @@ namespace BookStore
                     options.Cookie.HttpOnly = true;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.Cookie.SameSite = SameSiteMode.Lax;
-                    options.LoginPath = "/Login";
-                    options.LogoutPath = "/Login/Logout";
-                    options.AccessDeniedPath = "/Admin/index";
+                    options.LoginPath = "/Admin/Account/Login";
+                    options.LogoutPath = "/Admin/Account/Logout";
+                    options.AccessDeniedPath = "/Admin/Account/Login";
+                    options.EventsType = typeof(CookieAuthenticationPolicyHandler);
+                    
                 });
 
-            //services.AddScoped<BookStore.AdminPanel.Services.Interfaces.IAuthorizationService, BookStore.AdminPanel.Services.AuthorizationService>();
+            services.AddScoped<CookieAuthenticationPolicyHandler>();
+            services.AddScoped<IAuthService, AuthService>();            
             ///////////////'
             
             services.AddControllers().AddNewtonsoftJson(options =>
@@ -194,9 +196,12 @@ namespace BookStore
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
             }
 
-            app.UseMiddleware<ExceptionHandlerMiddleware>();
+            //app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -215,8 +220,6 @@ namespace BookStore
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMiddleware<MyMiddleware2>();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
@@ -225,19 +228,4 @@ namespace BookStore
         }
     }
 
-    public class MyMiddleware2
-    {
-        private readonly RequestDelegate _next;
-
-        public MyMiddleware2(RequestDelegate next)
-        {
-            _next = next;
-        }
-
-        public async Task Invoke(HttpContext httpContext)
-        {
-
-            await _next(httpContext);
-        }
-    }
 }
