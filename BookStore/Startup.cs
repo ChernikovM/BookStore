@@ -188,6 +188,7 @@ namespace BookStore
             });
 
             services.AddRazorPages();
+            services.AddAntiforgery(o => o.HeaderName = "CSRF-TOKEN");
         }
 
 
@@ -196,12 +197,12 @@ namespace BookStore
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                //app.UseExceptionHandler("/Error");
+                //// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                //app.UseHsts();
             }
 
-            //app.UseMiddleware<ExceptionHandlerMiddleware>();
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>

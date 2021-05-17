@@ -1,4 +1,5 @@
-﻿using BookStore.BusinessLogicLayer.Models.RequestModels.User;
+﻿using BookStore.BusinessLogicLayer.Exceptions;
+using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
@@ -41,19 +42,27 @@ namespace BookStore.BusinessLogicLayer.Services
 
         public async Task<bool> RefreshTokenPairAsync(HttpContext context, string refreshToken, string schema = _schema)
         {
-            var response = await _accountService.RefreshTokensAsync(new UserRefreshTokensModel() { RefreshToken = refreshToken });
 
-            if(response is null)
+            try
+            {
+                var response = await _accountService.RefreshTokensAsync(new UserRefreshTokensModel() { RefreshToken = refreshToken });
+
+                if (response is null)
+                {
+                    return false;
+                }
+
+                var claims = _jwtProvider.GetClaimsFromToken(response.AccessToken).ToList();
+
+                claims.Add(new Claim("AccessToken", response.AccessToken));
+                claims.Add(new Claim("RefreshToken", response.RefreshToken));
+
+                await SignInAsync(context, claims, schema);
+            }
+            catch(CustomException ex)
             {
                 return false;
             }
-
-            var claims = _jwtProvider.GetClaimsFromToken(response.AccessToken).ToList();
-
-            claims.Add(new Claim("AccessToken", response.AccessToken));
-            claims.Add(new Claim("RefreshToken", response.RefreshToken));
-
-            await SignInAsync(context, claims, schema);
 
             return true;
         }

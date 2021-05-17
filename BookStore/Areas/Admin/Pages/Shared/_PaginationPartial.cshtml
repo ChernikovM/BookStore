@@ -1,0 +1,84 @@
+﻿@model BookStore.BusinessLogicLayer.Models.Admin.PaginationModel
+
+@if (Model.PageModel.TotalPages > 1)
+{
+    @if (Model.PageModel.HasPreviousPage == true)
+    {
+        <a asp-page=@Model.ParentRoute
+           asp-route-currentPage=@(Model.PageModel.CurrentPageNumber-1)
+           asp-route-pageSize=@Model.PageModel.PageSize
+           asp-route-sortDirect=@Model.SortDirection
+           asp-route-sortProperty=@Model.SortProperty
+           asp-route-filterString=@Model.Filter
+           asp-route-filterProp=@Model.FilterProp
+           asp-route-filterExpr=@Model.FilterExpr
+           asp-route-filterText=@Model.FilterText
+           class="btn btn-outline-primary">Prev</a>
+    }
+    else
+    {
+        <a class="btn btn-outline-primary disabled">Prev</a>
+    }
+
+    int first = 1;
+    int last = Model.PageModel.TotalPages > 5 ? 5 : Model.PageModel.TotalPages;
+
+    if (Model.PageModel.CurrentPageNumber > 3 && Model.PageModel.TotalPages > 5)
+    {
+        first = Model.PageModel.CurrentPageNumber - 2;
+        last = Model.PageModel.CurrentPageNumber + 2;
+
+        while (last > Model.PageModel.TotalPages)
+        {
+            first--;
+            last--;
+        }
+    }
+
+    @for (int i = first; i <= last; ++i)
+    {
+        var route = $"{Model.ParentRoute}?CurrentPage={i}&PageSize={Model.PageModel.PageSize}";
+        if (i == Model.PageModel.CurrentPageNumber)
+        {
+           <a asp-page=@Model.ParentRoute
+           asp-route-currentPage=@i
+           asp-route-pageSize=@Model.PageModel.PageSize
+           asp-route-sortDirect=@Model.SortDirection
+           asp-route-sortProperty=@Model.SortProperty
+           asp-route-filterString=@Model.Filter
+              asp-route-filterProp=@Model.FilterProp
+           asp-route-filterExpr=@Model.FilterExpr
+           asp-route-filterText=@Model.FilterText
+           class="btn btn-primary">@i</a>
+            continue;
+        }
+        <a asp-page=@Model.ParentRoute
+           asp-route-currentPage=@i
+           asp-route-pageSize=@Model.PageModel.PageSize
+           asp-route-sortDirect=@Model.SortDirection
+           asp-route-sortProperty=@Model.SortProperty
+           asp-route-filterString=@Model.Filter
+           asp-route-filterProp=@Model.FilterProp
+           asp-route-filterExpr=@Model.FilterExpr
+           asp-route-filterText=@Model.FilterText
+           class="btn btn-outline-primary">@i</a>
+    }
+
+    @if (Model.PageModel.HasNextPage == true)
+    {
+        <a asp-page=@Model.ParentRoute
+           asp-route-currentPage=@(Model.PageModel.CurrentPageNumber+1)
+           asp-route-pageSize=@Model.PageModel.PageSize
+           asp-route-sortDirect=@Model.SortDirection
+           asp-route-sortProperty=@Model.SortProperty
+           asp-route-filterString=@Model.Filter
+           asp-route-filterProp=@Model.FilterProp
+           asp-route-filterExpr=@Model.FilterExpr
+           asp-route-filterText=@Model.FilterText
+           class="btn btn-outline-primary">Next</a>
+    }
+    else
+    {
+        <a class="btn btn-outline-primary disabled">Next</a>
+    }
+}

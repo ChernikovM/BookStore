@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Threading.Tasks;
 
 
 namespace BookStore.PresentationLayer.Areas.Admin.Pages
 {
-    [Authorize(AuthenticationSchemes = ("Cookies"), Roles = "Admin")]
+    [Authorize(Policy = "AdminCookiePolicy")]
     public class IndexModel : PageModel
     {
         public IndexModel()
@@ -13,9 +13,9 @@ namespace BookStore.PresentationLayer.Areas.Admin.Pages
 
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public IActionResult OnGet(string returnUrl = null)
         {
-            
+            return RedirectToPage("Account/Details");
         }
     }
 }

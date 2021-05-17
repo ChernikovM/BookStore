@@ -1,0 +1,47 @@
+﻿@model BookStore.BusinessLogicLayer.Models.Admin.SortModel
+@{
+    if (Model.SortProperty == Model.PropertyName)
+    {
+        if (Model.SortDirection is not null && Model.SortDirection == true)
+        {
+            <span><a asp-page=@Model.ParentRoute
+             asp-route-currentPage=@Model.PageModel.CurrentPageNumber
+             asp-route-pageSize=@Model.PageModel.PageSize
+             asp-route-filterString=@Model.Filter
+             asp-route-sortProperty=@Model.PropertyName
+             asp-route-sortDirect=false
+             asp-route-filterProp=@Model.FilterProp
+             asp-route-filterExpr=@Model.FilterExpr
+             asp-route-filterText=@Model.FilterText
+             ><i class="fas fa-sort-up"></i></a></span>
+        }
+
+        if (Model.SortDirection is not null && Model.SortDirection == false)
+        {
+            <span><a asp-page=@Model.ParentRoute
+                 asp-route-currentPage=@Model.PageModel.CurrentPageNumber
+                 asp-route-pageSize=@Model.PageModel.PageSize
+                 asp-route-filterString=@Model.Filter
+                 asp-route-sortProperty=@Model.PropertyName
+                 asp-route-sortDirect=true
+                 asp-route-filterProp=@Model.FilterProp
+                 asp-route-filterExpr=@Model.FilterExpr
+                 asp-route-filterText=@Model.FilterText
+                 ><i class="fas fa-sort-down"></i></a></span>
+        }
+    }
+
+    if (Model.SortProperty != Model.PropertyName)
+    {
+        <span><a asp-page=@Model.ParentRoute
+                 asp-route-currentPage=@Model.PageModel.CurrentPageNumber
+                 asp-route-pageSize=@Model.PageModel.PageSize
+                 asp-route-filterString=@Model.Filter
+                 asp-route-sortProperty=@Model.PropertyName
+                 asp-route-sortDirect=false
+                 asp-route-filterProp=@Model.FilterProp
+                 asp-route-filterExpr=@Model.FilterExpr
+                 asp-route-filterText=@Model.FilterText
+                 ><i class="fas fa-sort"></i></a></span>
+    }
+}

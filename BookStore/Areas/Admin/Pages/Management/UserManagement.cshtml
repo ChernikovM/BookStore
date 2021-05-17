@@ -1,0 +1,102 @@
+﻿@page
+@model BookStore.PresentationLayer.Areas.Admin.Pages.Management.UserManagementModel
+@{
+}
+
+<form>
+    <p>
+        <select asp-for="FilterProp" asp-items="Model.GetListProps()"></select>
+        <select asp-for="FilterExpr" asp-items="Model.GetListExpr()"></select>
+        <input type="hidden" asp-for="SortProperty" />
+        <input type="hidden" asp-for="SortDirect" />
+        <input type="hidden" asp-for="PageSize" />
+        <input type="hidden" asp-for="CurrentPage" />
+        Text: <input type="text" asp-for="FilterText" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<h1>User Management Page</h1>
+@if (Model.Success is not null)
+{
+    <p class="text-success">@Model.Success</p>
+}
+@if (Model.Error is not null)
+{
+    <p class="text-danger">@Model.Error</p>
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered table-condensed table-striped table-hover">
+        @if (Model.Collection is not null)
+        {
+            @if (Model.Collection.DataCollection.Count == 0)
+            {
+                <tr>
+                    <td colspan="10">No Record's found.</td>
+                </tr>
+            }
+            else
+            {
+                <thead class="table-primary">
+                    <tr class="danger">
+                        <th>First Name <partial name="_SortableIconPartial" model=@Model.GetSortModel("FirstName")></th>
+                        <th>Last Name <partial name="_SortableIconPartial" model=@Model.GetSortModel("LastName")></th>
+                        <th>Email <partial name="_SortableIconPartial" model=@Model.GetSortModel("Email")></th>
+                        <th>Edit</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                foreach (var item in Model.Collection?.DataCollection)
+                {
+                    <tr>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.Email</td>
+                        <td><a asp-page="/Account/Details" asp-route-id=@item.Id><span><i class="fas fa-edit fa-lg" /></span></a></td>
+                        @if (item.LockoutEnabled == false)
+                        {
+                            <td><span><i class="fas fa-audio-description fa-2x" /></span></td>
+                        }
+                        else
+                        {
+                            var now = DateTimeOffset.Now;
+                            var b = item.LockoutEnd < DateTimeOffset.Now;
+                            var c = item.LockoutEnd > DateTimeOffset.Now;
+                            @if (item.LockoutEnd is null || item.LockoutEnd < DateTimeOffset.Now)
+                            {
+                                <td><a asp-page-handler="BanUser"
+                                       asp-route-currentPage=@Model.CurrentPage
+                                       asp-route-pageSize=@Model.PageSize
+                                       asp-route-sortDirect=@Model.SortDirect
+                                       asp-route-sortProperty=@Model.SortProperty
+                                       asp-route-filterString=@Model.FilterString
+                                       asp-route-filterProp=@Model.FilterProp
+                                       asp-route-filterExpr=@Model.FilterExpr
+                                       asp-route-filterText=@Model.FilterText
+                                       asp-route-id=@item.Id><i class="fas fa-toggle-on fa-2x" /></a></td>
+                            }
+                            else
+                            {
+                                <td><a asp-page-handler="UnbanUser"
+                                       asp-route-currentPage=@Model.CurrentPage
+                                       asp-route-pageSize=@Model.PageSize
+                                       asp-route-sortDirect=@Model.SortDirect
+                                       asp-route-sortProperty=@Model.SortProperty
+                                       asp-route-filterString=@Model.FilterString
+                                       asp-route-filterProp=@Model.FilterProp
+                                       asp-route-filterExpr=@Model.FilterExpr
+                                       asp-route-filterText=@Model.FilterText
+                                       asp-route-id=@item.Id><i class="fas fa-toggle-off fa-2x" /></a></td>
+                            }
+                        }
+
+                    </tr>
+                }
+                <partial name="_PaginationPartial" model=Model.GetPaginationModel() />
+            }
+        }
+    </table>
+</div>
+
+

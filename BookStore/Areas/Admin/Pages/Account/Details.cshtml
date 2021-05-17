@@ -1,0 +1,64 @@
+﻿@page
+@model BookStore.PresentationLayer.Areas.Admin.Pages.Account.DetailsModel
+@{
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="header">
+            @{var profileOwner = $"{@Model.UpdateModel?.FirstName} {@Model.UpdateModel?.LastName}"; }
+            <h1>@profileOwner</h1>
+        </div>
+        @if (Model.UpdateModel is null)
+        {
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        }
+        @if (Model.UpdateModel is not null)
+        {
+            <div class="account-image">
+                <span><i class="fas fa-user fa-9x"></i></span>
+            </div>
+            <hr>
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="text-success">@Model.ResultMessage</div>
+                <div class="form-group">
+                    <label asp-for="UpdateModel.FirstName">Your First Name</label>
+                    <input asp-for="UpdateModel.FirstName" class="form-control" />
+                    <span asp-validation-for="UpdateModel.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UpdateModel.LastName">Your Last Name</label>
+                    <input asp-for="UpdateModel.LastName" class="form-control" />
+                    <span asp-validation-for="UpdateModel.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UpdateModel.Email">E-mail</label>
+                    <input asp-for="UpdateModel.Email" class="form-control" />
+                    <span asp-validation-for="UpdateModel.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UpdateModel.Password">Password</label>
+                    <input asp-for="UpdateModel.Password" class="form-control" />
+                    <span asp-validation-for="UpdateModel.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UpdateModel.ConfirmPassword">Confirm password</label>
+                    <input asp-for="UpdateModel.ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="UpdateModel.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Update Account</button>
+                </div>
+            </form>
+        }
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#button").click(function () {
+            alert("asd");
+        })
+    });
+</script>

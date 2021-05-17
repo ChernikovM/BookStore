@@ -18,21 +18,8 @@
                     <input asp-for="LoginUserModel.Password" class="form-control" />
                     <span asp-validation-for="LoginUserModel.Password" class="text-danger"></span>
                 </div>
-                @*<div class="form-group">
-                        <div class="checkbox">
-                            <label asp-for="Input.RememberMe">
-                                <input asp-for="Input.RememberMe" />
-                                @Html.DisplayNameFor(m => m.Input.RememberMe)
-                            </label>
-                        </div>
-                    </div>*@
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Log in</button>
-                </div>
-                <div class="form-group">
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
+                    <button type="submit" class="btn btn-primary">Sign In</button>
                 </div>
             </form>
         </section>
