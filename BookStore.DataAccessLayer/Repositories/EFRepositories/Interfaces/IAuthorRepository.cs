@@ -7,5 +7,7 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces
     public interface IAuthorRepository : IEFRepository<Author>
     {
         public Task<List<Author>> FindByIdAsync(List<long> ids);
+
+        public Task<List<Author>> FindByNameAsync(List<string> names);
     }
 }

@@ -9,6 +9,7 @@ using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using static BookStore.BusinessLogicLayer.Constants.Constants;
@@ -26,6 +27,18 @@ namespace BookStore.BusinessLogicLayer.Services
             _dataService = dataService;
             _repository = repository;
             _mapper = mapper;
+        }
+
+        public async Task<List<Author>> FindByNames(List<string> names)
+        {
+            var authors = await _repository.FindByNameAsync(names);
+
+            if (authors is null || authors.Count != names.Count)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.AuthorNotFound.GetDescription());
+            }
+
+            return authors;
         }
 
         private async Task<Author> FindByIdAsync(long id)

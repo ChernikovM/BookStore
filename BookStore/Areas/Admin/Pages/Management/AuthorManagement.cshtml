@@ -1,11 +1,11 @@
 ﻿@page
-@model BookStore.PresentationLayer.Areas.Admin.Pages.Management.ProductManagementModel
+@model BookStore.PresentationLayer.Areas.Admin.Pages.Management.AuthorManagementModel
 @{
 }
 
-<h1>Product Management Page</h1>
+<h1>Authors Management Page</h1>
 
-<a class="btn btn-primary" asp-page="CreateProduct">Create Product</a>
+<a class="btn btn-primary" asp-page="CreateAuthor">Create Author</a>
 
 <form>
     <p>
@@ -44,11 +44,8 @@
                 <thead class="table-primary">
                     <tr class="danger">
                         <th>Id <partial name="_SortableIconPartial" model=@Model.GetSortModel("Id")></th>
-                        <th>Title <partial name="_SortableIconPartial" model=@Model.GetSortModel("Title")></th>
-                        <th>Description</th>
-                        <th>Type <partial name="_SortableIconPartial" model=@Model.GetSortModel("Type")></th>
-                        <th>Author</th>
-                        <th>Price <partial name="_SortableIconPartial" model=@Model.GetSortModel("Price")></th>
+                        <th>Name <partial name="_SortableIconPartial" model=@Model.GetSortModel("Name")></th>
+                        <th>Products</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -56,18 +53,16 @@
                 {
                     <tr>
                         <td>@item.Id</td>
-                        <td>@item.Title</td>
-                        <td>@item.Description</td>
-                        <td>@item.Type</td>
+                        <td>@item.Name</td>
                         <td>
-                            @foreach(var a in item.Authors)
+                            @foreach(var prod in item.PrintingEditions)
                             {
-                                <p>@a.Name</p>
+                                <p>@prod.Title</p>
                             }
                         </td>
-                        <td>@item.Price</td>
-                        <td><a asp-page="ProductDetails" asp-route-id=@item.Id><span><i class="fas fa-edit fa-lg"></i></span></a>
-                            <a asp-page-handler="Delete" 
+                        <td>
+                            <a asp-page="AuthorDetails" asp-route-id=@item.Id><span><i class="fas fa-edit fa-lg"></i></span></a>
+                            <a asp-page-handler="Delete"
                                asp-route-currentPage=@Model.CurrentPage
                                asp-route-pageSize=@Model.PageSize
                                asp-route-sortDirect=@Model.SortDirect
@@ -76,8 +71,8 @@
                                asp-route-filterProp=@Model.FilterProp
                                asp-route-filterExpr=@Model.FilterExpr
                                asp-route-filterText=@Model.FilterText
-                               asp-route-id=@item.Id
-                               ><span><i class="fas fa-trash-alt fa-lg"></i></span></a></td>
+                               asp-route-id=@item.Id><span><i class="fas fa-trash-alt fa-lg"></i></span></a>
+                        </td>
                     </tr>
                 }
                 <partial name="_PaginationPartial" model=Model.GetPaginationModel() />

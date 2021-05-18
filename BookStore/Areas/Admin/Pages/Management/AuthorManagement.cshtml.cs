@@ -1,8 +1,8 @@
 using BookStore.BusinessLogicLayer.Exceptions;
 using BookStore.BusinessLogicLayer.Models.Admin;
 using BookStore.BusinessLogicLayer.Models.RequestModels;
-using BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition;
 using BookStore.BusinessLogicLayer.Models.ResponseModels;
+using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +14,10 @@ using System.Threading.Tasks;
 namespace BookStore.PresentationLayer.Areas.Admin.Pages.Management
 {
     [Authorize(Policy = "AdminCookiePolicy")]
-    public class ProductManagementModel : Microsoft.AspNetCore.Mvc.RazorPages.PageModel
+    public class AuthorManagementModel : Microsoft.AspNetCore.Mvc.RazorPages.PageModel
     {
-        private readonly IPrintingEditionService _peService;
+
+        private readonly IAuthorService _authorService;
 
         public IndexRequestModel RequestModel { get; set; }
 
@@ -24,7 +25,7 @@ namespace BookStore.PresentationLayer.Areas.Admin.Pages.Management
 
         public string Success { get; set; }
 
-        public DataCollectionModel<PrintingEditionModel> Collection { get; set; }
+        public DataCollectionModel<AuthorModel> Collection { get; set; }
 
         #region Sort Filter Pagination
         public bool? SortDirect { get; set; } //false - desc, true - asc
@@ -43,9 +44,9 @@ namespace BookStore.PresentationLayer.Areas.Admin.Pages.Management
         public int PageSize { get; set; } = 10;
         #endregion
 
-        public ProductManagementModel(IPrintingEditionService service)
+        public AuthorManagementModel(IAuthorService authorService)
         {
-            _peService = service;
+            _authorService = authorService;
 
             RequestModel = new IndexRequestModel()
             {
@@ -108,7 +109,7 @@ namespace BookStore.PresentationLayer.Areas.Admin.Pages.Management
                 requestModel.Filter = $"{filterProp}.{filterExpr}(\"{filterText}\")";
             }
 
-            Collection = await _peService.GetAllAsync(requestModel);
+            Collection = await _authorService.GetAllAsync(requestModel);
 
             PageSize = Collection.PageModel.PageSize;
             CurrentPage = Collection.PageModel.CurrentPageNumber;
@@ -132,7 +133,7 @@ namespace BookStore.PresentationLayer.Areas.Admin.Pages.Management
                 SortProperty = SortProperty,
                 SortDirection = SortDirect,
                 Filter = FilterString,
-                ParentRoute = "ProductManagement",
+                ParentRoute = "AuthorManagement",
                 FilterExpr = FilterExpr,
                 FilterProp = FilterProp,
                 FilterText = FilterText
@@ -149,7 +150,7 @@ namespace BookStore.PresentationLayer.Areas.Admin.Pages.Management
                 SortProperty = SortProperty,
                 SortDirection = SortDirect,
                 Filter = FilterString,
-                ParentRoute = "ProductManagement",
+                ParentRoute = "AuthorManagement",
                 PropertyName = propName,
                 FilterExpr = FilterExpr,
                 FilterProp = FilterProp,
@@ -163,7 +164,7 @@ namespace BookStore.PresentationLayer.Areas.Admin.Pages.Management
         {
             var props = new List<string>
                 {
-                    "Title"
+                    "Name"
                 };
 
             return new SelectList(props);
@@ -193,7 +194,7 @@ namespace BookStore.PresentationLayer.Areas.Admin.Pages.Management
         {
             try
             {
-                await _peService.RemoveAsync(id);
+                await _authorService.RemoveAsync(id);
 
                 await FetchCollection(
                 sortProperty,
@@ -206,7 +207,7 @@ namespace BookStore.PresentationLayer.Areas.Admin.Pages.Management
                 pageSize
                 );
 
-                Success = "Product was successfully deleted";
+                Success = "Author was successfully deleted";
             }
             catch (CustomException ex)
             {

@@ -12,7 +12,7 @@ namespace BookStore.BusinessLogicLayer.Models.RequestModels.PrintingEdition
 
         [Required(AllowEmptyStrings = false)]
         [Range(0, double.MaxValue, ErrorMessage = "Invalid price.")]
-        public string Price { get; set; }
+        public decimal Price { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [EnumDataType(typeof(Enums.CurrencyType))]

@@ -3,6 +3,8 @@
 @{
 }
 
+<h1>User Management Page</h1>
+
 <form>
     <p>
         <select asp-for="FilterProp" asp-items="Model.GetListProps()"></select>
@@ -16,7 +18,6 @@
     </p>
 </form>
 
-<h1>User Management Page</h1>
 @if (Model.Success is not null)
 {
     <p class="text-success">@Model.Success</p>

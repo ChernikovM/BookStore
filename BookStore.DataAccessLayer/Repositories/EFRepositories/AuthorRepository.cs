@@ -3,6 +3,7 @@ using BookStore.DataAccessLayer.Entities;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Base;
 using BookStore.DataAccessLayer.Repositories.EFRepositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +21,13 @@ namespace BookStore.DataAccessLayer.Repositories.EFRepositories
             var result = await _dbSet
                 .Include(x => x.PrintingEditions)
                 .FirstOrDefaultAsync(x => x.Id == id && x.IsRemoved == false);
+
+            return result;
+        }
+
+        public async Task<List<Author>> FindByNameAsync(List<string> names)
+        {
+            var result = await _dbSet.Where(x => names.Contains(x.Name) && x.IsRemoved == false).ToListAsync();
 
             return result;
         }
