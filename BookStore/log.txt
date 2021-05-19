@@ -10151,3 +10151,37 @@ ____________________
    at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
    at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
 
+____________________
+- Date: 19.05.2021 07:21:51
+- Exception : AutoMapper.AutoMapperMappingException
+- Error : Error mapping types.
+
+Mapping types:
+List`1 -> List`1
+System.Collections.Generic.List`1[[BookStore.DataAccessLayer.Entities.Order, BookStore.DataAccessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.List`1[[BookStore.BusinessLogicLayer.Models.ResponseModels.Order.OrderModel, BookStore.BusinessLogicLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+- Stack Trace: 
+   at lambda_method297(Closure , List`1 , List`1 , ResolutionContext )
+   at BookStore.BusinessLogicLayer.Services.DataCollectionAccessProvider.GetCollection[TSource,TDest](IQueryable`1 collection, IndexRequestModel requestModel, DataCollectionModel`1& responseModel) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Providers\DataCollectionAccessProvider.cs:line 36
+   at BookStore.BusinessLogicLayer.Services.OrderService.GetAllAsync(IndexRequestModel model) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore.BusinessLogicLayer\Services\OrderService.cs:line 56
+   at BookStore.PresentationLayer.Areas.Admin.Pages.Management.OrderManagementModel.FetchCollection(String sortProperty, Nullable`1 sortDirect, String filterString, String filterProp, String filterExpr, String filterText, Int32 currentPage, Int32 pageSize) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Areas\Admin\Pages\Management\OrderManagement.cshtml.cs:line 109
+   at BookStore.PresentationLayer.Areas.Admin.Pages.Management.OrderManagementModel.OnGetAsync(String sortProperty, Nullable`1 sortDirect, String filterString, String filterProp, String filterExpr, String filterText, Int32 currentPage, Int32 pageSize) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Areas\Admin\Pages\Management\OrderManagement.cshtml.cs:line 67
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.ExecutorFactory.NonGenericTaskHandlerMethod.Execute(Object receiver, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeHandlerMethodAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeNextPageFilterAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at BookStore.PresentationLayer.Middlewares.ExceptionHandlerMiddleware.Invoke(HttpContext context) in C:\Users\Anuitex-45\source\repos\BookStore\BookStore\Middlewares\ExceptionHandlerMiddleware.cs:line 26
+

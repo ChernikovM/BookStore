@@ -1,0 +1,84 @@
+﻿@page
+@model BookStore.PresentationLayer.Areas.Admin.Pages.Management.OrderManagementModel
+@{
+}
+
+<h1>Order Management</h1>
+
+@if (Model.Success is not null)
+{
+    <p class="text-success">@Model.Success</p>
+}
+@if (Model.Error is not null)
+{
+    <p class="text-danger">@Model.Error</p>
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered table-condensed table-striped table-hover">
+        @if (Model.Collection is not null)
+        {
+            @if (Model.Collection.DataCollection.Count == 0)
+            {
+                <tr>
+                    <td colspan="10">No Record's found.</td>
+                </tr>
+            }
+            else
+            {
+                <thead class="table-primary">
+                    <tr class="danger">
+                        <th>Id <partial name="_SortableIconPartial" model=@Model.GetSortModel("Id")></th>
+                        <th>Date <partial name="_SortableIconPartial" model=@Model.GetSortModel("CreationDate")></th>
+                        <th>User name</th>
+                        <th>User email</th>
+                        <th>Product</th>
+                        <th>Title</th>
+                        <th>Qty</th>
+                        <th>Order amount</th>
+                        <th>Status <partial name="_SortableIconPartial" model=@Model.GetSortModel("Status")></th>
+                    </tr>
+                </thead>
+                foreach (var item in Model.Collection?.DataCollection)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.CreationDate</td>
+                        <td>@item.User.FirstName @item.User.LastName</td>
+                        <td>@item.User.Email</td>
+                        <td>
+                            @foreach (var prod in item.OrderItems)
+                            {
+                                <p>@prod.PrintingEdition?.Type</p>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var prod in item.OrderItems)
+                            {
+                                <p>@prod.PrintingEdition?.Title</p>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var prod in item.OrderItems)
+                            {
+                                <p>@prod.Count</p>
+                            }
+                        </td>
+                        <td>
+                            @{ 
+                                decimal amount = 0;
+                                foreach(var prod in item.OrderItems)
+                                {
+                                    amount += prod.Amount;
+                                }
+                            }
+                            @amount
+                        </td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
+                <partial name="_PaginationPartial" model=Model.GetPaginationModel() />
+            }
+        }
+    </table>
+</div>

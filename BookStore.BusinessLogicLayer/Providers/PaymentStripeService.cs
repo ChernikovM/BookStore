@@ -145,7 +145,7 @@ namespace BookStore.BusinessLogicLayer.Providers
 
             if(session.PaymentStatus == "paid")
             {
-                order.Status = (int)Enums.OrderStatusType.Paid;
+                order.Status = Enums.OrderStatusType.Paid;
                 await _orderService.UpdateAsync(orderId, order);
             }
 

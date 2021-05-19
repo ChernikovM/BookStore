@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.DataAccessLayer",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.BusinessLogicLayer", "BookStore.BusinessLogicLayer\BookStore.BusinessLogicLayer.csproj", "{0A223508-345F-474F-81F3-2F5875A669EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.AdminPanel", "BookStore.AdminPanel\BookStore.AdminPanel.csproj", "{586F4A9E-B92B-466F-A615-C47DEAC6EDD6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{0A223508-345F-474F-81F3-2F5875A669EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A223508-345F-474F-81F3-2F5875A669EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A223508-345F-474F-81F3-2F5875A669EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{586F4A9E-B92B-466F-A615-C47DEAC6EDD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{586F4A9E-B92B-466F-A615-C47DEAC6EDD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{586F4A9E-B92B-466F-A615-C47DEAC6EDD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{586F4A9E-B92B-466F-A615-C47DEAC6EDD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

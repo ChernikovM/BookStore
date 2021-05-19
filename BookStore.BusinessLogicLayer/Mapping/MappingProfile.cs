@@ -9,6 +9,7 @@ using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Models.ResponseModel.PrintingEdition;
 using BookStore.BusinessLogicLayer.Models.ResponseModels.Author;
 using BookStore.BusinessLogicLayer.Models.ResponseModels.Order;
+using BookStore.BusinessLogicLayer.Models.ResponseModels.OrderItem.cs;
 using BookStore.BusinessLogicLayer.Models.ResponseModels.Payment;
 using BookStore.BusinessLogicLayer.Models.ResponseModels.User;
 using BookStore.DataAccessLayer.Entities;
@@ -37,6 +38,7 @@ namespace BookStore.BusinessLogicLayer.Mapping
             CreateMap<Order, BaseModel>().ReverseMap();
 
             CreateMap<OrderItem, OrderItemCreateModel>().ReverseMap();
+            CreateMap<OrderItem, OrderItemModel>().ReverseMap();
             CreateMap<OrderItem, BaseModel>().ReverseMap();
 
             CreateMap<Payment, PaymentCreationModel>().ReverseMap();
