@@ -16,11 +16,11 @@ namespace BookStore.BusinessLogicLayer.Services.Interfaces
 
         Task<JwtPairResponse> RefreshTokensAsync(UserRefreshTokensModel model);
 
-        Task<MessageResponse> ResetPassword(UserChangePasswordModel model);
+        Task<MessageResponse> SendPasswordResetMail(UserPasswordResetModel model);
 
-        Task<MessageResponse> CheckEmail(UserResetPasswordModel model);
+        Task<bool> CheckPasswordResetToken(string id, string token);
 
-        Task<MessageResponse> ChangePassword(string userId, string token, string password);
+        Task<MessageResponse> SetNewPassword(string id, UserChangePasswordModel model);
 
         Task<MessageResponse> Logout(string username);
 

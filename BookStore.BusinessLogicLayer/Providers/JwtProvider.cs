@@ -87,7 +87,7 @@ namespace BookStore.BusinessLogicLayer.Services
             }
             catch(Exception )
             {
-                throw new Exceptions.CustomException(System.Net.HttpStatusCode.BadRequest, Constants.Constants.ErrorMessage.InvalidToken.GetDescription());
+                throw new Exceptions.CustomException(System.Net.HttpStatusCode.Unauthorized, Constants.Constants.ErrorMessage.InvalidToken.GetDescription());
             }
 
             return result;

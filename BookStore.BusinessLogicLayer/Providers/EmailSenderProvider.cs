@@ -5,6 +5,7 @@ using BookStore.BusinessLogicLayer.Providers.Interfaces;
 using BookStore.DataAccessLayer.Entities;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Identity;
+
 using MimeKit;
 using System;
 using System.Net;
@@ -59,7 +60,7 @@ namespace BookStore.BusinessLogicLayer.Services
             await smtpClient.DisconnectAsync(true);
         }
 
-        public async Task SendEmailConfirmationLinkAsync(User user)
+        public async Task SendEmailConfirmationLinkAsync(User user, string callbackUrl)
         {
             string messageSubject = "Account Registration";
 
@@ -74,12 +75,10 @@ namespace BookStore.BusinessLogicLayer.Services
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            var emailConfirmationUrl = new UriBuilder
+            var emailConfirmationUrl = new UriBuilder(callbackUrl)
             {
-                Port = _config.Port,
-                Path = _config.PathEmailConfirmation,
                 Query = $"userId={user.Id}&token={HttpUtility.UrlEncode(token)}"
-            };
+            };            
 
             sb.Append(emailConfirmationUrl);
 
@@ -88,7 +87,7 @@ namespace BookStore.BusinessLogicLayer.Services
             await SendEmailAsync(message);
         }
 
-        public async Task SendPasswordResettingLinkAsync(User user, string newPassword)
+        public async Task SendPasswordResettingLinkAsync(User user, string callbackUrl)
         {
             IsEmailConfirmed(user);
 
@@ -101,15 +100,11 @@ namespace BookStore.BusinessLogicLayer.Services
             sb.Append($"A request has been received to change the password for your account.");
             sb.Append(Environment.NewLine);
             sb.Append($"Follow the next link if you want to change password: ");
-            sb.Append(Environment.NewLine);
+            sb.Append(Environment.NewLine);            
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            var resetPasswordLink = new UriBuilder
+            var resetPasswordLink = new UriBuilder(callbackUrl)
             {
-                Port = _config.Port,
-                Path = _config.PathPasswordChange,
-                Query = $"userId={user.Id}&token={HttpUtility.UrlEncode(token)}&password={newPassword}"
+                Query = $"userId={user.Id}&token={HttpUtility.UrlEncode(user.PasswordResetToken)}"
             };
 
             sb.Append(resetPasswordLink);

@@ -134,7 +134,7 @@ namespace BookStore.BusinessLogicLayer.Services
             {
                 user.Email = model.Email;
                 user.EmailConfirmed = false;
-                await _emailSenderService.SendEmailConfirmationLinkAsync(user); //TODO: change text in email
+                await _emailSenderService.SendEmailConfirmationLinkAsync(user, model.EmailConfirmationCallbackUrl); //TODO: change text in email
             }
 
             var result = await _userManager.UpdateAsync(user);
@@ -169,7 +169,7 @@ namespace BookStore.BusinessLogicLayer.Services
             {
                 user.Email = model.Email;
                 user.EmailConfirmed = false;
-                await _emailSenderService.SendEmailConfirmationLinkAsync(user); //TODO: change text in email
+                await _emailSenderService.SendEmailConfirmationLinkAsync(user, model.EmailConfirmationCallbackUrl); //TODO: change text in email
             }
 
             var result = await _userManager.UpdateAsync(user);

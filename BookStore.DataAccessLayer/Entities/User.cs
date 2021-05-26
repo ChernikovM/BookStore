@@ -11,6 +11,8 @@ namespace BookStore.DataAccessLayer.Entities
 
         public string RefreshToken { get; set; }
 
+        public string PasswordResetToken { get; set; }
+
         public List<Order> Orders { get; set; }
 
         public User()

@@ -26,5 +26,8 @@ namespace BookStore.BusinessLogicLayer.Models.RequestModels.User
         [Compare("Password", ErrorMessage = "The password and confirmation password dont match.")]
         public string ConfirmPassword { get; set; }
 
+        [Required]
+        public string CallbackUrl { get; set; }
+
     }
 }

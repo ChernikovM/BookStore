@@ -183,6 +183,7 @@ namespace BookStore
                     {
                         builder
                         .AllowAnyOrigin()
+                        .AllowAnyMethod()
                         .AllowAnyHeader();
                     });
             });

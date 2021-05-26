@@ -5,8 +5,8 @@ namespace BookStore.BusinessLogicLayer.Providers.Interfaces
 {
     public interface IEmailSenderProvider
     {
-        public Task SendEmailConfirmationLinkAsync(User user);
+        public Task SendEmailConfirmationLinkAsync(User user, string callbackUrl);
 
-        public Task SendPasswordResettingLinkAsync(User user, string newPassword);
+        public Task SendPasswordResettingLinkAsync(User user, string callbackUrl);
     }
 }

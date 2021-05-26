@@ -1,14 +1,11 @@
 ﻿using BookStore.BusinessLogicLayer.Models.RequestModels.User;
 using BookStore.BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BookStore.PresentationLayer.Controllers
 {
-    [AllowAnonymous]
     [ApiController]
     [Route("[controller]/[action]")]
     public class AccountController : Controller
@@ -52,31 +49,55 @@ namespace BookStore.PresentationLayer.Controllers
             return new OkObjectResult(response);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CheckEmail([FromBody] UserResetPasswordModel model)
-        {
-            var response = await _accountService.CheckEmail(model);
-            return new OkObjectResult(response);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> CheckEmail([FromBody] UserResetPasswordModel model)
+        //{
+        //    var response = await _accountService.CheckEmail(model);
+        //    return new OkObjectResult(response);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> ResetPassword([FromBody] UserChangePasswordModel model)
+        //{
+        //    var response = await _accountService.ResetPassword(model);
+
+        //    return Ok(response);
+        //}
+
+        //[HttpGet]
+        //public async Task<IActionResult> ChangePassword([FromQuery] string userId, [FromQuery] string token, [FromQuery]string password)
+        //{
+        //    var response = await _accountService.ChangePassword(userId, token, password);
+
+        //    return Ok(response);
+        //}
 
         [HttpPost]
-        public async Task<IActionResult> ResetPassword([FromBody] UserChangePasswordModel model)
+        public async Task<IActionResult> SendPasswordResetMail([FromBody] UserPasswordResetModel model)
         {
-            var response = await _accountService.ResetPassword(model);
+            var response = await _accountService.SendPasswordResetMail(model);
 
             return Ok(response);
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> ChangePassword([FromQuery] string userId, [FromQuery] string token, [FromQuery]string password)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> CheckPasswordResetToken(string id, string token)
         {
-            var response = await _accountService.ChangePassword(userId, token, password);
+            var response = await _accountService.CheckPasswordResetToken(id, token);
 
             return Ok(response);
         }
 
-        [Authorize]
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> SetNewPassword(string id, [FromBody] UserChangePasswordModel model)
+        {
+            var response = await _accountService.SetNewPassword(id, model);
+
+            return Ok(response);
+        }
+
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             var name = User.Identity.Name;

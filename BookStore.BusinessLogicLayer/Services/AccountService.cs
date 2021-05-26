@@ -101,7 +101,7 @@ namespace BookStore.BusinessLogicLayer.Services
                 throw new CustomException(HttpStatusCode.BadRequest, result);
             }
 
-            await _emailSenderService.SendEmailConfirmationLinkAsync(newUser);
+            await _emailSenderService.SendEmailConfirmationLinkAsync(newUser, model.CallbackUrl);
 
             var userResponse = _mapper.Map<UserResponseModel>(newUser);
 
@@ -113,7 +113,11 @@ namespace BookStore.BusinessLogicLayer.Services
         {
             var user = await FindByIdAsync(model.UserId);
 
-            var confirmationResult = await _userManager.ConfirmEmailAsync(user, model.Token);
+            var decoded = System.Web.HttpUtility.UrlDecode(model.Token, System.Text.Encoding.UTF8);
+
+            decoded = decoded.Replace(' ', '+');
+
+            var confirmationResult = await _userManager.ConfirmEmailAsync(user, decoded);
 
             if (!confirmationResult.Succeeded)
             {
@@ -135,13 +139,13 @@ namespace BookStore.BusinessLogicLayer.Services
 
             if (user.LockoutEnd is not null && user.LockoutEnd > DateTime.UtcNow)
             {
-                throw new CustomException(HttpStatusCode.Forbidden, ErrorMessage.AccountBlocked.GetDescription());
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.AccountBlocked.GetDescription());
             }
 
             var checkEmailConfirmation = await _userManager.IsEmailConfirmedAsync(user);
             if (!checkEmailConfirmation)
             {
-                throw new CustomException(HttpStatusCode.Unauthorized, ErrorMessage.EmailNotConfirmed.GetDescription());
+                throw new CustomException(HttpStatusCode.BadRequest, ErrorMessage.EmailNotConfirmed.GetDescription());
             }
 
             var tokenPair = await _jwtService.GenerateTokenPairAsync(user);
@@ -170,35 +174,6 @@ namespace BookStore.BusinessLogicLayer.Services
             return response;
         }
 
-        public async Task<MessageResponse> ResetPassword(UserChangePasswordModel model)
-        {
-            var user = await FindByEmailAsync(model.Email);
-
-            await _emailSenderService.SendPasswordResettingLinkAsync(user, model.NewPassword);
-
-            return new MessageResponse() { Message = "Email was sent." };
-        }
-
-        public async Task<MessageResponse> CheckEmail(UserResetPasswordModel model)
-        {
-            var user = await FindByEmailAsync(model.Email);
-
-            return new MessageResponse() { Message = "Success" };
-        }
-
-        public async Task<MessageResponse> ChangePassword(string userId, string token, string password)
-        {
-            var user = await FindByIdAsync(userId);
-
-            var result = await _userManager.ResetPasswordAsync(user, token, password);
-            if (!result.Succeeded)
-            {
-                throw new CustomException(HttpStatusCode.BadRequest, result);
-            }
-
-            return new MessageResponse() { Message = "Password was successfully changed." };
-        }
-
         public async Task<MessageResponse> Logout(string username)
         {
             var user = await FindByNameAsync(username);
@@ -208,6 +183,51 @@ namespace BookStore.BusinessLogicLayer.Services
             await _userManager.UpdateAsync(user);
 
             return new MessageResponse() { Message = "Successfully logged out." };
+        }
+
+        public async Task<MessageResponse> SendPasswordResetMail(UserPasswordResetModel model)
+        {
+            var user = await FindByEmailAsync(model.EmailAddress); //if email not confirmed return 400 bad request
+
+            var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            user.PasswordResetToken = passwordResetToken;
+            await _userManager.UpdateAsync(user);
+
+            await _emailSenderService.SendPasswordResettingLinkAsync(user, model.CallbackUrl);
+
+            return new MessageResponse() { Message = "Email was sent." };
+        }
+
+        public async Task<bool> CheckPasswordResetToken(string id, string token)
+        {
+            var user = await FindByIdAsync(id);
+
+            var decodedRequestToken = System.Web.HttpUtility.UrlDecode(token);
+            var decodedUserToken = System.Web.HttpUtility.UrlDecode(user.PasswordResetToken);
+
+            bool result = decodedRequestToken == decodedUserToken;
+
+            return result;
+        }
+
+        public async Task<MessageResponse> SetNewPassword(string id, UserChangePasswordModel model)
+        {
+            var user = await FindByIdAsync(id);
+
+            var token = System.Web.HttpUtility.UrlDecode(model.Token);
+
+            var resetPasswordResult = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+
+            if (!resetPasswordResult.Succeeded)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, resetPasswordResult);
+            }
+
+            user.PasswordResetToken = null;
+            await _userManager.UpdateAsync(user);
+
+            return new MessageResponse() { Message = "Password was successfully changed." };
         }
     }
 }

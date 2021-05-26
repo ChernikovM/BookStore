@@ -61,6 +61,7 @@ namespace BookStore.PresentationLayer.Areas.Admin.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string id = null)
         {
+            UpdateModel.EmailConfirmationCallbackUrl = "http://localhost:4200/account/emailConfirmation";
             try
             {
                 var response = await (id is null ? 
